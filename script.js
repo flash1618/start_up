@@ -1,956 +1,390 @@
-class LemonadeStandGame {
+// EXACT DUOLINGO REPLICA - Business Academy
+class BusinessAcademy {
     constructor() {
-        this.difficulty = 'easy'; // Default difficulty
-        this.gameState = {
-            cash: 100,
-            day: 1,
-            price: 5,
-            ingredients: {
-                lemons: 0,
-                sugar: 0,
-                ice: 0
-            },
-            customersServed: 0,
-            dailyEarnings: 0,
-            totalEarnings: 0,
-            goal: 50,
-            achievements: {
-                firstSale: false,
-                hundredDay: false,
-                businessOwner: false
-            }
+        this.currentDifficulty = null;
+        this.currentLesson = 0;
+        this.totalLessons = 5;
+        this.streak = 0;
+        this.gems = 0;
+        this.lessons = {
+            beginner: [
+                {
+                    title: "What is Revenue?",
+                    question: "Revenue is the total amount of money a business earns from selling products or services. If you sell 10 lemonades at ₹5 each, what is your revenue?",
+                    options: ["₹50", "₹15", "₹5", "₹10"],
+                    correct: 0,
+                    explanation: "Revenue = Price × Quantity = ₹5 × 10 = ₹50"
+                },
+                {
+                    title: "Understanding Costs",
+                    question: "Costs are the money you spend to make your product. If lemons cost ₹2 each and you need 2 lemons per lemonade, what's the cost for 5 lemonades?",
+                    options: ["₹20", "₹10", "₹15", "₹25"],
+                    correct: 0,
+                    explanation: "Cost = Cost per unit × Quantity = ₹2 × 2 × 5 = ₹20"
+                },
+                {
+                    title: "Calculating Profit",
+                    question: "Profit = Revenue - Costs. If your revenue is ₹50 and costs are ₹20, what is your profit?",
+                    options: ["₹30", "₹70", "₹25", "₹35"],
+                    correct: 0,
+                    explanation: "Profit = ₹50 - ₹20 = ₹30"
+                },
+                {
+                    title: "Break-even Point",
+                    question: "Break-even is when your revenue equals your costs. If each lemonade costs ₹4 to make and you sell for ₹6, how many do you need to sell to break even with ₹20 in fixed costs?",
+                    options: ["10", "5", "15", "20"],
+                    correct: 0,
+                    explanation: "Break-even = Fixed Costs ÷ (Price - Variable Cost) = ₹20 ÷ (₹6 - ₹4) = 10"
+                },
+                {
+                    title: "Customer Acquisition",
+                    question: "Customer Acquisition Cost (CAC) is how much you spend to get one customer. If you spend ₹100 on marketing and get 20 customers, what's your CAC?",
+                    options: ["₹5", "₹10", "₹15", "₹20"],
+                    correct: 0,
+                    explanation: "CAC = Marketing Spend ÷ Customers = ₹100 ÷ 20 = ₹5"
+                }
+            ],
+            intermediate: [
+                {
+                    title: "Market Analysis",
+                    question: "Market share is your portion of total market sales. If the total coffee market is ₹1,000,000 and your shop makes ₹50,000, what's your market share?",
+                    options: ["5%", "10%", "15%", "20%"],
+                    correct: 0,
+                    explanation: "Market Share = (Your Sales ÷ Total Market) × 100 = (₹50,000 ÷ ₹1,000,000) × 100 = 5%"
+                },
+                {
+                    title: "Customer Lifetime Value",
+                    question: "LTV is the total value a customer brings over their lifetime. If a customer buys ₹50 worth of coffee monthly for 2 years, what's their LTV?",
+                    options: ["₹1,200", "₹1,000", "₹1,500", "₹800"],
+                    correct: 0,
+                    explanation: "LTV = Monthly Value × Months = ₹50 × 24 = ₹1,200"
+                },
+                {
+                    title: "Gross Margin",
+                    question: "Gross margin is the percentage of revenue left after direct costs. If revenue is ₹1,000 and direct costs are ₹600, what's the gross margin?",
+                    options: ["40%", "30%", "50%", "60%"],
+                    correct: 0,
+                    explanation: "Gross Margin = ((Revenue - Costs) ÷ Revenue) × 100 = ((₹1,000 - ₹600) ÷ ₹1,000) × 100 = 40%"
+                },
+                {
+                    title: "Inventory Turnover",
+                    question: "Inventory turnover measures how quickly you sell inventory. If you have ₹10,000 in inventory and sell ₹30,000 worth annually, what's your turnover?",
+                    options: ["3", "2", "4", "5"],
+                    correct: 0,
+                    explanation: "Turnover = Annual Sales ÷ Average Inventory = ₹30,000 ÷ ₹10,000 = 3"
+                },
+                {
+                    title: "Cash Flow",
+                    question: "Cash flow is money moving in and out. If you have ₹5,000 cash, receive ₹3,000, and spend ₹2,000, what's your ending cash?",
+                    options: ["₹6,000", "₹5,000", "₹7,000", "₹4,000"],
+                    correct: 0,
+                    explanation: "Ending Cash = Starting Cash + Inflows - Outflows = ₹5,000 + ₹3,000 - ₹2,000 = ₹6,000"
+                }
+            ],
+            advanced: [
+                {
+                    title: "Burn Rate",
+                    question: "Burn rate is how fast you spend money. If you have ₹100,000 and spend ₹10,000 monthly, how many months until you run out?",
+                    options: ["10", "8", "12", "15"],
+                    correct: 0,
+                    explanation: "Runway = Cash ÷ Monthly Burn = ₹100,000 ÷ ₹10,000 = 10 months"
+                },
+                {
+                    title: "Valuation Methods",
+                    question: "A tech startup has ₹1M revenue and 5x revenue multiple. What's the company valuation?",
+                    options: ["₹5M", "₹1M", "₹10M", "₹2M"],
+                    correct: 0,
+                    explanation: "Valuation = Revenue × Multiple = ₹1M × 5 = ₹5M"
+                },
+                {
+                    title: "Unit Economics",
+                    question: "If your product costs ₹20 to make, sells for ₹50, and you spend ₹10 to acquire each customer, what's your unit profit?",
+                    options: ["₹20", "₹30", "₹10", "₹40"],
+                    correct: 0,
+                    explanation: "Unit Profit = Price - Cost - CAC = ₹50 - ₹20 - ₹10 = ₹20"
+                },
+                {
+                    title: "Growth Metrics",
+                    question: "If you had 100 customers last month and 120 this month, what's your growth rate?",
+                    options: ["20%", "15%", "25%", "30%"],
+                    correct: 0,
+                    explanation: "Growth Rate = ((New - Old) ÷ Old) × 100 = ((120 - 100) ÷ 100) × 100 = 20%"
+                },
+                {
+                    title: "ROI Calculation",
+                    question: "If you invest ₹10,000 in marketing and generate ₹15,000 in sales, what's your ROI?",
+                    options: ["50%", "40%", "60%", "30%"],
+                    correct: 0,
+                    explanation: "ROI = ((Gain - Investment) ÷ Investment) × 100 = ((₹15,000 - ₹10,000) ÷ ₹10,000) × 100 = 50%"
+                }
+            ]
         };
-        
-        this.tutorialStep = 1;
-        this.customers = [];
-        this.user = {
-            isLoggedIn: false,
-            isGuest: false,
-            name: 'Guest Player',
-            email: null
-        };
-        this.maxCustomers = 5;
         
         this.init();
     }
     
     init() {
         this.setupEventListeners();
-        this.checkLoginStatus();
-    }
-    
-    checkLoginStatus() {
-        // Check if user is already logged in
-        const savedUser = localStorage.getItem('lemonadeUser');
-        if (savedUser) {
-            this.user = JSON.parse(savedUser);
-            this.showGame();
-        } else {
-            this.showLogin();
-        }
-    }
-    
-    showLogin() {
-        document.getElementById('login-overlay').style.display = 'flex';
-        document.getElementById('game-container').style.display = 'none';
-    }
-    
-    showGame() {
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('game-container').style.display = 'block';
-        this.updateUserDisplay();
-        this.showDifficultySelection();
-    }
-    
-    updateUserDisplay() {
-        document.getElementById('user-name').textContent = this.user.name;
-        document.getElementById('user-type').textContent = this.user.isGuest ? 'Guest' : 'User';
-    }
-    
-    setupLoginEventListeners() {
-        // Login tabs
-        document.querySelectorAll('.login-tab').forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                const tabType = e.target.dataset.tab;
-                this.switchLoginTab(tabType);
-            });
-        });
-        
-        // Login form
-        document.getElementById('login-btn').addEventListener('click', () => {
-            this.handleLogin();
-        });
-        
-        // Signup form
-        document.getElementById('signup-btn').addEventListener('click', () => {
-            this.handleSignup();
-        });
-        
-        // Guest login
-        document.getElementById('guest-btn').addEventListener('click', () => {
-            this.handleGuestLogin();
-        });
-        
-        document.getElementById('guest-btn-signup').addEventListener('click', () => {
-            this.handleGuestLogin();
-        });
-        
-        // Logout
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            this.handleLogout();
-        });
-        
-        // Enter key for forms
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                if (document.getElementById('login-form').classList.contains('active')) {
-                    this.handleLogin();
-                } else if (document.getElementById('signup-form').classList.contains('active')) {
-                    this.handleSignup();
-                }
-            }
-        });
-    }
-    
-    switchLoginTab(tabType) {
-        // Update tab buttons
-        document.querySelectorAll('.login-tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.querySelector(`[data-tab="${tabType}"]`).classList.add('active');
-        
-        // Update forms
-        document.querySelectorAll('.login-form').forEach(form => {
-            form.classList.remove('active');
-        });
-        document.getElementById(`${tabType}-form`).classList.add('active');
-    }
-    
-    handleLogin() {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        
-        if (!email || !password) {
-            this.showMessage('Please fill in all fields', 'error');
-            return;
-        }
-        
-        // Simple validation (in real app, this would be server-side)
-        const users = JSON.parse(localStorage.getItem('lemonadeUsers') || '{}');
-        if (users[email] && users[email].password === password) {
-            this.user = {
-                isLoggedIn: true,
-                isGuest: false,
-                name: users[email].name,
-                email: email
-            };
-            this.saveUser();
-            this.showGame();
-            this.showMessage(`Welcome back, ${this.user.name}!`, 'success');
-        } else {
-            this.showMessage('Invalid email or password', 'error');
-        }
-    }
-    
-    handleSignup() {
-        const name = document.getElementById('signup-name').value;
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        
-        if (!name || !email || !password) {
-            this.showMessage('Please fill in all fields', 'error');
-            return;
-        }
-        
-        if (password.length < 6) {
-            this.showMessage('Password must be at least 6 characters', 'error');
-            return;
-        }
-        
-        // Simple validation (in real app, this would be server-side)
-        const users = JSON.parse(localStorage.getItem('lemonadeUsers') || '{}');
-        if (users[email]) {
-            this.showMessage('Email already exists', 'error');
-            return;
-        }
-        
-        users[email] = { name, password };
-        localStorage.setItem('lemonadeUsers', JSON.stringify(users));
-        
-        this.user = {
-            isLoggedIn: true,
-            isGuest: false,
-            name: name,
-            email: email
-        };
-        this.saveUser();
-        this.showGame();
-        this.showMessage(`Welcome to Lemonade Stand, ${name}!`, 'success');
-    }
-    
-    handleGuestLogin() {
-        this.user = {
-            isLoggedIn: true,
-            isGuest: true,
-            name: 'Guest Player',
-            email: null
-        };
-        this.saveUser();
-        this.showGame();
-        this.showMessage('Welcome! Playing as guest', 'info');
-    }
-    
-    handleLogout() {
-        localStorage.removeItem('lemonadeUser');
-        this.user = {
-            isLoggedIn: false,
-            isGuest: false,
-            name: 'Guest Player',
-            email: null
-        };
-        this.showLogin();
-        this.showMessage('Logged out successfully', 'info');
-    }
-    
-    saveUser() {
-        localStorage.setItem('lemonadeUser', JSON.stringify(this.user));
+        this.loadUserData();
+        this.showWelcomeScreen();
     }
     
     setupEventListeners() {
-        // Login system
-        this.setupLoginEventListeners();
-        
         // Difficulty selection
-        document.querySelectorAll('.difficulty-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const card = e.target.closest('.difficulty-card');
-                const difficulty = card.dataset.difficulty;
+        document.querySelectorAll('.difficulty-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const difficulty = e.currentTarget.dataset.difficulty;
                 this.selectDifficulty(difficulty);
             });
         });
         
-        // Tutorial
-        document.getElementById('tutorial-start-btn').addEventListener('click', () => {
-            this.hideTutorial();
-        });
-        
-        // Buy ingredients
-        document.querySelectorAll('.buy-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const item = e.target.dataset.item;
-                const price = parseFloat(e.target.dataset.price);
-                this.buyIngredient(item, price);
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const section = e.currentTarget.dataset.section;
+                this.navigateToSection(section);
             });
         });
         
-        // Set price
-        document.getElementById('set-price-btn').addEventListener('click', () => {
-            this.setPrice();
-        });
-        
-        // Serve customers
-        document.getElementById('serve-btn').addEventListener('click', () => {
-            this.serveCustomer();
-        });
-        
-        // End day button
-        document.getElementById('next-day-btn').addEventListener('click', () => {
-            this.showDayResults();
-        });
-        
-        // Next day
-        document.getElementById('continue-btn').addEventListener('click', () => {
-            this.nextDay();
-        });
-        
-        // Customer clicks
-        document.getElementById('customer-queue').addEventListener('click', (e) => {
-            if (e.target.classList.contains('customer')) {
-                this.serveCustomer(e.target);
-            }
+        // Back button
+        document.getElementById('back-btn').addEventListener('click', () => {
+            this.showLessonScreen();
         });
     }
     
-    showDifficultySelection() {
-        document.getElementById('difficulty-overlay').classList.remove('hidden');
-    }
-    
-    selectDifficulty(difficulty) {
-        this.difficulty = difficulty;
-        
-        // Adjust game parameters based on difficulty
-        this.adjustGameForDifficulty();
-        
-        // Hide difficulty selection
-        document.getElementById('difficulty-overlay').classList.add('hidden');
-        
-        // Add difficulty class to body for any remaining styling
-        document.body.className = document.body.className.replace(/easy-mode|medium-mode|hard-mode/g, '');
-        document.body.classList.add(`${difficulty}-mode`);
-        
-        // Show tutorial for easy mode, or start game directly for others
-        if (difficulty === 'easy') {
-            this.showTutorial();
-        } else {
-            this.startGame();
+    loadUserData() {
+        const savedData = localStorage.getItem('businessAcademyData');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            this.streak = data.streak || 0;
+            this.gems = data.gems || 0;
+            this.currentDifficulty = data.difficulty || null;
+            this.currentLesson = data.lesson || 0;
         }
-    }
-    
-    adjustGameForDifficulty() {
-        switch(this.difficulty) {
-            case 'easy':
-                this.gameState.cash = 100;
-                this.gameState.goal = 50;
-                this.gameState.weather = 'sunny';
-                this.gameState.competition = 0;
-                this.gameState.marketing = 0;
-                break;
-            case 'medium':
-                this.gameState.cash = 150;
-                this.gameState.goal = 100;
-                this.gameState.weather = this.getRandomWeather();
-                this.gameState.competition = 1;
-                this.gameState.marketing = 0;
-                this.gameState.products = ['lemonade'];
-                break;
-            case 'hard':
-                this.gameState.cash = 200;
-                this.gameState.goal = 200;
-                this.gameState.weather = this.getRandomWeather();
-                this.gameState.competition = 2;
-                this.gameState.marketing = 0;
-                this.gameState.products = ['lemonade', 'iced_tea', 'snacks'];
-                this.gameState.employees = 0;
-                this.gameState.marketResearch = 0;
-                break;
-        }
-        
-        // Add difficulty class to body for styling
-        document.body.className = document.body.className.replace(/easy-mode|medium-mode|hard-mode/g, '');
-        document.body.classList.add(`${this.difficulty}-mode`);
-        
-        // Show/hide difficulty-specific features
-        this.toggleDifficultyFeatures();
-    }
-    
-    getRandomWeather() {
-        const weathers = ['sunny', 'cloudy', 'rainy', 'hot'];
-        return weathers[Math.floor(Math.random() * weathers.length)];
-    }
-    
-    toggleDifficultyFeatures() {
-        // Hide all difficulty-specific elements first
-        document.querySelectorAll('.hard-mode-only').forEach(el => {
-            el.style.display = 'none';
-        });
-        
-        // Show features based on difficulty
-        if (this.difficulty === 'hard') {
-            // Show Hard Mode features
-            document.querySelectorAll('.hard-mode-only').forEach(el => {
-                el.style.display = 'block';
-            });
-        }
-    }
-    
-    startGame() {
         this.updateUI();
-        this.updateWeatherDisplay();
-        this.generateCustomers();
     }
     
-    updateWeatherDisplay() {
-        const weatherDisplay = document.getElementById('weather-display');
-        const weatherIcon = document.getElementById('weather-icon');
-        const weatherText = document.getElementById('weather-text');
-        
-        if (this.difficulty === 'easy') {
-            weatherDisplay.style.display = 'none';
-            return;
-        }
-        
-        weatherDisplay.style.display = 'flex';
-        
-        const weatherIcons = {
-            'sunny': '☀️',
-            'cloudy': '☁️',
-            'rainy': '🌧️',
-            'hot': '🔥'
+    saveUserData() {
+        const data = {
+            streak: this.streak,
+            gems: this.gems,
+            difficulty: this.currentDifficulty,
+            lesson: this.currentLesson
         };
-        
-        const weatherNames = {
-            'sunny': 'Sunny',
-            'cloudy': 'Cloudy',
-            'rainy': 'Rainy',
-            'hot': 'Hot'
-        };
-        
-        weatherIcon.textContent = weatherIcons[this.gameState.weather];
-        weatherText.textContent = weatherNames[this.gameState.weather];
-    }
-    
-    showTutorial() {
-        document.getElementById('tutorial-overlay').classList.remove('hidden');
-    }
-    
-    hideTutorial() {
-        document.getElementById('tutorial-overlay').classList.add('hidden');
-        this.generateCustomers();
-        this.updateTutorialStep(2);
-    }
-    
-    updateTutorialStep(step) {
-        // Remove active class from all steps
-        document.querySelectorAll('.tutorial-step').forEach(s => {
-            s.classList.remove('active');
-        });
-        
-        // Add active class to current step
-        const currentStep = document.getElementById(`tutorial-step-${step}`);
-        if (currentStep) {
-            currentStep.classList.add('active');
-        }
-    }
-    
-    buyIngredient(item, price) {
-        let quantity, totalCost;
-        
-        switch(item) {
-            case 'lemons':
-                quantity = 5;
-                totalCost = 10;
-                break;
-            case 'sugar':
-                quantity = 10;
-                totalCost = 10;
-                break;
-            case 'ice':
-                quantity = 20;
-                totalCost = 10;
-                break;
-            case 'tea':
-                quantity = 5;
-                totalCost = 40;
-                break;
-            case 'snacks':
-                quantity = 3;
-                totalCost = 36;
-                break;
-        }
-        
-        if (this.gameState.cash >= totalCost) {
-            this.gameState.cash -= totalCost;
-            this.gameState.ingredients[item] += quantity;
-            
-            this.showMessage(`Bought ${quantity} ${item} for ₹${totalCost}!`, 'success');
-            this.updateUI();
-            
-            // Update tutorial progress (only for basic ingredients in Easy mode)
-            if (this.difficulty === 'easy' && ['lemons', 'sugar', 'ice'].includes(item)) {
-                this.checkTutorialProgress();
-            }
-            
-            // Animate the purchase
-            this.animatePurchase(item);
-        } else {
-            this.showMessage(`Not enough cash! Need ₹${totalCost}`, 'error');
-        }
-    }
-    
-    animatePurchase(item) {
-        const icon = document.querySelector(`[data-item="${item}"]`).parentElement.querySelector('.ingredient-icon');
-        icon.style.animation = 'none';
-        setTimeout(() => {
-            icon.style.animation = 'achievementUnlock 0.6s ease-out';
-        }, 10);
-    }
-    
-    setPrice() {
-        const priceInput = document.getElementById('price-input');
-        const price = parseFloat(priceInput.value);
-        
-        if (price >= 1 && price <= 50) {
-            this.gameState.price = price;
-            document.getElementById('price-display').textContent = `₹${price}`;
-            this.showMessage(`Price set to ₹${price} per cup!`, 'success');
-            this.updateTutorialStep(3);
-            this.checkTutorialProgress();
-            
-            // Regenerate customers with new price sensitivity
-            this.generateCustomers();
-        } else {
-            this.showMessage('Price must be between ₹1 and ₹50!', 'error');
-        }
-    }
-    
-    generateCustomers() {
-        const customerQueue = document.getElementById('customer-queue');
-        customerQueue.innerHTML = '';
-        
-        // Base customer count, affected by price
-        let baseCustomerCount = 4;
-        if (this.gameState.price > 15) baseCustomerCount = 2;
-        else if (this.gameState.price > 10) baseCustomerCount = 3;
-        
-        let customerCount = Math.floor(Math.random() * 2) + baseCustomerCount; // 2-5 customers
-        
-        // Weather effects (Medium & Hard modes)
-        if (this.difficulty !== 'easy') {
-            customerCount = this.applyWeatherEffects(customerCount);
-        }
-        
-        // Competition effects (Medium & Hard modes)
-        if (this.difficulty !== 'easy') {
-            customerCount = this.applyCompetitionEffects(customerCount);
-        }
-        
-        for (let i = 0; i < customerCount; i++) {
-            const customer = document.createElement('div');
-            customer.className = 'customer';
-            
-            // Customer willingness to pay affected by price
-            let minWilling = Math.max(5, this.gameState.price - 5);
-            let maxWilling = Math.min(30, this.gameState.price + 15);
-            let willingToPay = Math.floor(Math.random() * (maxWilling - minWilling + 1)) + minWilling;
-            
-            // Weather affects willingness to pay
-            if (this.difficulty !== 'easy') {
-                willingToPay = this.applyWeatherToWillingness(willingToPay);
-            }
-            
-            customer.dataset.willingToPay = willingToPay;
-            
-            // Add customer thoughts for learning
-            const customerThoughts = this.getCustomerThoughts(willingToPay);
-            customer.innerHTML = `
-                <div class="customer-avatar">${this.getCustomerEmoji()}</div>
-                <div class="customer-thought" style="display: none;">${customerThoughts}</div>
-            `;
-            
-            // Add hover to show thoughts
-            customer.addEventListener('mouseenter', () => {
-                const thought = customer.querySelector('.customer-thought');
-                thought.style.display = 'block';
-            });
-            
-            customer.addEventListener('mouseleave', () => {
-                const thought = customer.querySelector('.customer-thought');
-                thought.style.display = 'none';
-            });
-            
-            customerQueue.appendChild(customer);
-        }
-        
-        // Enable serve button if we have ingredients
-        this.updateServeButton();
-    }
-    
-    applyWeatherEffects(customerCount) {
-        switch(this.gameState.weather) {
-            case 'hot':
-                return Math.floor(customerCount * 1.5); // 50% more customers
-            case 'sunny':
-                return customerCount; // Normal
-            case 'cloudy':
-                return Math.floor(customerCount * 0.8); // 20% fewer
-            case 'rainy':
-                return Math.floor(customerCount * 0.5); // 50% fewer
-            default:
-                return customerCount;
-        }
-    }
-    
-    applyCompetitionEffects(customerCount) {
-        const competitionFactor = 1 - (this.gameState.competition * 0.2); // 20% reduction per competitor
-        return Math.floor(customerCount * competitionFactor);
-    }
-    
-    applyWeatherToWillingness(willingToPay) {
-        switch(this.gameState.weather) {
-            case 'hot':
-                return Math.floor(willingToPay * 1.2); // Pay 20% more when hot
-            case 'rainy':
-                return Math.floor(willingToPay * 0.8); // Pay 20% less when rainy
-            default:
-                return willingToPay;
-        }
-    }
-    
-    getCustomerEmoji() {
-        const emojis = ['😊', '😄', '🤔', '😐', '😕'];
-        return emojis[Math.floor(Math.random() * emojis.length)];
-    }
-    
-    getCustomerThoughts(willingToPay) {
-        const thoughts = [
-            `"I have ₹${willingToPay} in my pocket..."`,
-            `"I'm willing to pay up to ₹${willingToPay} for lemonade"`,
-            `"My budget is ₹${willingToPay} today"`,
-            `"I can afford ₹${willingToPay} maximum"`,
-            `"₹${willingToPay} is my limit for drinks"`
-        ];
-        return thoughts[Math.floor(Math.random() * thoughts.length)];
-    }
-    
-    updateServeButton() {
-        const serveBtn = document.getElementById('serve-btn');
-        const hasIngredients = this.gameState.ingredients.lemons > 0 && 
-                              this.gameState.ingredients.sugar > 0 && 
-                              this.gameState.ingredients.ice > 0;
-        
-        serveBtn.disabled = !hasIngredients;
-        
-        if (hasIngredients) {
-            serveBtn.style.background = 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)';
-        } else {
-            serveBtn.style.background = '#ccc';
-        }
-    }
-    
-    serveCustomer(customerElement = null) {
-        // Check if we have ingredients first
-        if (this.gameState.ingredients.lemons <= 0 || 
-            this.gameState.ingredients.sugar <= 0 || 
-            this.gameState.ingredients.ice <= 0) {
-            this.showMessage('Not enough ingredients! Buy more to serve customers.', 'error');
-            return;
-        }
-        
-        if (!customerElement) {
-            customerElement = document.querySelector('.customer:not(.served)');
-        }
-        
-        if (!customerElement) {
-            this.showMessage('No more customers to serve!', 'warning');
-            return;
-        }
-        
-        const willingToPay = parseInt(customerElement.dataset.willingToPay);
-        
-        // Check if customer will buy at current price
-        if (this.gameState.price <= willingToPay) {
-            // Customer buys!
-            const costPerCup = this.calculateCostPerCup();
-            const profitPerCup = this.gameState.price - costPerCup;
-            
-            this.gameState.cash += this.gameState.price;
-            this.gameState.dailyEarnings += this.gameState.price;
-            this.gameState.customersServed++;
-            
-            // Use ingredients
-            this.gameState.ingredients.lemons--;
-            this.gameState.ingredients.sugar--;
-            this.gameState.ingredients.ice--;
-            
-            // Mark customer as served
-            customerElement.classList.add('served');
-            customerElement.innerHTML = `
-                <div class="customer-avatar">😋</div>
-                <div class="sale-result">+₹${this.gameState.price}</div>
-            `;
-            
-            // Show learning message with profit calculation
-            this.showLearningMessage(
-                `✅ SALE! Customer paid ₹${this.gameState.price}`,
-                `📊 Profit: ₹${this.gameState.price} - ₹${costPerCup} = ₹${profitPerCup} profit!`,
-                'success'
-            );
-            
-            // Check achievements
-            this.checkAchievements();
-            
-            // Animate cash increase
-            this.animateCashIncrease();
-            
-        } else {
-            // Customer leaves
-            customerElement.classList.add('served');
-            customerElement.innerHTML = `
-                <div class="customer-avatar">😞</div>
-                <div class="sale-result">No Sale</div>
-            `;
-            
-            // Show learning message about pricing
-            this.showLearningMessage(
-                `❌ Customer left - price too high!`,
-                `💡 They had ₹${willingToPay} but you charged ₹${this.gameState.price}. Try lowering your price!`,
-                'warning'
-            );
-        }
-        
-        this.updateUI();
-        this.updateServeButton();
-        
-        // Check if all customers served
-        const remainingCustomers = document.querySelectorAll('.customer:not(.served)').length;
-        if (remainingCustomers === 0) {
-            this.endDay();
-        }
-    }
-    
-    animateCashIncrease() {
-        const cashElement = document.getElementById('cash-amount');
-        cashElement.style.animation = 'none';
-        setTimeout(() => {
-            cashElement.style.animation = 'achievementUnlock 0.6s ease-out';
-        }, 10);
-    }
-    
-    endDay() {
-        document.getElementById('next-day-btn').disabled = false;
-        this.showMessage('All customers served! Click "End Day" to see results.', 'success');
-    }
-    
-    showDayResults() {
-        // Show day results modal
-        this.showDayResultsModal();
-    }
-    
-    showDayResultsModal() {
-        const modal = document.getElementById('day-results-modal');
-        const progress = Math.min((this.gameState.dailyEarnings / this.gameState.goal) * 100, 100);
-        const costPerCup = this.calculateCostPerCup();
-        const totalCosts = this.gameState.customersServed * costPerCup;
-        const totalProfit = this.gameState.dailyEarnings - totalCosts;
-        
-        // Update modal content
-        document.getElementById('results-day').textContent = this.gameState.day;
-        document.getElementById('result-customers').textContent = this.gameState.customersServed;
-        document.getElementById('result-earned').textContent = `₹${this.gameState.dailyEarnings}`;
-        document.getElementById('result-goal').textContent = `${Math.round(progress)}%`;
-        
-        // Update progress bar
-        document.getElementById('progress-fill').style.width = `${progress}%`;
-        
-        // Set result message with learning insights
-        let message = '';
-        if (this.gameState.dailyEarnings >= this.gameState.goal) {
-            message = `🎉 Great job! You reached your goal of ₹${this.gameState.goal}!<br><br>📊 Business Analysis:<br>• Revenue: ₹${this.gameState.dailyEarnings}<br>• Costs: ₹${totalCosts.toFixed(1)}<br>• Profit: ₹${totalProfit.toFixed(1)}<br>• Profit per cup: ₹${(totalProfit / this.gameState.customersServed).toFixed(1)}`;
-        } else {
-            message = `Keep trying! You earned ₹${this.gameState.dailyEarnings} out of ₹${this.gameState.goal} goal.<br><br>📊 Business Analysis:<br>• Revenue: ₹${this.gameState.dailyEarnings}<br>• Costs: ₹${totalCosts.toFixed(1)}<br>• Profit: ₹${totalProfit.toFixed(1)}<br><br>💡 Tip: Try adjusting your price to find the sweet spot between customer count and profit per sale!`;
-        }
-        document.getElementById('results-message').innerHTML = message;
-        
-        modal.classList.remove('hidden');
-    }
-    
-    nextDay() {
-        // Reset daily stats
-        this.gameState.dailyEarnings = 0;
-        this.gameState.customersServed = 0;
-        this.gameState.day++;
-        
-        // Change weather for Medium & Hard modes
-        if (this.difficulty !== 'easy') {
-            this.gameState.weather = this.getRandomWeather();
-            this.updateWeatherDisplay();
-        }
-        
-        // Increase goal
-        this.gameState.goal = Math.min(this.gameState.goal + 25, 200);
-        
-        // Close modal
-        document.getElementById('day-results-modal').classList.add('hidden');
-        
-        // Show learning challenge on day 3
-        if (this.gameState.day === 3) {
-            this.showPricingChallenge();
-        }
-        
-        // Generate new customers
-        this.generateCustomers();
-        
-        // Update UI
-        this.updateUI();
-        
-        // Check win condition
-        if (this.gameState.cash >= 500) {
-            this.showWinScreen();
-        }
-    }
-    
-    showPricingChallenge() {
-        this.showLearningMessage(
-            "🧩 PRICING CHALLENGE!",
-            "You've learned the basics! Now here's a puzzle: You have 10 customers today. 3 will pay up to ₹5, 4 will pay up to ₹8, and 3 will pay up to ₹12. What price should you set to maximize profit? (Cost per cup: ₹3.5)",
-            'info'
-        );
-    }
-    
-    checkAchievements() {
-        // First Sale
-        if (this.gameState.customersServed === 1 && !this.gameState.achievements.firstSale) {
-            this.gameState.achievements.firstSale = true;
-            this.gameState.cash += 10; // Bonus
-            this.showAchievement('First Sale', 'You made your first sale!', '🥇');
-        }
-        
-        // ₹100 Day
-        if (this.gameState.dailyEarnings >= 100 && !this.gameState.achievements.hundredDay) {
-            this.gameState.achievements.hundredDay = true;
-            this.gameState.cash += 25; // Bonus
-            this.showAchievement('₹100 Day', 'You earned ₹100 in one day!', '💰');
-        }
-        
-        // Business Owner
-        if (this.gameState.cash >= 500 && !this.gameState.achievements.businessOwner) {
-            this.gameState.achievements.businessOwner = true;
-            this.showAchievement('Business Owner', 'You saved ₹500 for your bike!', '👑');
-        }
-    }
-    
-    showAchievement(title, description, icon) {
-        const popup = document.getElementById('achievement-popup');
-        popup.querySelector('.achievement-icon-large').textContent = icon;
-        popup.querySelector('.achievement-description').textContent = description;
-        
-        popup.classList.remove('hidden');
-        
-        // Update achievement list
-        const achievementItems = document.querySelectorAll('.achievement-item');
-        achievementItems.forEach(item => {
-            if (item.querySelector('.achievement-text').textContent === title) {
-                item.classList.remove('locked');
-                item.classList.add('unlocked');
-            }
-        });
-        
-        setTimeout(() => {
-            popup.classList.add('hidden');
-        }, 3000);
-    }
-    
-    showWinScreen() {
-        const modal = document.getElementById('day-results-modal');
-        document.getElementById('results-message').innerHTML = `
-            🎉🎉🎉 CONGRATULATIONS! 🎉🎉🎉<br><br>
-            You saved ₹500 and can now buy your new bike! 🚲<br><br>
-            You've become a successful lemonade stand entrepreneur!
-        `;
-        modal.classList.remove('hidden');
-        
-        // Change continue button text
-        document.getElementById('continue-btn').textContent = 'Play Again';
-        document.getElementById('continue-btn').onclick = () => {
-            location.reload();
-        };
-    }
-    
-    checkTutorialProgress() {
-        const hasIngredients = this.gameState.ingredients.lemons > 0 && 
-                              this.gameState.ingredients.sugar > 0 && 
-                              this.gameState.ingredients.ice > 0;
-        
-        if (hasIngredients && this.tutorialStep === 2) {
-            this.updateTutorialStep(3);
-        }
-    }
-    
-    calculateCostPerCup() {
-        // Cost breakdown: 1 lemon (₹2), 1 sugar (₹1), 1 ice (₹0.5) = ₹3.5 per cup
-        return 3.5;
-    }
-    
-    showLearningMessage(title, explanation, type = 'info') {
-        const messagesContainer = document.getElementById('game-messages');
-        const message = document.createElement('div');
-        message.className = `learning-message ${type}`;
-        message.innerHTML = `
-            <div class="learning-title">${title}</div>
-            <div class="learning-explanation">${explanation}</div>
-        `;
-        
-        messagesContainer.appendChild(message);
-        
-        // Remove message after 5 seconds (longer for learning)
-        setTimeout(() => {
-            message.remove();
-        }, 5000);
-    }
-    
-    showMessage(text, type = 'info') {
-        const messagesContainer = document.getElementById('game-messages');
-        const message = document.createElement('div');
-        message.className = `message ${type}`;
-        message.innerHTML = `
-            <div class="message-title">${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}</div>
-            <div class="message-text">${text}</div>
-        `;
-        
-        messagesContainer.appendChild(message);
-        
-        // Remove message after 4 seconds
-        setTimeout(() => {
-            message.remove();
-        }, 4000);
+        localStorage.setItem('businessAcademyData', JSON.stringify(data));
     }
     
     updateUI() {
-        // Update cash
-        document.getElementById('cash-amount').textContent = `₹${this.gameState.cash}`;
-        
-        // Update day
-        document.getElementById('day-number').textContent = this.gameState.day;
-        
-        // Update ingredients
-        document.getElementById('lemons-count').textContent = this.gameState.ingredients.lemons;
-        document.getElementById('sugar-count').textContent = this.gameState.ingredients.sugar;
-        document.getElementById('ice-count').textContent = this.gameState.ingredients.ice;
-        
-        // Update Hard Mode inventory
-        if (this.difficulty === 'hard') {
-            document.getElementById('iced-tea-count').textContent = this.gameState.ingredients.tea || 0;
-            document.getElementById('snacks-count').textContent = this.gameState.ingredients.snacks || 0;
-        }
-        
-        // Update price display
-        document.getElementById('price-display').textContent = `₹${this.gameState.price}`;
-        
-        // Update serve count
-        document.getElementById('serve-count').textContent = this.gameState.customersServed;
-        
-        // Update goal
-        document.getElementById('goal-amount').textContent = this.gameState.goal;
-        
-        // Update progress
-        const progress = Math.min((this.gameState.dailyEarnings / this.gameState.goal) * 100, 100);
-        document.getElementById('progress-fill').style.width = `${progress}%`;
-        
-        // Update goal status
-        const goalStatus = document.getElementById('goal-status');
-        if (this.gameState.dailyEarnings >= this.gameState.goal) {
-            goalStatus.textContent = 'Goal reached! 🎉';
-            goalStatus.style.color = '#4CAF50';
-        } else {
-            goalStatus.textContent = `₹${this.gameState.dailyEarnings} / ₹${this.gameState.goal}`;
-            goalStatus.style.color = '#666';
-        }
-        
-        // Update achievements
-        this.updateAchievements();
+        document.getElementById('streak-count').textContent = this.streak;
+        document.getElementById('gem-count').textContent = this.gems;
     }
     
-    updateAchievements() {
-        const achievements = document.querySelectorAll('.achievement-item');
+    showWelcomeScreen() {
+        document.getElementById('welcome-screen').classList.remove('hidden');
+        document.getElementById('lesson-screen').classList.add('hidden');
+        document.getElementById('lesson-content-screen').classList.add('hidden');
+    }
+    
+    selectDifficulty(difficulty) {
+        this.currentDifficulty = difficulty;
+        this.currentLesson = 0;
+        this.showLessonScreen();
+        this.saveUserData();
+    }
+    
+    showLessonScreen() {
+        document.getElementById('welcome-screen').classList.add('hidden');
+        document.getElementById('lesson-screen').classList.remove('hidden');
+        document.getElementById('lesson-content-screen').classList.add('hidden');
         
-        if (this.gameState.achievements.firstSale) {
-            achievements[0].classList.remove('locked');
-            achievements[0].classList.add('unlocked');
+        this.renderLessonGrid();
+    }
+    
+    renderLessonGrid() {
+        const lessonGrid = document.getElementById('lesson-grid');
+        const lessonTitle = document.getElementById('lesson-title');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        
+        // Set title based on difficulty
+        const titles = {
+            beginner: "Lemonade Stand Basics",
+            intermediate: "Coffee Shop Growth",
+            advanced: "Tech Startup Mastery"
+        };
+        
+        lessonTitle.textContent = titles[this.currentDifficulty];
+        
+        // Calculate progress
+        const progress = (this.currentLesson / this.totalLessons) * 100;
+        progressFill.style.width = `${progress}%`;
+        progressText.textContent = `${Math.round(progress)}% Complete`;
+        
+        // Generate lesson items
+        lessonGrid.innerHTML = '';
+        for (let i = 0; i < this.totalLessons; i++) {
+            const lessonItem = document.createElement('div');
+            lessonItem.className = 'lesson-item';
+            lessonItem.textContent = i + 1;
+            
+            if (i < this.currentLesson) {
+                lessonItem.classList.add('completed');
+            } else if (i === this.currentLesson) {
+                lessonItem.classList.add('current');
+            } else {
+                lessonItem.classList.add('locked');
+            }
+            
+            if (i <= this.currentLesson) {
+                lessonItem.addEventListener('click', () => {
+                    this.startLesson(i);
+                });
+            }
+            
+            lessonGrid.appendChild(lessonItem);
+        }
+    }
+    
+    startLesson(lessonIndex) {
+        this.currentLesson = lessonIndex;
+        this.showLessonContent();
+    }
+    
+    showLessonContent() {
+        document.getElementById('lesson-screen').classList.add('hidden');
+        document.getElementById('lesson-content-screen').classList.remove('hidden');
+        
+        const lesson = this.lessons[this.currentDifficulty][this.currentLesson];
+        this.renderLessonContent(lesson);
+    }
+    
+    renderLessonContent(lesson) {
+        const lessonContent = document.getElementById('lesson-content');
+        const currentLessonSpan = document.getElementById('current-lesson');
+        const totalLessonsSpan = document.getElementById('total-lessons');
+        
+        currentLessonSpan.textContent = this.currentLesson + 1;
+        totalLessonsSpan.textContent = this.totalLessons;
+        
+        lessonContent.innerHTML = `
+            <div class="question-card">
+                <h3 class="question-title">${lesson.title}</h3>
+                <p class="question-text">${lesson.question}</p>
+                <div class="options-grid" id="options-grid">
+                    ${lesson.options.map((option, index) => `
+                        <button class="option-btn" data-index="${index}">${option}</button>
+                    `).join('')}
+                </div>
+                <button class="continue-btn hidden" id="continue-btn">Continue</button>
+                <div class="explanation hidden" id="explanation">
+                    <p><strong>Explanation:</strong> ${lesson.explanation}</p>
+                </div>
+            </div>
+        `;
+        
+        this.setupLessonEventListeners(lesson);
+    }
+    
+    setupLessonEventListeners(lesson) {
+        const options = document.querySelectorAll('.option-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const explanation = document.getElementById('explanation');
+        
+        options.forEach((option, index) => {
+            option.addEventListener('click', () => {
+                this.selectAnswer(index, lesson, options, continueBtn, explanation);
+            });
+        });
+        
+        continueBtn.addEventListener('click', () => {
+            this.completeLesson();
+        });
+    }
+    
+    selectAnswer(selectedIndex, lesson, options, continueBtn, explanation) {
+        // Disable all options
+        options.forEach(option => {
+            option.disabled = true;
+            option.style.cursor = 'not-allowed';
+        });
+        
+        // Mark correct and incorrect answers
+        options.forEach((option, index) => {
+            if (index === lesson.correct) {
+                option.classList.add('correct');
+            } else if (index === selectedIndex && index !== lesson.correct) {
+                option.classList.add('incorrect');
+            }
+        });
+        
+        // Show explanation and continue button
+        explanation.classList.remove('hidden');
+        continueBtn.classList.remove('hidden');
+        
+        // Award points
+        if (selectedIndex === lesson.correct) {
+            this.gems += 10;
+            this.streak++;
+        } else {
+            this.streak = 0;
         }
         
-        if (this.gameState.achievements.hundredDay) {
-            achievements[1].classList.remove('locked');
-            achievements[1].classList.add('unlocked');
-        }
+        this.updateUI();
+        this.saveUserData();
+    }
+    
+    completeLesson() {
+        this.currentLesson++;
         
-        if (this.gameState.achievements.businessOwner) {
-            achievements[2].classList.remove('locked');
-            achievements[2].classList.add('unlocked');
+        if (this.currentLesson >= this.totalLessons) {
+            // All lessons completed
+            this.showCompletionScreen();
+        } else {
+            this.showLessonScreen();
+        }
+    }
+    
+    showCompletionScreen() {
+        const lessonContent = document.getElementById('lesson-content');
+        lessonContent.innerHTML = `
+            <div class="question-card">
+                <h3 class="question-title">🎉 Congratulations!</h3>
+                <p class="question-text">You've completed all lessons in ${this.currentDifficulty} mode!</p>
+                <div style="margin: 32px 0;">
+                    <p><strong>Total Gems Earned:</strong> ${this.gems}</p>
+                    <p><strong>Current Streak:</strong> ${this.streak} days</p>
+                </div>
+                <button class="continue-btn" onclick="location.reload()">Start Over</button>
+            </div>
+        `;
+    }
+    
+    navigateToSection(section) {
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-section="${section}"]`).classList.add('active');
+        
+        // Handle different sections
+        switch(section) {
+            case 'learn':
+                this.showWelcomeScreen();
+                break;
+            case 'practice':
+                // Show practice mode
+                break;
+            case 'leaderboard':
+                // Show leaderboard
+                break;
+            case 'profile':
+                // Show profile
+                break;
         }
     }
 }
 
-// Initialize game when page loads
+// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new LemonadeStandGame();
+    new BusinessAcademy();
 });

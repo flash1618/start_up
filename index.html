@@ -3,449 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍋 Lemonade Stand Simulator - Learn Business Skills!</title>
+    <title>Business Academy - Learn Business Skills</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Login Overlay -->
-    <div class="login-overlay" id="login-overlay">
-        <div class="login-content">
-            <div class="login-header">
-                <div class="login-logo">🍋</div>
-                <h1 class="login-title">Lemonade Stand</h1>
-                <p class="login-subtitle">Learn Business Skills</p>
-            </div>
-            
-            <div class="login-tabs">
-                <button class="login-tab active" data-tab="login">Login</button>
-                <button class="login-tab" data-tab="signup">Sign Up</button>
-            </div>
-            
-            <!-- Login Form -->
-            <div class="login-form active" id="login-form">
-                <div class="form-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <input type="password" id="login-password" placeholder="Enter your password" required>
-                </div>
-                <button class="btn btn-primary login-btn" id="login-btn">Login</button>
-                <div class="login-divider">
-                    <span>or</span>
-                </div>
-                <button class="btn btn-secondary guest-btn" id="guest-btn">Continue as Guest</button>
-            </div>
-            
-            <!-- Signup Form -->
-            <div class="login-form" id="signup-form">
-                <div class="form-group">
-                    <label for="signup-name">Full Name</label>
-                    <input type="text" id="signup-name" placeholder="Enter your full name" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" placeholder="Create a password" required>
-                </div>
-                <button class="btn btn-primary signup-btn" id="signup-btn">Create Account</button>
-                <div class="login-divider">
-                    <span>or</span>
-                </div>
-                <button class="btn btn-secondary guest-btn" id="guest-btn-signup">Continue as Guest</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Game Container -->
-    <div class="game-container" id="game-container" style="display: none;">
+    <!-- Duolingo-style App Container -->
+    <div class="app-container">
         
-        <!-- Header -->
-        <header class="game-header">
-            <div class="header-brand">
-                <div class="game-logo">🍋</div>
-                <h1 class="game-title">Lemonade Stand</h1>
-                <div class="game-subtitle">Learn Business Skills</div>
-            </div>
-            
-            <!-- User Info & Logout -->
-            <div class="user-section">
-                <div class="user-info">
-                    <div class="user-avatar">👤</div>
-                    <div class="user-details">
-                        <div class="user-name" id="user-name">Guest Player</div>
-                        <div class="user-type" id="user-type">Guest</div>
+        <!-- Header - Exact Duolingo Style -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">💼</div>
+                    <h1 class="app-title">Business Academy</h1>
+                </div>
+                
+                <div class="user-section">
+                    <div class="streak-info">
+                        <div class="streak-icon">🔥</div>
+                        <span class="streak-count" id="streak-count">0</span>
                     </div>
-                </div>
-                <button class="btn btn-danger logout-btn" id="logout-btn">Logout</button>
-            </div>
-            
-            <div class="player-info">
-                <div class="stat-card success">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-content">
-                        <div class="stat-label">Cash</div>
-                        <div class="stat-value" id="cash-amount">₹100</div>
+                    <div class="gems-info">
+                        <div class="gem-icon">💎</div>
+                        <span class="gem-count" id="gem-count">0</span>
                     </div>
-                </div>
-                <div class="stat-card info">
-                    <div class="stat-icon">📅</div>
-                    <div class="stat-content">
-                        <div class="stat-label">Day</div>
-                        <div class="stat-value" id="day-number">1</div>
-                    </div>
-                </div>
-                <div class="stat-card warning" id="weather-display" style="display: none;">
-                    <div class="stat-icon" id="weather-icon">☀️</div>
-                    <div class="stat-content">
-                        <div class="stat-label">Weather</div>
-                        <div class="stat-value" id="weather-text">Sunny</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Progress & Achievements -->
-            <div class="progress-section">
-                <div class="streak-card">
-                    <div class="streak-icon">🔥</div>
-                    <div class="streak-count" id="streak-count">0</div>
-                    <div class="streak-label">Day Streak</div>
-                </div>
-                <div class="level-card">
-                    <div class="level-icon">⭐</div>
-                    <div class="level-count" id="level-count">1</div>
-                    <div class="level-label">Level</div>
-                </div>
-                <div class="xp-card">
-                    <div class="xp-icon">💎</div>
-                    <div class="xp-count" id="xp-count">0</div>
-                    <div class="xp-label">XP</div>
+                    <div class="user-avatar" id="user-avatar">👤</div>
                 </div>
             </div>
         </header>
 
-        <!-- Main Game Area -->
-        <main class="game-main">
+        <!-- Main Content Area -->
+        <main class="main-content">
             
-            <!-- Lemonade Stand Section -->
-            <div class="game-section">
-                <h2 class="section-title">
-                    <span class="section-icon">🍋</span>
-                    Your Stand
-                </h2>
-                
-                <div class="stand-container">
-                    <div class="lemonade-stand">
-                        <div class="stand-sign">🍋 LEMONADE 🍋</div>
-                        <div class="price-display">
-                            <div class="price-label">Price per cup</div>
-                            <div class="price-value" id="price-display">₹5</div>
-                        </div>
-                        
-                        <div class="inventory-display">
-                            <div class="inventory-item">
-                                <div class="inventory-icon">🍋</div>
-                                <div class="inventory-count" id="lemons-count">0</div>
-                            </div>
-                            <div class="inventory-item">
-                                <div class="inventory-icon">🍯</div>
-                                <div class="inventory-count" id="sugar-count">0</div>
-                            </div>
-                            <div class="inventory-item">
-                                <div class="inventory-icon">🧊</div>
-                                <div class="inventory-count" id="ice-count">0</div>
-                            </div>
-                            <!-- Hard Mode Products -->
-                            <div class="inventory-item hard-mode-only" id="iced-tea-item" style="display: none;">
-                                <div class="inventory-icon">🍵</div>
-                                <div class="inventory-count" id="iced-tea-count">0</div>
-                            </div>
-                            <div class="inventory-item hard-mode-only" id="snacks-item" style="display: none;">
-                                <div class="inventory-icon">🍪</div>
-                                <div class="inventory-count" id="snacks-count">0</div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcome-screen">
+                <div class="welcome-content">
+                    <h2 class="welcome-title">Welcome to Business Academy!</h2>
+                    <p class="welcome-subtitle">Learn business skills through interactive lessons</p>
                     
-                    <!-- Customer Queue -->
-                    <div class="customer-queue" id="customer-queue">
-                        <!-- Customers will appear here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action Panel -->
-            <div class="game-section">
-                <h2 class="section-title">
-                    <span class="section-icon">🛒</span>
-                    Buy Ingredients
-                </h2>
-                
-                <div class="ingredient-grid">
-                    <div class="ingredient-card">
-                        <div class="ingredient-icon">🍋</div>
-                        <div class="ingredient-name">Lemons</div>
-                        <div class="ingredient-price">₹2 each</div>
-                        <button class="btn btn-primary" id="buy-lemons" data-item="lemons" data-price="2">
-                            Buy 5 for ₹10
-                        </button>
-                    </div>
-                    <div class="ingredient-card">
-                        <div class="ingredient-icon">🍯</div>
-                        <div class="ingredient-name">Sugar</div>
-                        <div class="ingredient-price">₹1 per cup</div>
-                        <button class="btn btn-primary" id="buy-sugar" data-item="sugar" data-price="1">
-                            Buy 10 for ₹10
-                        </button>
-                    </div>
-                    <div class="ingredient-card">
-                        <div class="ingredient-icon">🧊</div>
-                        <div class="ingredient-name">Ice</div>
-                        <div class="ingredient-price">₹0.5 per cube</div>
-                        <button class="btn btn-primary" id="buy-ice" data-item="ice" data-price="0.5">
-                            Buy 20 for ₹10
-                        </button>
-                    </div>
-                    <!-- Hard Mode Ingredients -->
-                    <div class="ingredient-card hard-mode-only" id="tea-ingredient" style="display: none;">
-                        <div class="ingredient-icon">🍵</div>
-                        <div class="ingredient-name">Tea Leaves</div>
-                        <div class="ingredient-price">₹8 per pack</div>
-                        <button class="btn btn-primary" id="buy-tea" data-item="tea" data-price="8">
-                            Buy 5 for ₹40
-                        </button>
-                    </div>
-                    <div class="ingredient-card hard-mode-only" id="snacks-ingredient" style="display: none;">
-                        <div class="ingredient-icon">🍪</div>
-                        <div class="ingredient-name">Snacks</div>
-                        <div class="ingredient-price">₹12 per pack</div>
-                        <button class="btn btn-primary" id="buy-snacks" data-item="snacks" data-price="12">
-                            Buy 3 for ₹36
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-                <!-- Set Price Section -->
-                <div class="action-section" id="price-section">
-                    <h3 class="section-title">💰 Set Your Price</h3>
-                    <div class="price-controls">
-                        <div class="price-input-group">
-                            <label for="price-input">Price per cup:</label>
-                            <div class="price-input-wrapper">
-                                <span class="currency">₹</span>
-                                <input type="number" id="price-input" min="1" max="50" value="5" step="0.5">
+                    <div class="difficulty-selection">
+                        <h3>Choose your learning path:</h3>
+                        <div class="difficulty-options">
+                            <div class="difficulty-card" data-difficulty="beginner">
+                                <div class="difficulty-icon">🌱</div>
+                                <h4>Beginner</h4>
+                                <p>Basic business concepts</p>
+                                <div class="difficulty-features">
+                                    <span>• Lemonade Stand</span>
+                                    <span>• Simple metrics</span>
+                                    <span>• Guided lessons</span>
+                                </div>
+                            </div>
+                            
+                            <div class="difficulty-card" data-difficulty="intermediate">
+                                <div class="difficulty-icon">🌿</div>
+                                <h4>Intermediate</h4>
+                                <p>Growing business skills</p>
+                                <div class="difficulty-features">
+                                    <span>• Coffee Shop</span>
+                                    <span>• Advanced metrics</span>
+                                    <span>• Market analysis</span>
+                                </div>
+                            </div>
+                            
+                            <div class="difficulty-card" data-difficulty="advanced">
+                                <div class="difficulty-icon">🌳</div>
+                                <h4>Advanced</h4>
+                                <p>Master business strategy</p>
+                                <div class="difficulty-features">
+                                    <span>• Tech Startup</span>
+                                    <span>• Financial modeling</span>
+                                    <span>• Strategic planning</span>
+                                </div>
                             </div>
                         </div>
-                        <button class="set-price-btn" id="set-price-btn">Set Price</button>
                     </div>
-                </div>
-
-                <!-- Serve Customers Section -->
-                <div class="action-section" id="serve-section">
-                    <h3 class="section-title">👥 Serve Customers</h3>
-                    <div class="serve-controls">
-                        <button class="serve-btn" id="serve-btn" disabled>
-                            <span class="serve-icon">🍋</span>
-                            Serve Lemonade
-                        </button>
-                        <div class="serve-info">
-                            <span id="serve-count">0</span> customers served today
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Next Day Button -->
-                <div class="action-section" id="next-day-section">
-                    <button class="next-day-btn" id="next-day-btn" disabled>
-                        <span class="next-day-icon">🌅</span>
-                        End Day & See Results
-                    </button>
                 </div>
             </div>
 
-            <!-- Progress & Goals -->
-            <div class="progress-panel">
-                <div class="goal-card">
-                    <h4 class="goal-title">🎯 Today's Goal</h4>
-                    <div class="goal-progress">
-                        <div class="goal-text">Make ₹<span id="goal-amount">50</span></div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <div class="goal-status" id="goal-status">Not started</div>
+            <!-- Lesson Selection Screen -->
+            <div class="lesson-screen hidden" id="lesson-screen">
+                <div class="lesson-header">
+                    <h2 class="lesson-title" id="lesson-title">Business Fundamentals</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <p class="progress-text" id="progress-text">0% Complete</p>
+                </div>
+                
+                <div class="lesson-grid" id="lesson-grid">
+                    <!-- Lessons will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Lesson Content Screen -->
+            <div class="lesson-content-screen hidden" id="lesson-content-screen">
+                <div class="lesson-content-header">
+                    <button class="back-btn" id="back-btn">← Back</button>
+                    <div class="lesson-progress">
+                        <span id="current-lesson">1</span> / <span id="total-lessons">5</span>
                     </div>
                 </div>
                 
-                <div class="achievement-card">
-                    <h4 class="achievement-title">🏆 Achievements</h4>
-                    <div class="achievement-list" id="achievement-list">
-                        <div class="achievement-item locked">
-                            <span class="achievement-icon">🥇</span>
-                            <span class="achievement-text">First Sale</span>
-                        </div>
-                        <div class="achievement-item locked">
-                            <span class="achievement-icon">💰</span>
-                            <span class="achievement-text">₹100 Day</span>
-                        </div>
-                        <div class="achievement-item locked">
-                            <span class="achievement-icon">👑</span>
-                            <span class="achievement-text">Business Owner</span>
-                        </div>
-                    </div>
+                <div class="lesson-content" id="lesson-content">
+                    <!-- Lesson content will be dynamically generated -->
                 </div>
             </div>
+
         </main>
 
-        <!-- Game Messages -->
-        <div class="game-messages" id="game-messages">
-            <!-- Messages will appear here -->
-        </div>
-
-    <!-- Difficulty Selection Screen -->
-    <div class="difficulty-overlay" id="difficulty-overlay">
-        <div class="difficulty-content">
-            <div class="difficulty-header">
-                <h1>🍋 Lemonade Stand Simulator</h1>
-                <p>Choose your learning level to start your business journey!</p>
+        <!-- Bottom Navigation - Duolingo Style -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-section="learn">
+                <div class="nav-icon">📚</div>
+                <span>Learn</span>
             </div>
-            
-                <div class="difficulty-options">
-                    <div class="difficulty-card easy" data-difficulty="easy">
-                        <div class="difficulty-icon">🌱</div>
-                        <h3 class="difficulty-name">Easy Mode</h3>
-                        <p class="difficulty-age">Ages 8-12</p>
-                        <div class="difficulty-features">
-                            <ul>
-                                <li>Simple lemonade stand</li>
-                                <li>Basic pricing & inventory</li>
-                                <li>Customer interactions</li>
-                                <li>Profit calculations</li>
-                            </ul>
-                        </div>
-                        <button class="difficulty-btn easy">Start Learning!</button>
-                    </div>
-                    
-                    <div class="difficulty-card medium" data-difficulty="medium">
-                        <div class="difficulty-icon">🌿</div>
-                        <h3 class="difficulty-name">Medium Mode</h3>
-                        <p class="difficulty-age">Ages 13-17</p>
-                        <div class="difficulty-features">
-                            <ul>
-                                <li>Weather effects</li>
-                                <li>Competition</li>
-                                <li>Marketing campaigns</li>
-                                <li>Advanced pricing</li>
-                            </ul>
-                        </div>
-                        <button class="difficulty-btn medium">Take the Challenge!</button>
-                    </div>
-                    
-                    <div class="difficulty-card hard" data-difficulty="hard">
-                        <div class="difficulty-icon">🌳</div>
-                        <h3 class="difficulty-name">Hard Mode</h3>
-                        <p class="difficulty-age">Ages 18+</p>
-                        <div class="difficulty-features">
-                            <ul>
-                                <li>Multiple products</li>
-                                <li>Employee management</li>
-                                <li>Market research</li>
-                                <li>Financial planning</li>
-                            </ul>
-                        </div>
-                        <button class="difficulty-btn hard">Master Business!</button>
-                    </div>
-                </div>
-        </div>
-    </div>
-
-    <!-- Tutorial Overlay -->
-    <div class="tutorial-overlay hidden" id="tutorial-overlay">
-            <div class="tutorial-content">
-                <div class="tutorial-header">
-                    <h2>🍋 Welcome to Your Lemonade Stand!</h2>
-                    <p>Your goal: Save up ₹500 to buy a new bike! 🚲</p>
-                </div>
-                <div class="tutorial-steps">
-                    <div class="tutorial-step active" id="tutorial-step-1">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4>Buy Ingredients</h4>
-                            <p>Start by buying lemons, sugar, and ice to make lemonade!</p>
-                        </div>
-                    </div>
-                    <div class="tutorial-step" id="tutorial-step-2">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4>Set Your Price</h4>
-                            <p>Choose how much to charge per cup. Higher price = more profit, but fewer customers!</p>
-                        </div>
-                    </div>
-                    <div class="tutorial-step" id="tutorial-step-3">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>Serve Customers</h4>
-                            <p>When customers arrive, serve them lemonade to earn money!</p>
-                        </div>
-                    </div>
-                </div>
-                <button class="tutorial-btn" id="tutorial-start-btn">Let's Start! 🚀</button>
+            <div class="nav-item" data-section="practice">
+                <div class="nav-icon">💪</div>
+                <span>Practice</span>
             </div>
-        </div>
-
-        <!-- Day Results Modal -->
-        <div class="modal-overlay hidden" id="day-results-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>📊 Day <span id="results-day">1</span> Results</h2>
-                </div>
-                <div class="modal-body">
-                    <div class="results-grid">
-                        <div class="result-item">
-                            <div class="result-icon">👥</div>
-                            <div class="result-label">Customers Served</div>
-                            <div class="result-value" id="result-customers">0</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-icon">💰</div>
-                            <div class="result-label">Money Earned</div>
-                            <div class="result-value" id="result-earned">₹0</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-icon">🎯</div>
-                            <div class="result-label">Goal Progress</div>
-                            <div class="result-value" id="result-goal">0%</div>
-                        </div>
-                    </div>
-                    <div class="results-message" id="results-message">
-                        <!-- Dynamic message will appear here -->
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="modal-btn primary" id="continue-btn">Continue to Next Day</button>
-                </div>
+            <div class="nav-item" data-section="leaderboard">
+                <div class="nav-icon">🏆</div>
+                <span>Leaderboard</span>
             </div>
-        </div>
-
-        <!-- Achievement Popup -->
-        <div class="achievement-popup hidden" id="achievement-popup">
-            <div class="achievement-content">
-                <div class="achievement-icon-large">🏆</div>
-                <div class="achievement-title">Achievement Unlocked!</div>
-                <div class="achievement-description" id="achievement-description">First Sale</div>
-                <div class="achievement-reward">+₹10 Bonus!</div>
+            <div class="nav-item" data-section="profile">
+                <div class="nav-icon">👤</div>
+                <span>Profile</span>
             </div>
-        </div>
+        </nav>
 
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

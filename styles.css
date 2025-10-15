@@ -922,7 +922,7 @@ body::before {
 
 .price-input {
     border: 3px solid #f59e0b !important;
-    background: rgba(245, 158, 11, 0.1) !important;
+    background: white !important;
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
     color: #1f2937 !important;
     font-weight: 600 !important;
@@ -930,6 +930,11 @@ body::before {
     padding: 15px 20px !important;
     height: 60px !important;
     border-radius: 12px !important;
+}
+
+.price-input::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
 }
 
 .price-input:focus {
@@ -2456,5 +2461,52 @@ body::before {
     }
     75% {
         transform: translateY(-30px) translateX(5px);
+    }
+}
+
+/* Pinned Next Month Button */
+.pinned-next-month {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.pinned-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+}
+
+.pinned-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+.pulse {
+    animation: pulse 1200ms infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+        transform: scale(1.04);
+        box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
     }
 }

@@ -150,6 +150,18 @@ class StartupSimulator {
             { id: 'breakEven', title: 'Reach Break-Even', completed: false, locked: true }
         ];
         
+        // Safe typing controller
+        this.currentTyping = null;
+        
+        // Exact mentor script for Easy mode
+        this.mentorLinesEasy = [
+            "Hi! I'm your business mentor. Let's start by setting your product price. Click the price field and type a number (example: 25). Then click Confirm Price.",
+            "Nice — price set! Now buy some inventory so you can sell. Click the 'Buy Inventory' button and confirm a small batch.",
+            "Great — you've got inventory. Now click 'Next Month' to simulate sales and see your first results.",
+            "Congrats! You made your first sale! See how revenue and profit updated. Next, let's aim for break-even — keep going!",
+            "Amazing — you reached break-even. You covered all your costs. Ready to unlock marketing and scale?"
+        ];
+        
         this.init();
     }
 
@@ -398,6 +410,15 @@ class StartupSimulator {
             console.log('Showing tutorial interface');
             this.showTutorialInterface();
             this.updateMissionUI(); // Initialize mission UI
+            
+            // Auto-focus price input and show first mentor line
+            setTimeout(() => {
+                const priceInput = document.getElementById('tutorial-price-input');
+                if (priceInput) {
+                    priceInput.focus();
+                }
+                this.showMentorLine(0);
+            }, 1000);
         } else {
             console.log('Showing full interface');
             this.showFullInterface();
@@ -446,19 +467,26 @@ class StartupSimulator {
                     console.log('Price validation passed, setting price...');
                     this.gameState.price = price;
                     this.updateUI();
-                    this.addEvent(`Price set to $${price.toFixed(2)} per unit.`, "info");
+                    this.addEvent(`Price set to ₹${price.toFixed(2)} per unit.`, "info");
                     
                     // Check missions
                     this.checkMissions();
-                    
-                    // Update mentor dialogue
-                    this.updateMentorDialogue('priceSet');
                     
                     // Show success animation
                     this.showPriceSetSuccess();
                     
                     // Unlock inventory action
                     this.unlockInventoryAction();
+                    
+                    // Autoscroll to Buy Inventory
+                    setTimeout(() => {
+                        this.scrollAndPulse('inventory-action');
+                    }, 500);
+                    
+                    // Update mentor line
+                    setTimeout(() => {
+                        this.showMentorLine(1);
+                    }, 600);
                 }
             });
 
@@ -479,6 +507,14 @@ class StartupSimulator {
 
         // Add button glow effects
         this.addButtonGlowEffects();
+        
+        // Wire up pinned Next Month button
+        const pinnedNextMonthBtn = document.getElementById('pinned-next-month-btn');
+        if (pinnedNextMonthBtn) {
+            pinnedNextMonthBtn.addEventListener('click', () => {
+                this.nextMonth();
+            });
+        }
     }
 
     validatePrice(price, errorElement) {
@@ -525,21 +561,34 @@ class StartupSimulator {
             this.gameState.inventory += 50; // Deterministic units
             
             this.updateUI();
-            this.addEvent(`Bought 50 units of inventory for $${cost}.`, "info");
+            this.addEvent(`Bought 50 units of inventory for ₹${cost}.`, "info");
             
             // Check missions
             this.checkMissions();
-            
-            // Update mentor dialogue
-            this.updateMentorDialogue('inventoryBought');
             
             // Show floating coins animation
             const cashElement = document.getElementById('cash');
             if (cashElement) {
                 this.createFloatingCoins(3, cashElement);
             }
+            
+            // Show pinned Next Month button
+            const pinnedBtn = document.getElementById('pinned-next-month');
+            if (pinnedBtn) {
+                pinnedBtn.classList.remove('hidden');
+            }
+            
+            // Autoscroll to mentor and update message
+            setTimeout(() => {
+                const mentorBubble = document.getElementById('mentor-guidance');
+                if (mentorBubble) {
+                    mentorBubble.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }
+                this.showMentorLine(2);
+            }, 500);
+            
         } else {
-            this.addEvent(`Not enough cash! Need $${cost} but only have $${this.gameState.cash}.`, "error");
+            this.addEvent(`Not enough cash! Need ₹${cost} but only have ₹${this.gameState.cash}.`, "error");
         }
     }
 
@@ -618,6 +667,22 @@ class StartupSimulator {
             }
         `;
         document.head.appendChild(style);
+    }
+
+    // Autoscroll and pulse functions
+    scrollAndPulse(elementId) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        el.scrollIntoView({behavior: "smooth", block: "center"});
+        el.classList.add('pulse');
+        setTimeout(() => el.classList.remove('pulse'), 2000);
+    }
+
+    showMentorLine(lineIndex) {
+        const speechText = document.getElementById('speech-text');
+        if (speechText && this.mentorLinesEasy[lineIndex]) {
+            this.safeType(speechText, this.mentorLinesEasy[lineIndex], 40);
+        }
     }
 
     unlockTutorialStep(stepNumber) {
@@ -2149,17 +2214,31 @@ class StartupSimulator {
         }
     }
 
-    // Typing Animation for Speech Bubble
-    typeText(element, text, speed = 50) {
+    // Safe Typing Animation for Speech Bubble
+    safeType(element, text, speed = 50) {
+        // Cancel any existing typing animation
+        if (this.currentTyping) {
+            clearInterval(this.currentTyping);
+            this.currentTyping = null;
+        }
+        
         element.innerHTML = '';
         let i = 0;
-        const timer = setInterval(() => {
-            element.innerHTML += text.charAt(i);
-            i++;
-            if (i > text.length) {
-                clearInterval(timer);
+        
+        this.currentTyping = setInterval(() => {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+            } else {
+                clearInterval(this.currentTyping);
+                this.currentTyping = null;
             }
         }, speed);
+    }
+
+    // Legacy method for compatibility
+    typeText(element, text, speed = 50) {
+        this.safeType(element, text, speed);
     }
 
     // Price Set Success Animation

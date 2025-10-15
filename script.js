@@ -138,7 +138,12 @@ class StartupSimulator {
         this.checkForSavedUser();
         this.initializeMentorMessages();
         this.initializeMissions();
-        this.initAnimations();
+        
+        // Initialize animations after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            this.initAnimations();
+        }, 100);
+        
         this.showScreen('difficulty-screen');
     }
 
@@ -154,34 +159,44 @@ class StartupSimulator {
     }
 
     startBackgroundAnimations() {
-        // Animate the gradient orbs
+        // Animate the gradient orbs only if they exist
         if (this.gsap) {
-            this.gsap.to('.orb-1', {
-                x: 50,
-                y: -30,
-                duration: 20,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut'
-            });
+            const orb1 = document.querySelector('.orb-1');
+            const orb2 = document.querySelector('.orb-2');
+            const orb3 = document.querySelector('.orb-3');
             
-            this.gsap.to('.orb-2', {
-                x: -40,
-                y: 40,
-                duration: 25,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut'
-            });
+            if (orb1) {
+                this.gsap.to(orb1, {
+                    x: 50,
+                    y: -30,
+                    duration: 20,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut'
+                });
+            }
             
-            this.gsap.to('.orb-3', {
-                x: 60,
-                y: -20,
-                duration: 30,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut'
-            });
+            if (orb2) {
+                this.gsap.to(orb2, {
+                    x: -40,
+                    y: 40,
+                    duration: 25,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut'
+                });
+            }
+            
+            if (orb3) {
+                this.gsap.to(orb3, {
+                    x: 60,
+                    y: -20,
+                    duration: 30,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut'
+                });
+            }
         }
     }
 
@@ -880,13 +895,15 @@ class StartupSimulator {
         
         // Show target screen with animation
         const targetScreen = document.getElementById(screenId);
-        targetScreen.classList.add('active');
-        
-        if (this.gsap) {
-            this.gsap.fromTo(targetScreen, 
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out', delay: 0.1 }
-            );
+        if (targetScreen) {
+            targetScreen.classList.add('active');
+            
+            if (this.gsap) {
+                this.gsap.fromTo(targetScreen, 
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out', delay: 0.1 }
+                );
+            }
         }
     }
 
@@ -1653,6 +1670,11 @@ class StartupSimulator {
         const milestoneMessage = document.getElementById('milestone-message');
         const milestoneIcon = document.getElementById('milestone-icon');
         
+        if (!popup || !milestoneTitle || !milestoneMessage || !milestoneIcon) {
+            console.error('Milestone popup elements not found');
+            return;
+        }
+        
         milestoneTitle.textContent = title;
         milestoneMessage.textContent = message;
         
@@ -1708,10 +1730,15 @@ class StartupSimulator {
     }
 
     hideMilestonePopup() {
-        document.getElementById('milestone-popup').classList.add('hidden');
+        const popup = document.getElementById('milestone-popup');
+        if (popup) {
+            popup.classList.add('hidden');
+        }
         // Clear confetti
         const confettiContainer = document.getElementById('confetti-container');
-        confettiContainer.innerHTML = '';
+        if (confettiContainer) {
+            confettiContainer.innerHTML = '';
+        }
     }
 
     // Floating Coin Animation

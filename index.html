@@ -33,10 +33,62 @@
             </div>
         </header>
 
+        <!-- Difficulty Selection Screen -->
+        <div id="difficulty-screen" class="screen active">
+            <div class="difficulty-content">
+                <h2>🎯 Choose Your Learning Level</h2>
+                <p>Don't worry - you can always change this later!</p>
+                
+                <div class="difficulty-options">
+                    <div class="difficulty-card" data-difficulty="easy">
+                        <div class="difficulty-icon">🌱</div>
+                        <h3>Easy</h3>
+                        <p>Perfect for beginners!</p>
+                        <div class="difficulty-features">
+                            <span>Revenue & Costs</span>
+                            <span>Profit & Gross Margin</span>
+                            <span>Simple pricing</span>
+                        </div>
+                        <div class="difficulty-description">
+                            Learn the basics of running a business with friendly guidance every step of the way.
+                        </div>
+                    </div>
+                    
+                    <div class="difficulty-card" data-difficulty="medium">
+                        <div class="difficulty-icon">🚀</div>
+                        <h3>Medium</h3>
+                        <p>Ready for more challenge?</p>
+                        <div class="difficulty-features">
+                            <span>Everything from Easy</span>
+                            <span>Break-even & ROI</span>
+                            <span>Runway planning</span>
+                        </div>
+                        <div class="difficulty-description">
+                            Add strategic thinking with break-even analysis and return on investment concepts.
+                        </div>
+                    </div>
+                    
+                    <div class="difficulty-card" data-difficulty="hard">
+                        <div class="difficulty-icon">💎</div>
+                        <h3>Hard</h3>
+                        <p>Business expert mode!</p>
+                        <div class="difficulty-features">
+                            <span>Everything from Medium</span>
+                            <span>CAC, LTV, Burn Rate</span>
+                            <span>ARR & Advanced Metrics</span>
+                        </div>
+                        <div class="difficulty-description">
+                            Master advanced startup metrics like customer acquisition cost and lifetime value.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Game Setup Screen -->
-        <div id="setup-screen" class="screen active">
+        <div id="setup-screen" class="screen">
             <div class="setup-content">
-                <h2>Choose Your Business Idea</h2>
+                <h2>🏢 Choose Your Business Idea</h2>
                 <p>You have $1,000 in seed money. Pick your startup and start building!</p>
                 
                 <div class="business-options">
@@ -150,6 +202,28 @@
                         <h3><i class="fas fa-calendar"></i> Month <span id="current-month">1</span></h3>
                         <div class="business-info">
                             <span id="business-name">Your Business</span>
+                        </div>
+                    </div>
+
+                    <!-- Mentor Messages -->
+                    <div id="mentor-message" class="mentor-message hidden">
+                        <div class="mentor-avatar">👨‍💼</div>
+                        <div class="mentor-content">
+                            <div class="mentor-text" id="mentor-text">Welcome! I'm your business mentor. Let's start with setting your price!</div>
+                            <button id="mentor-next" class="mentor-next-btn">Got it! →</button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Indicator -->
+                    <div class="progress-section">
+                        <h4>📈 Your Progress</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-milestones">
+                            <div class="milestone" id="milestone-1">💰 First Sale</div>
+                            <div class="milestone" id="milestone-2">📊 Break Even</div>
+                            <div class="milestone" id="milestone-3">🎯 Profitability</div>
                         </div>
                     </div>
 

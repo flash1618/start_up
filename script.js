@@ -2,6 +2,9 @@
 class StartupSimulator {
     constructor() {
         this.currentUser = null;
+        this.difficulty = 'easy'; // easy, medium, hard
+        this.currentStep = 0; // For guided gameplay
+        this.mentorMessages = [];
         this.gameState = {
             businessType: null,
             cash: 1000,
@@ -131,11 +134,18 @@ class StartupSimulator {
         this.setupEventListeners();
         this.initAudio();
         this.checkForSavedUser();
-        this.showScreen('setup-screen');
-        this.addEvent("Welcome to Startup Simulator! Choose your business idea to begin.", "info");
+        this.initializeMentorMessages();
+        this.showScreen('difficulty-screen');
     }
 
     setupEventListeners() {
+        // Difficulty selection
+        document.querySelectorAll('.difficulty-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                this.selectDifficulty(e.currentTarget.dataset.difficulty);
+            });
+        });
+
         // Business selection
         document.querySelectorAll('.business-card').forEach(card => {
             card.addEventListener('click', (e) => {
@@ -203,6 +213,11 @@ class StartupSimulator {
             this.saveGame();
         });
 
+        // Mentor system
+        document.getElementById('mentor-next').addEventListener('click', () => {
+            this.nextMentorMessage();
+        });
+
         // Tooltips
         document.querySelectorAll('[data-tooltip]').forEach(element => {
             element.addEventListener('mouseenter', (e) => {
@@ -212,6 +227,24 @@ class StartupSimulator {
                 this.hideTooltip();
             });
         });
+    }
+
+    selectDifficulty(difficulty) {
+        // Remove previous selection
+        document.querySelectorAll('.difficulty-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+
+        // Add selection to clicked card
+        document.querySelector(`[data-difficulty="${difficulty}"]`).classList.add('selected');
+
+        this.difficulty = difficulty;
+        
+        // Move to business selection after a short delay
+        setTimeout(() => {
+            this.showScreen('setup-screen');
+            this.addEvent(`Great choice! You selected ${difficulty} mode. Now let's pick your business idea!`, "info");
+        }, 500);
     }
 
     selectBusiness(businessType) {
@@ -480,9 +513,15 @@ class StartupSimulator {
             peakCustomers: 0,
             gameOver: false,
             victory: false,
-            consecutiveProfitableMonths: 0
+            consecutiveProfitableMonths: 0,
+            achievements: {
+                firstSale: false,
+                profitability: false,
+                hundredCustomers: false
+            }
         };
 
+        this.currentStep = 0;
         this.activeEvents = [];
         this.eventsLog = [];
 
@@ -490,10 +529,18 @@ class StartupSimulator {
         document.querySelectorAll('.business-card').forEach(card => {
             card.classList.remove('selected');
         });
+        document.querySelectorAll('.difficulty-card').forEach(card => {
+            card.classList.remove('selected');
+        });
         document.getElementById('events-log').innerHTML = '';
+        
+        // Reset progress
+        document.getElementById('progress-fill').style.width = '0%';
+        document.querySelectorAll('.milestone').forEach(milestone => {
+            milestone.classList.remove('achieved');
+        });
 
-        this.showScreen('setup-screen');
-        this.addEvent("Welcome to Startup Simulator! Choose your business idea to begin.", "info");
+        this.showScreen('difficulty-screen');
     }
 
     updateUI() {
@@ -832,6 +879,170 @@ class StartupSimulator {
     playSaleSound() {
         this.playSound(1000, 0.15);
         setTimeout(() => this.playSound(1200, 0.15), 50);
+    }
+
+    // Mentor System Methods
+    initializeMentorMessages() {
+        this.mentorMessages = {
+            easy: [
+                "Welcome! I'm your business mentor. Let's start with setting your price! 💰",
+                "Great! Now let's see what happens when you make your first sale! 🎉",
+                "Revenue is the total money you earn from sales. Watch it grow! 📈",
+                "Costs are what you spend to make your product. Keep them low! 💸",
+                "Profit = Revenue - Costs. This is your goal! 🎯",
+                "You're doing great! Try spending some money on marketing to get more customers! 📢"
+            ],
+            medium: [
+                "Welcome! I'm your business mentor. Let's start with setting your price! 💰",
+                "Great! Now let's see what happens when you make your first sale! 🎉",
+                "Revenue is the total money you earn from sales. Watch it grow! 📈",
+                "Costs are what you spend to make your product. Keep them low! 💸",
+                "Profit = Revenue - Costs. This is your goal! 🎯",
+                "Break-even means your revenue equals your costs. No profit, no loss! ⚖️",
+                "ROI (Return on Investment) shows how much you earn for every dollar spent! 📊",
+                "Runway is how long you can survive with your current cash. Plan ahead! 🛫"
+            ],
+            hard: [
+                "Welcome! I'm your business mentor. Let's start with setting your price! 💰",
+                "Great! Now let's see what happens when you make your first sale! 🎉",
+                "Revenue is the total money you earn from sales. Watch it grow! 📈",
+                "Costs are what you spend to make your product. Keep them low! 💸",
+                "Profit = Revenue - Costs. This is your goal! 🎯",
+                "Break-even means your revenue equals your costs. No profit, no loss! ⚖️",
+                "ROI (Return on Investment) shows how much you earn for every dollar spent! 📊",
+                "Runway is how long you can survive with your current cash. Plan ahead! 🛫",
+                "CAC (Customer Acquisition Cost) is how much you spend to get one customer! 🎯",
+                "LTV (Lifetime Value) is how much a customer is worth over their lifetime! 💎",
+                "Burn Rate is how fast you're spending money each month! 🔥",
+                "ARR (Annual Recurring Revenue) is your yearly subscription revenue! 📅"
+            ]
+        };
+    }
+
+    showMentorMessage(message) {
+        const mentorMessage = document.getElementById('mentor-message');
+        const mentorText = document.getElementById('mentor-text');
+        
+        mentorText.textContent = message;
+        mentorMessage.classList.remove('hidden');
+    }
+
+    hideMentorMessage() {
+        const mentorMessage = document.getElementById('mentor-message');
+        mentorMessage.classList.add('hidden');
+    }
+
+    nextMentorMessage() {
+        this.currentStep++;
+        const messages = this.mentorMessages[this.difficulty];
+        
+        if (this.currentStep < messages.length) {
+            this.showMentorMessage(messages[this.currentStep]);
+        } else {
+            this.hideMentorMessage();
+        }
+    }
+
+    updateProgress() {
+        const progressFill = document.getElementById('progress-fill');
+        let progress = 0;
+        
+        if (this.gameState.customers > 0) {
+            progress += 33;
+            document.getElementById('milestone-1').classList.add('achieved');
+        }
+        
+        if (this.gameState.netProfit >= 0) {
+            progress += 33;
+            document.getElementById('milestone-2').classList.add('achieved');
+        }
+        
+        if (this.gameState.netProfit > 0) {
+            progress += 34;
+            document.getElementById('milestone-3').classList.add('achieved');
+        }
+        
+        progressFill.style.width = `${progress}%`;
+    }
+
+    // Override updateUI to include progress and mentor messages
+    updateUI() {
+        // Call the original updateUI method
+        this.updateMetrics();
+        this.updateProductDisplay();
+        this.updateAchievements();
+        this.updateProgress();
+        
+        // Show mentor message for first-time actions
+        if (this.gameState.month === 1 && this.gameState.customers === 0) {
+            this.showMentorMessage(this.mentorMessages[this.difficulty][0]);
+        }
+    }
+
+    updateMetrics() {
+        // Update metrics based on difficulty level
+        const metricsToShow = this.getMetricsForDifficulty();
+        
+        // Show/hide metrics based on difficulty
+        document.querySelectorAll('.metric').forEach(metric => {
+            const metricLabel = metric.querySelector('.metric-label').textContent;
+            if (metricsToShow.includes(metricLabel)) {
+                metric.style.display = 'flex';
+            } else {
+                metric.style.display = 'none';
+            }
+        });
+
+        // Update metric values
+        document.getElementById('cash').textContent = `$${this.gameState.cash.toFixed(0)}`;
+        document.getElementById('revenue').textContent = `$${this.gameState.revenue.toFixed(0)}`;
+        document.getElementById('cogs').textContent = `$${this.gameState.cogs.toFixed(0)}`;
+        document.getElementById('gross-margin').textContent = `$${this.gameState.grossMargin.toFixed(0)}`;
+        document.getElementById('net-profit').textContent = `$${this.gameState.netProfit.toFixed(0)}`;
+        document.getElementById('cac').textContent = `$${this.gameState.cac.toFixed(0)}`;
+        document.getElementById('ltv').textContent = `$${this.gameState.ltv.toFixed(0)}`;
+        document.getElementById('burn-rate').textContent = `$${this.gameState.burnRate.toFixed(0)}`;
+        document.getElementById('runway').textContent = this.gameState.runway === Infinity ? '∞' : `${this.gameState.runway}`;
+        document.getElementById('customers').textContent = this.gameState.customers;
+        document.getElementById('price').textContent = `$${this.gameState.price.toFixed(2)}`;
+        document.getElementById('demand').textContent = `${this.gameState.demand.toFixed(0)}%`;
+        document.getElementById('current-month').textContent = this.gameState.month;
+
+        // Color code profit/loss
+        const netProfitElement = document.getElementById('net-profit');
+        netProfitElement.className = 'metric-value';
+        if (this.gameState.netProfit > 0) {
+            netProfitElement.classList.add('positive');
+        } else if (this.gameState.netProfit < 0) {
+            netProfitElement.classList.add('negative');
+        }
+
+        // Update price input
+        document.getElementById('price-input').value = this.gameState.price;
+
+        // Disable buttons if not enough cash
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            const amount = parseInt(btn.dataset.amount);
+            btn.disabled = this.gameState.cash < amount;
+        });
+
+        // Disable next month if game over
+        document.getElementById('next-month-btn').disabled = this.gameState.gameOver || this.gameState.victory;
+    }
+
+    getMetricsForDifficulty() {
+        const baseMetrics = ['Cash', 'Revenue', 'COGS', 'Gross Margin', 'Net Profit', 'Customers', 'Price', 'Demand'];
+        
+        switch (this.difficulty) {
+            case 'easy':
+                return baseMetrics;
+            case 'medium':
+                return [...baseMetrics, 'Runway'];
+            case 'hard':
+                return [...baseMetrics, 'CAC', 'LTV', 'Burn Rate', 'Runway'];
+            default:
+                return baseMetrics;
+        }
     }
 }
 

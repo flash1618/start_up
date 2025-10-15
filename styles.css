@@ -164,11 +164,12 @@ body {
 }
 
 .customer {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
     border-radius: 50%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
@@ -176,6 +177,7 @@ body {
     animation: customerBounce 2s ease-in-out infinite;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
 }
 
 .customer:hover {
@@ -185,6 +187,42 @@ body {
 
 .customer.served {
     animation: customerLeave 0.5s ease-out forwards;
+}
+
+.customer-avatar {
+    font-size: 2rem;
+}
+
+.customer-thought {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 10;
+    animation: thoughtBubble 0.3s ease-out;
+}
+
+.customer-thought::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.8);
+}
+
+.sale-result {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #2D5016;
+    margin-top: 2px;
 }
 
 /* Action Panel */
@@ -552,6 +590,43 @@ body {
     border-left-color: #FF9800;
 }
 
+/* Learning Messages */
+.learning-message {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border-left: 4px solid #4CAF50;
+    animation: messageSlideIn 0.3s ease-out;
+    margin-bottom: 10px;
+}
+
+.learning-message.error {
+    border-left-color: #F44336;
+}
+
+.learning-message.success {
+    border-left-color: #4CAF50;
+}
+
+.learning-message.warning {
+    border-left-color: #FF9800;
+}
+
+.learning-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #2D5016;
+    margin-bottom: 8px;
+}
+
+.learning-explanation {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+}
+
 /* Tutorial Overlay */
 .tutorial-overlay {
     position: fixed;
@@ -820,6 +895,11 @@ body {
 @keyframes messageSlideIn {
     0% { transform: translateX(100%); opacity: 0; }
     100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes thoughtBubble {
+    0% { transform: translateX(-50%) scale(0.8); opacity: 0; }
+    100% { transform: translateX(-50%) scale(1); opacity: 1; }
 }
 
 @keyframes achievementUnlock {

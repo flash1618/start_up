@@ -5,15 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🍋 Lemonade Stand Simulator - Learn Business Skills!</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="login-overlay">
+        <div class="login-content">
+            <div class="login-header">
+                <div class="login-logo">🍋</div>
+                <h1 class="login-title">Lemonade Stand</h1>
+                <p class="login-subtitle">Learn Business Skills</p>
+            </div>
+            
+            <div class="login-tabs">
+                <button class="login-tab active" data-tab="login">Login</button>
+                <button class="login-tab" data-tab="signup">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="login-form active" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                </div>
+                <button class="btn btn-primary login-btn" id="login-btn">Login</button>
+                <div class="login-divider">
+                    <span>or</span>
+                </div>
+                <button class="btn btn-secondary guest-btn" id="guest-btn">Continue as Guest</button>
+            </div>
+            
+            <!-- Signup Form -->
+            <div class="login-form" id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="Create a password" required>
+                </div>
+                <button class="btn btn-primary signup-btn" id="signup-btn">Create Account</button>
+                <div class="login-divider">
+                    <span>or</span>
+                </div>
+                <button class="btn btn-secondary guest-btn" id="guest-btn-signup">Continue as Guest</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Game Container -->
-    <div class="game-container">
+    <div class="game-container" id="game-container" style="display: none;">
         
         <!-- Header -->
         <header class="game-header">
-            <h1 class="game-title">🍋 Lemonade Stand Simulator</h1>
+            <div class="header-brand">
+                <div class="game-logo">🍋</div>
+                <h1 class="game-title">Lemonade Stand</h1>
+                <div class="game-subtitle">Learn Business Skills</div>
+            </div>
+            
+            <!-- User Info & Logout -->
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-avatar">👤</div>
+                    <div class="user-details">
+                        <div class="user-name" id="user-name">Guest Player</div>
+                        <div class="user-type" id="user-type">Guest</div>
+                    </div>
+                </div>
+                <button class="btn btn-danger logout-btn" id="logout-btn">Logout</button>
+            </div>
+            
             <div class="player-info">
                 <div class="stat-card success">
                     <div class="stat-icon">💰</div>
@@ -35,6 +106,25 @@
                         <div class="stat-label">Weather</div>
                         <div class="stat-value" id="weather-text">Sunny</div>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Progress & Achievements -->
+            <div class="progress-section">
+                <div class="streak-card">
+                    <div class="streak-icon">🔥</div>
+                    <div class="streak-count" id="streak-count">0</div>
+                    <div class="streak-label">Day Streak</div>
+                </div>
+                <div class="level-card">
+                    <div class="level-icon">⭐</div>
+                    <div class="level-count" id="level-count">1</div>
+                    <div class="level-label">Level</div>
+                </div>
+                <div class="xp-card">
+                    <div class="xp-icon">💎</div>
+                    <div class="xp-count" id="xp-count">0</div>
+                    <div class="xp-label">XP</div>
                 </div>
             </div>
         </header>

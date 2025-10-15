@@ -23,6 +23,12 @@ class LemonadeStandGame {
         
         this.tutorialStep = 1;
         this.customers = [];
+        this.user = {
+            isLoggedIn: false,
+            isGuest: false,
+            name: 'Guest Player',
+            email: null
+        };
         this.maxCustomers = 5;
         
         this.init();
@@ -30,10 +36,190 @@ class LemonadeStandGame {
     
     init() {
         this.setupEventListeners();
+        this.checkLoginStatus();
+    }
+    
+    checkLoginStatus() {
+        // Check if user is already logged in
+        const savedUser = localStorage.getItem('lemonadeUser');
+        if (savedUser) {
+            this.user = JSON.parse(savedUser);
+            this.showGame();
+        } else {
+            this.showLogin();
+        }
+    }
+    
+    showLogin() {
+        document.getElementById('login-overlay').style.display = 'flex';
+        document.getElementById('game-container').style.display = 'none';
+    }
+    
+    showGame() {
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('game-container').style.display = 'block';
+        this.updateUserDisplay();
         this.showDifficultySelection();
     }
     
+    updateUserDisplay() {
+        document.getElementById('user-name').textContent = this.user.name;
+        document.getElementById('user-type').textContent = this.user.isGuest ? 'Guest' : 'User';
+    }
+    
+    setupLoginEventListeners() {
+        // Login tabs
+        document.querySelectorAll('.login-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const tabType = e.target.dataset.tab;
+                this.switchLoginTab(tabType);
+            });
+        });
+        
+        // Login form
+        document.getElementById('login-btn').addEventListener('click', () => {
+            this.handleLogin();
+        });
+        
+        // Signup form
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            this.handleSignup();
+        });
+        
+        // Guest login
+        document.getElementById('guest-btn').addEventListener('click', () => {
+            this.handleGuestLogin();
+        });
+        
+        document.getElementById('guest-btn-signup').addEventListener('click', () => {
+            this.handleGuestLogin();
+        });
+        
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            this.handleLogout();
+        });
+        
+        // Enter key for forms
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (document.getElementById('login-form').classList.contains('active')) {
+                    this.handleLogin();
+                } else if (document.getElementById('signup-form').classList.contains('active')) {
+                    this.handleSignup();
+                }
+            }
+        });
+    }
+    
+    switchLoginTab(tabType) {
+        // Update tab buttons
+        document.querySelectorAll('.login-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelector(`[data-tab="${tabType}"]`).classList.add('active');
+        
+        // Update forms
+        document.querySelectorAll('.login-form').forEach(form => {
+            form.classList.remove('active');
+        });
+        document.getElementById(`${tabType}-form`).classList.add('active');
+    }
+    
+    handleLogin() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        if (!email || !password) {
+            this.showMessage('Please fill in all fields', 'error');
+            return;
+        }
+        
+        // Simple validation (in real app, this would be server-side)
+        const users = JSON.parse(localStorage.getItem('lemonadeUsers') || '{}');
+        if (users[email] && users[email].password === password) {
+            this.user = {
+                isLoggedIn: true,
+                isGuest: false,
+                name: users[email].name,
+                email: email
+            };
+            this.saveUser();
+            this.showGame();
+            this.showMessage(`Welcome back, ${this.user.name}!`, 'success');
+        } else {
+            this.showMessage('Invalid email or password', 'error');
+        }
+    }
+    
+    handleSignup() {
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        
+        if (!name || !email || !password) {
+            this.showMessage('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (password.length < 6) {
+            this.showMessage('Password must be at least 6 characters', 'error');
+            return;
+        }
+        
+        // Simple validation (in real app, this would be server-side)
+        const users = JSON.parse(localStorage.getItem('lemonadeUsers') || '{}');
+        if (users[email]) {
+            this.showMessage('Email already exists', 'error');
+            return;
+        }
+        
+        users[email] = { name, password };
+        localStorage.setItem('lemonadeUsers', JSON.stringify(users));
+        
+        this.user = {
+            isLoggedIn: true,
+            isGuest: false,
+            name: name,
+            email: email
+        };
+        this.saveUser();
+        this.showGame();
+        this.showMessage(`Welcome to Lemonade Stand, ${name}!`, 'success');
+    }
+    
+    handleGuestLogin() {
+        this.user = {
+            isLoggedIn: true,
+            isGuest: true,
+            name: 'Guest Player',
+            email: null
+        };
+        this.saveUser();
+        this.showGame();
+        this.showMessage('Welcome! Playing as guest', 'info');
+    }
+    
+    handleLogout() {
+        localStorage.removeItem('lemonadeUser');
+        this.user = {
+            isLoggedIn: false,
+            isGuest: false,
+            name: 'Guest Player',
+            email: null
+        };
+        this.showLogin();
+        this.showMessage('Logged out successfully', 'info');
+    }
+    
+    saveUser() {
+        localStorage.setItem('lemonadeUser', JSON.stringify(this.user));
+    }
+    
     setupEventListeners() {
+        // Login system
+        this.setupLoginEventListeners();
+        
         // Difficulty selection
         document.querySelectorAll('.difficulty-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {

@@ -129,6 +129,19 @@ class StartupSimulator {
         this.audioContext = null;
         this.soundsEnabled = true;
         
+        // Mentor dialogue system
+        this.mentorDialogue = {
+            welcome: "Welcome! I'm your business mentor. Let's start by setting your product price!",
+            priceSet: "Great! You've set your price. Now let's buy some inventory so you have products to sell.",
+            inventoryBought: "Perfect! You have inventory. Now let's make your first sale by clicking 'Next Month'!",
+            firstSale: "🎉 Congratulations! You made your first sale! Now let's work on growing your business.",
+            marketingUnlocked: "Excellent! You're making sales. Now you can spend on marketing to get more customers.",
+            breakEven: "🎊 Amazing! You've reached break-even! Your business is profitable!",
+            growing: "You're doing great! Keep optimizing your business to reach your goals."
+        };
+        
+        this.currentDialogue = 'welcome';
+        
         this.init();
     }
 
@@ -415,6 +428,13 @@ class StartupSimulator {
                     this.addEvent(`Price set to $${price.toFixed(2)} per unit.`, "info");
                     this.completeMission(1);
                     this.unlockTutorialStep(2);
+                    
+                    // Update mentor dialogue
+                    this.updateMentorDialogue('priceSet');
+                    
+                    // Show success animation
+                    this.showPriceSetSuccess();
+                    
                     this.showMilestonePopup('Price Set!', 'Great! You\'ve set your product price. Now let\'s buy some inventory!', 'price');
                 }
             });
@@ -1632,17 +1652,14 @@ class StartupSimulator {
         const popup = document.getElementById('mentor-popup');
         const guidanceText = document.getElementById('guidance-text');
         
-        // Set context-appropriate guidance
-        let guidance = "Let's set your price first — that's how you'll make your first sale!";
-        let tip = "Start with a price that covers your costs plus some profit.";
-        
-        if (this.gameState.price > 0 && this.gameState.customers === 0) {
-            guidance = "Great! Now let's buy some inventory so you have products to sell.";
-            tip = "You'll need inventory before you can make your first sale.";
-        } else if (this.gameState.customers > 0) {
-            guidance = "Excellent! You're making sales. Now let's work on growing your business.";
-            tip = "Consider spending on marketing to get more customers.";
+        if (!popup || !guidanceText) {
+            console.error('Mentor popup elements not found');
+            return;
         }
+        
+        // Get current dialogue based on game state
+        let dialogueKey = this.getCurrentDialogueKey();
+        let message = this.mentorDialogue[dialogueKey] || this.mentorDialogue.welcome;
         
         popup.classList.remove('hidden');
         
@@ -1655,8 +1672,80 @@ class StartupSimulator {
         }
         
         // Type the text with animation
-        const fullText = `${guidance}<br><br>💡 <strong>Tip:</strong> ${tip}`;
-        this.typeText(guidanceText, fullText, 30);
+        this.typeText(guidanceText, message, 30);
+    }
+
+    getCurrentDialogueKey() {
+        if (this.gameState.price === 0) return 'welcome';
+        if (this.gameState.price > 0 && this.gameState.inventory === 0) return 'priceSet';
+        if (this.gameState.inventory > 0 && this.gameState.customers === 0) return 'inventoryBought';
+        if (this.gameState.customers > 0 && this.gameState.revenue <= this.gameState.costs) return 'firstSale';
+        if (this.gameState.revenue > this.gameState.costs) return 'breakEven';
+        return 'growing';
+    }
+
+    updateMentorDialogue(dialogueKey) {
+        this.currentDialogue = dialogueKey;
+        const speechText = document.getElementById('speech-text');
+        if (speechText) {
+            this.typeText(speechText, this.mentorDialogue[dialogueKey], 40);
+        }
+    }
+
+    // Mission Tracker Methods
+    updateMissionProgress() {
+        const progressText = document.getElementById('mission-progress-text');
+        if (progressText) {
+            const completed = document.querySelectorAll('.mission-item.completed').length;
+            const total = document.querySelectorAll('.mission-item').length;
+            progressText.textContent = `${completed}/${total}`;
+        }
+    }
+
+    completeMission(missionNumber) {
+        const mission = document.getElementById(`mission-${missionNumber}`);
+        if (mission) {
+            mission.classList.remove('active', 'locked');
+            mission.classList.add('completed');
+            
+            // Update status text
+            const status = mission.querySelector('.mission-status');
+            if (status) {
+                status.textContent = 'Completed';
+            }
+            
+            // Unlock next mission
+            const nextMission = document.getElementById(`mission-${missionNumber + 1}`);
+            if (nextMission) {
+                nextMission.classList.remove('locked');
+                nextMission.classList.add('active');
+                
+                const nextStatus = nextMission.querySelector('.mission-status');
+                if (nextStatus) {
+                    nextStatus.textContent = 'Active';
+                }
+            }
+            
+            this.updateMissionProgress();
+            
+            // Show completion animation
+            if (this.gsap) {
+                this.gsap.fromTo(mission, 
+                    { scale: 1 },
+                    { scale: 1.05, duration: 0.2, yoyo: true, repeat: 1 }
+                );
+            }
+        }
+    }
+
+    updateMissionStatus(missionNumber, status) {
+        const mission = document.getElementById(`mission-${missionNumber}`);
+        if (mission) {
+            const statusElement = mission.querySelector('.mission-status');
+            if (statusElement) {
+                statusElement.textContent = status;
+            }
+        }
     }
 
     hideMentorPopup() {
@@ -1833,6 +1922,59 @@ class StartupSimulator {
                 clearInterval(timer);
             }
         }, speed);
+    }
+
+    // Price Set Success Animation
+    showPriceSetSuccess() {
+        const priceInput = document.getElementById('tutorial-price-input');
+        if (priceInput) {
+            // Add checkmark animation
+            const checkmark = document.createElement('div');
+            checkmark.innerHTML = '✓';
+            checkmark.style.cssText = `
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #22c55e;
+                font-size: 1.2rem;
+                font-weight: bold;
+                animation: checkmarkBounce 0.6s ease-out;
+            `;
+            
+            const inputWrapper = priceInput.parentElement;
+            inputWrapper.style.position = 'relative';
+            inputWrapper.appendChild(checkmark);
+            
+            // Remove checkmark after animation
+            setTimeout(() => {
+                if (checkmark.parentNode) {
+                    checkmark.parentNode.removeChild(checkmark);
+                }
+            }, 2000);
+        }
+    }
+
+    // Enhanced Metric Animations
+    animateMetricChange(metricId, oldValue, newValue, prefix = '$') {
+        const element = document.getElementById(metricId);
+        if (!element) return;
+
+        // Animate the number change
+        this.animateNumberCount(element, oldValue, newValue, 1000, prefix);
+        
+        // Add floating coin effect for positive changes
+        if (newValue > oldValue) {
+            this.createFloatingCoins(Math.min(5, Math.floor((newValue - oldValue) / 100)), element);
+        }
+        
+        // Add bounce effect for significant increases
+        if (newValue > oldValue * 1.5) {
+            element.style.animation = 'metricBounce 0.6s ease-out';
+            setTimeout(() => {
+                element.style.animation = '';
+            }, 600);
+        }
     }
 
     // Button Glow Effects

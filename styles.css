@@ -894,15 +894,18 @@ body {
     display: block;
     font-size: 0.9rem;
     font-weight: 600;
-    color: rgba(255,255,255,0.9);
+    color: #1f2937;
     margin-bottom: 8px;
     text-align: left;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
 }
 
 .price-input {
     border: 3px solid #f59e0b !important;
     background: rgba(245, 158, 11, 0.1) !important;
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    color: #1f2937 !important;
+    font-weight: 600 !important;
 }
 
 .price-input:focus {
@@ -2222,6 +2225,132 @@ body {
     animation: numberCountUp 0.6s ease-out;
 }
 
+/* Mission Tracker */
+.mission-tracker {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 280px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mission-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.mission-header h3 {
+    color: #1f2937;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.mission-progress {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.mission-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mission-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.mission-item.active {
+    background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+    border: 2px solid #22c55e;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.mission-item.completed {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 2px solid #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.mission-item.locked {
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    opacity: 0.6;
+}
+
+.mission-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mission-content {
+    flex: 1;
+}
+
+.mission-title {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.mission-status {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.mission-item.active .mission-status {
+    color: #22c55e;
+}
+
+.mission-item.completed .mission-status {
+    color: #3b82f6;
+}
+
+.mission-item.locked .mission-status {
+    color: #9ca3af;
+}
+
+.mission-item.completed::after {
+    content: '✓';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3b82f6;
+    font-size: 1.2rem;
+    font-weight: bold;
+    animation: checkmarkBounce 0.6s ease-out;
+}
+
 /* Ripple Effect */
 .ripple {
     position: absolute;
@@ -2240,5 +2369,34 @@ body {
     100% {
         transform: scale(1);
         opacity: 0;
+    }
+}
+
+@keyframes checkmarkBounce {
+    0% {
+        transform: translateY(-50%) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(-50%) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes metricBounce {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+        color: #22c55e;
+    }
+    100% {
+        transform: scale(1);
+        color: inherit;
     }
 }

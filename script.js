@@ -58,6 +58,11 @@ class LemonadeStandGame {
             this.serveCustomer();
         });
         
+        // End day button
+        document.getElementById('next-day-btn').addEventListener('click', () => {
+            this.showDayResults();
+        });
+        
         // Next day
         document.getElementById('continue-btn').addEventListener('click', () => {
             this.nextDay();
@@ -145,6 +150,9 @@ class LemonadeStandGame {
             this.showMessage(`Price set to ₹${price} per cup!`, 'success');
             this.updateTutorialStep(3);
             this.checkTutorialProgress();
+            
+            // Regenerate customers with new price sensitivity
+            this.generateCustomers();
         } else {
             this.showMessage('Price must be between ₹1 and ₹50!', 'error');
         }
@@ -154,13 +162,23 @@ class LemonadeStandGame {
         const customerQueue = document.getElementById('customer-queue');
         customerQueue.innerHTML = '';
         
-        const customerCount = Math.floor(Math.random() * 3) + 2; // 2-4 customers
+        // Base customer count, affected by price
+        let baseCustomerCount = 4;
+        if (this.gameState.price > 15) baseCustomerCount = 2;
+        else if (this.gameState.price > 10) baseCustomerCount = 3;
+        
+        const customerCount = Math.floor(Math.random() * 2) + baseCustomerCount; // 2-5 customers
         
         for (let i = 0; i < customerCount; i++) {
             const customer = document.createElement('div');
             customer.className = 'customer';
             customer.innerHTML = '😊';
-            customer.dataset.willingToPay = Math.floor(Math.random() * 20) + 5; // ₹5-25
+            
+            // Customer willingness to pay affected by price
+            let minWilling = Math.max(5, this.gameState.price - 5);
+            let maxWilling = Math.min(30, this.gameState.price + 15);
+            customer.dataset.willingToPay = Math.floor(Math.random() * (maxWilling - minWilling + 1)) + minWilling;
+            
             customerQueue.appendChild(customer);
         }
         
@@ -184,11 +202,22 @@ class LemonadeStandGame {
     }
     
     serveCustomer(customerElement = null) {
+        // Check if we have ingredients first
+        if (this.gameState.ingredients.lemons <= 0 || 
+            this.gameState.ingredients.sugar <= 0 || 
+            this.gameState.ingredients.ice <= 0) {
+            this.showMessage('Not enough ingredients! Buy more to serve customers.', 'error');
+            return;
+        }
+        
         if (!customerElement) {
             customerElement = document.querySelector('.customer:not(.served)');
         }
         
-        if (!customerElement) return;
+        if (!customerElement) {
+            this.showMessage('No more customers to serve!', 'warning');
+            return;
+        }
         
         const willingToPay = parseInt(customerElement.dataset.willingToPay);
         
@@ -246,12 +275,12 @@ class LemonadeStandGame {
         this.showMessage('All customers served! Click "End Day" to see results.', 'success');
     }
     
-    nextDay() {
+    showDayResults() {
         // Show day results modal
-        this.showDayResults();
+        this.showDayResultsModal();
     }
     
-    showDayResults() {
+    showDayResultsModal() {
         const modal = document.getElementById('day-results-modal');
         const progress = Math.min((this.gameState.dailyEarnings / this.gameState.goal) * 100, 100);
         

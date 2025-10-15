@@ -7,11 +7,28 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #F0E68C 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
     min-height: 100vh;
     overflow-x: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Age-Appropriate Backgrounds */
+body.easy-mode {
+    background: linear-gradient(135deg, #FFE0B2 0%, #FFCC80 50%, #FFB74D 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+body.medium-mode {
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #90CAF9 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+}
+
+body.hard-mode {
+    background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 25s ease infinite;
 }
 
 /* Game Container */
@@ -42,11 +59,29 @@ body {
     gap: 20px;
 }
 
-.game-title {
+/* Age-Appropriate Typography */
+.easy-mode .game-title {
+    font-family: 'Comic Neue', cursive;
+    font-size: 2.8rem;
+    color: #E65100;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    font-weight: 700;
+}
+
+.medium-mode .game-title {
     font-family: 'Fredoka One', cursive;
     font-size: 2.5rem;
-    color: #2D5016;
+    color: #1565C0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hard-mode .game-title {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 2.2rem;
+    color: #4A148C;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .player-info {
@@ -55,17 +90,48 @@ body {
     align-items: center;
 }
 
-.cash-display, .day-counter {
+/* Age-Appropriate UI Elements */
+.easy-mode .cash-display, .easy-mode .day-counter {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    background: linear-gradient(135deg, #FFD54F 0%, #FFC107 100%);
+    padding: 15px 25px;
+    border-radius: 30px;
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #E65100;
+    border: 3px solid #FF8F00;
+}
+
+.medium-mode .cash-display, .medium-mode .day-counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #42A5F5 0%, #1976D2 100%);
     padding: 12px 20px;
     border-radius: 25px;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
     font-weight: 700;
     font-size: 1.2rem;
-    color: #8B4513;
+    color: white;
+}
+
+.hard-mode .cash-display, .hard-mode .day-counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+    padding: 10px 18px;
+    border-radius: 20px;
+    box-shadow: 0 3px 12px rgba(123, 31, 162, 0.3);
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
+    letter-spacing: 0.3px;
 }
 
 .cash-icon, .day-icon {
@@ -240,12 +306,33 @@ body {
     backdrop-filter: blur(10px);
 }
 
-.section-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 1.3rem;
-    color: #2D5016;
+/* Age-Appropriate Section Titles */
+.easy-mode .section-title {
+    font-family: 'Comic Neue', cursive;
+    font-size: 1.5rem;
+    color: #E65100;
     margin-bottom: 15px;
     text-align: center;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.medium-mode .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem;
+    color: #1565C0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.hard-mode .section-title {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 1.2rem;
+    color: #4A148C;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
 /* Ingredient Grid */
@@ -287,7 +374,23 @@ body {
     margin-bottom: 10px;
 }
 
-.buy-btn {
+/* Age-Appropriate Buttons */
+.easy-mode .buy-btn {
+    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+    color: white;
+    border: 3px solid #FF6F00;
+    padding: 12px 16px;
+    border-radius: 25px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+}
+
+.medium-mode .buy-btn {
     background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
     color: white;
     border: none;
@@ -300,10 +403,37 @@ body {
     width: 100%;
 }
 
-.buy-btn:hover {
+.hard-mode .buy-btn {
+    background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+    color: white;
+    border: 1px solid #6A1B9A;
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    width: 100%;
+    letter-spacing: 0.2px;
+}
+
+.easy-mode .buy-btn:hover {
+    background: linear-gradient(135deg, #F57C00 0%, #EF6C00 100%);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+}
+
+.medium-mode .buy-btn:hover {
     background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.hard-mode .buy-btn:hover {
+    background: linear-gradient(135deg, #7B1FA2 0%, #6A1B9A 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(123, 31, 162, 0.3);
 }
 
 .buy-btn:disabled {

@@ -396,13 +396,17 @@ class StartupSimulator {
     }
 
     showTutorialInterface() {
+        console.log('Setting up tutorial interface...');
         // Hide full action groups, show tutorial actions
-        document.getElementById('action-groups').classList.add('hidden');
-        document.getElementById('tutorial-actions').classList.remove('hidden');
-        document.getElementById('current-action').classList.add('hidden');
+        const actionGroups = document.getElementById('action-groups');
+        const tutorialActions = document.getElementById('tutorial-actions');
+        const currentAction = document.getElementById('current-action');
+        const mentorGuidance = document.getElementById('mentor-guidance');
         
-        // Show mentor guidance
-        document.getElementById('mentor-guidance').classList.remove('hidden');
+        if (actionGroups) actionGroups.classList.add('hidden');
+        if (tutorialActions) tutorialActions.classList.remove('hidden');
+        if (currentAction) currentAction.classList.add('hidden');
+        if (mentorGuidance) mentorGuidance.classList.remove('hidden');
         
         // Set up tutorial event listeners
         this.setupTutorialListeners();
@@ -843,12 +847,19 @@ class StartupSimulator {
     }
 
     updateUI() {
-        // Update metrics
-        document.getElementById('cash').textContent = `$${this.gameState.cash.toFixed(0)}`;
-        document.getElementById('revenue').textContent = `$${this.gameState.revenue.toFixed(0)}`;
+        // Store old values for animation
+        const oldCash = parseFloat(document.getElementById('cash')?.textContent?.replace(/[^0-9.-]/g, '') || 0);
+        const oldRevenue = parseFloat(document.getElementById('revenue')?.textContent?.replace(/[^0-9.-]/g, '') || 0);
+        const oldNetProfit = parseFloat(document.getElementById('net-profit')?.textContent?.replace(/[^0-9.-]/g, '') || 0);
+        
+        // Update metrics with animation
+        this.animateMetricChange('cash', oldCash, this.gameState.cash);
+        this.animateMetricChange('revenue', oldRevenue, this.gameState.revenue);
+        this.animateMetricChange('net-profit', oldNetProfit, this.gameState.netProfit);
+        
+        // Update other metrics normally
         document.getElementById('cogs').textContent = `$${this.gameState.cogs.toFixed(0)}`;
         document.getElementById('gross-margin').textContent = `$${this.gameState.grossMargin.toFixed(0)}`;
-        document.getElementById('net-profit').textContent = `$${this.gameState.netProfit.toFixed(0)}`;
         document.getElementById('cac').textContent = `$${this.gameState.cac.toFixed(0)}`;
         document.getElementById('ltv').textContent = `$${this.gameState.ltv.toFixed(0)}`;
         document.getElementById('burn-rate').textContent = `$${this.gameState.burnRate.toFixed(0)}`;

@@ -142,6 +142,14 @@ class StartupSimulator {
         
         this.currentDialogue = 'welcome';
         
+        // Mission state array for Easy mode
+        this.missions = [
+            { id: 'setPrice', title: 'Set Your Price', completed: false, locked: false },
+            { id: 'buyInventory', title: 'Buy Inventory', completed: false, locked: true },
+            { id: 'firstSale', title: 'Make First Sale', completed: false, locked: true },
+            { id: 'breakEven', title: 'Reach Break-Even', completed: false, locked: true }
+        ];
+        
         this.init();
     }
 
@@ -389,6 +397,7 @@ class StartupSimulator {
         if (this.difficulty === 'easy') {
             console.log('Showing tutorial interface');
             this.showTutorialInterface();
+            this.updateMissionUI(); // Initialize mission UI
         } else {
             console.log('Showing full interface');
             this.showFullInterface();
@@ -438,8 +447,9 @@ class StartupSimulator {
                     this.gameState.price = price;
                     this.updateUI();
                     this.addEvent(`Price set to $${price.toFixed(2)} per unit.`, "info");
-                    this.completeMission(1);
-                    this.unlockTutorialStep(2);
+                    
+                    // Check missions
+                    this.checkMissions();
                     
                     // Update mentor dialogue
                     this.updateMentorDialogue('priceSet');
@@ -447,7 +457,8 @@ class StartupSimulator {
                     // Show success animation
                     this.showPriceSetSuccess();
                     
-                    this.showMilestonePopup('Price Set!', 'Great! You\'ve set your product price. Now let\'s buy some inventory!', 'price');
+                    // Unlock inventory action
+                    this.unlockInventoryAction();
                 }
             });
 
@@ -462,7 +473,7 @@ class StartupSimulator {
         const inventoryBtn = document.querySelector('[data-action="inventory"]');
         if (inventoryBtn) {
             inventoryBtn.addEventListener('click', () => {
-                this.performAction('inventory', 200);
+                this.buyInventory();
             });
         }
 
@@ -482,6 +493,131 @@ class StartupSimulator {
             }
             return true;
         }
+    }
+
+    unlockInventoryAction() {
+        const inventoryAction = document.getElementById('inventory-action');
+        if (inventoryAction) {
+            inventoryAction.classList.remove('locked-action');
+            inventoryAction.classList.add('active-action');
+            
+            const unlockCondition = inventoryAction.querySelector('.unlock-condition');
+            if (unlockCondition) {
+                unlockCondition.textContent = 'Unlocked!';
+                unlockCondition.style.color = '#22c55e';
+                unlockCondition.style.borderLeftColor = '#22c55e';
+                unlockCondition.style.background = '#f0fff4';
+            }
+            
+            const inventoryBtn = inventoryAction.querySelector('button');
+            if (inventoryBtn) {
+                inventoryBtn.classList.remove('disabled');
+                inventoryBtn.disabled = false;
+                inventoryBtn.style.animation = 'unlockAction 0.6s ease-out';
+            }
+        }
+    }
+
+    buyInventory() {
+        const cost = 200;
+        if (this.gameState.cash >= cost) {
+            this.gameState.cash -= cost;
+            this.gameState.inventory += 50; // Deterministic units
+            
+            this.updateUI();
+            this.addEvent(`Bought 50 units of inventory for $${cost}.`, "info");
+            
+            // Check missions
+            this.checkMissions();
+            
+            // Update mentor dialogue
+            this.updateMentorDialogue('inventoryBought');
+            
+            // Show floating coins animation
+            const cashElement = document.getElementById('cash');
+            if (cashElement) {
+                this.createFloatingCoins(3, cashElement);
+            }
+        } else {
+            this.addEvent(`Not enough cash! Need $${cost} but only have $${this.gameState.cash}.`, "error");
+        }
+    }
+
+    calculateDemandFactor() {
+        const business = this.businessTypes[this.gameState.businessType];
+        const priceRatio = this.gameState.price / business.basePrice;
+        
+        // Price sensitivity - lower prices = higher demand
+        if (priceRatio < 0.8) return 1.5;
+        if (priceRatio < 1.0) return 1.2;
+        if (priceRatio < 1.2) return 1.0;
+        if (priceRatio < 1.5) return 0.8;
+        return 0.5;
+    }
+
+    showGameOverModal() {
+        const modal = document.createElement('div');
+        modal.className = 'game-over-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>💸 Game Over</h2>
+                </div>
+                <div class="modal-body">
+                    <p>You've run out of cash! Your business couldn't survive.</p>
+                    <p>Final Score: $${this.gameState.totalRevenue.toFixed(0)} in revenue</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="location.reload()">Play Again</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Add CSS for modal
+        const style = document.createElement('style');
+        style.textContent = `
+            .game-over-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2000;
+            }
+            .modal-content {
+                background: white;
+                border-radius: 15px;
+                padding: 30px;
+                max-width: 400px;
+                text-align: center;
+            }
+            .modal-header h2 {
+                color: #ef4444;
+                margin-bottom: 20px;
+            }
+            .modal-body p {
+                margin-bottom: 15px;
+                color: #374151;
+            }
+            .btn {
+                padding: 12px 24px;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            .btn-primary {
+                background: #3b82f6;
+                color: white;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     unlockTutorialStep(stepNumber) {
@@ -569,10 +705,17 @@ class StartupSimulator {
 
     nextMonth() {
         if (this.gameState.gameOver || this.gameState.victory) return;
+        
+        // Check if required actions are completed
+        if (this.gameState.price <= 0 || this.gameState.inventory <= 0) {
+            this.addEvent('Please set your price and buy inventory before proceeding to next month.', "error");
+            return;
+        }
 
         this.gameState.month++;
         this.processMonth();
         this.updateUI();
+        this.checkMissions();
         this.checkWinConditions();
     }
 
@@ -704,7 +847,7 @@ class StartupSimulator {
         // Check for bankruptcy
         if (this.gameState.cash <= 0) {
             this.gameState.gameOver = true;
-            this.showGameSummary();
+            this.showGameOverModal();
             return;
         }
 
@@ -1721,39 +1864,85 @@ class StartupSimulator {
         }
     }
 
-    completeMission(missionNumber) {
-        const mission = document.getElementById(`mission-${missionNumber}`);
-        if (mission) {
-            mission.classList.remove('active', 'locked');
-            mission.classList.add('completed');
-            
-            // Update status text
-            const status = mission.querySelector('.mission-status');
-            if (status) {
-                status.textContent = 'Completed';
-            }
+    completeMission(missionId) {
+        const mission = this.missions.find(m => m.id === missionId);
+        if (mission && !mission.completed) {
+            mission.completed = true;
+            mission.locked = false;
             
             // Unlock next mission
-            const nextMission = document.getElementById(`mission-${missionNumber + 1}`);
-            if (nextMission) {
-                nextMission.classList.remove('locked');
-                nextMission.classList.add('active');
+            const nextMissionIndex = this.missions.findIndex(m => m.id === missionId) + 1;
+            if (nextMissionIndex < this.missions.length) {
+                this.missions[nextMissionIndex].locked = false;
+            }
+            
+            this.updateMissionUI();
+            this.showMissionCompleteAnimation(missionId);
+        }
+    }
+
+    checkMissions() {
+        // Check setPrice mission
+        if (!this.missions[0].completed && this.gameState.price > 0) {
+            this.completeMission('setPrice');
+        }
+        
+        // Check buyInventory mission
+        if (!this.missions[1].completed && this.gameState.inventory > 0) {
+            this.completeMission('buyInventory');
+        }
+        
+        // Check firstSale mission
+        if (!this.missions[2].completed && this.gameState.customers > 0) {
+            this.completeMission('firstSale');
+            this.showMilestonePopup('First Sale!', '🎉 Congratulations! You made your first sale!', 'sale');
+        }
+        
+        // Check breakEven mission
+        if (!this.missions[3].completed && this.gameState.netProfit > 0) {
+            this.completeMission('breakEven');
+            this.showMilestonePopup('Break-Even!', '🎊 Amazing! You\'ve reached profitability!', 'breakEven');
+        }
+    }
+
+    updateMissionUI() {
+        this.missions.forEach((mission, index) => {
+            const missionElement = document.getElementById(`mission-${index + 1}`);
+            if (missionElement) {
+                missionElement.classList.remove('active', 'locked', 'completed');
                 
-                const nextStatus = nextMission.querySelector('.mission-status');
-                if (nextStatus) {
-                    nextStatus.textContent = 'Active';
+                if (mission.completed) {
+                    missionElement.classList.add('completed');
+                    const status = missionElement.querySelector('.mission-status');
+                    if (status) status.textContent = 'Completed';
+                } else if (mission.locked) {
+                    missionElement.classList.add('locked');
+                    const status = missionElement.querySelector('.mission-status');
+                    if (status) status.textContent = 'Locked';
+                } else {
+                    missionElement.classList.add('active');
+                    const status = missionElement.querySelector('.mission-status');
+                    if (status) status.textContent = 'Active';
                 }
             }
-            
-            this.updateMissionProgress();
-            
-            // Show completion animation
-            if (this.gsap) {
-                this.gsap.fromTo(mission, 
-                    { scale: 1 },
-                    { scale: 1.05, duration: 0.2, yoyo: true, repeat: 1 }
-                );
-            }
+        });
+        this.updateMissionProgress();
+    }
+
+    showMissionCompleteAnimation(missionId) {
+        const missionIndex = this.missions.findIndex(m => m.id === missionId);
+        const missionElement = document.getElementById(`mission-${missionIndex + 1}`);
+        
+        if (missionElement && this.gsap) {
+            this.gsap.fromTo(missionElement, 
+                { scale: 1 },
+                { scale: 1.05, duration: 0.2, yoyo: true, repeat: 1 }
+            );
+        }
+        
+        // Show confetti for major milestones
+        if (missionId === 'firstSale' || missionId === 'breakEven') {
+            this.createConfetti();
         }
     }
 

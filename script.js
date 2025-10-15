@@ -1,5 +1,6 @@
 class LemonadeStandGame {
     constructor() {
+        this.difficulty = 'easy'; // Default difficulty
         this.gameState = {
             cash: 100,
             day: 1,
@@ -29,11 +30,19 @@ class LemonadeStandGame {
     
     init() {
         this.setupEventListeners();
-        this.updateUI();
-        this.showTutorial();
+        this.showDifficultySelection();
     }
     
     setupEventListeners() {
+        // Difficulty selection
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.difficulty-card');
+                const difficulty = card.dataset.difficulty;
+                this.selectDifficulty(difficulty);
+            });
+        });
+        
         // Tutorial
         document.getElementById('tutorial-start-btn').addEventListener('click', () => {
             this.hideTutorial();
@@ -74,6 +83,53 @@ class LemonadeStandGame {
                 this.serveCustomer(e.target);
             }
         });
+    }
+    
+    showDifficultySelection() {
+        document.getElementById('difficulty-overlay').classList.remove('hidden');
+    }
+    
+    selectDifficulty(difficulty) {
+        this.difficulty = difficulty;
+        
+        // Adjust game parameters based on difficulty
+        this.adjustGameForDifficulty();
+        
+        // Hide difficulty selection
+        document.getElementById('difficulty-overlay').classList.add('hidden');
+        
+        // Show tutorial for easy mode, or start game directly for others
+        if (difficulty === 'easy') {
+            this.showTutorial();
+        } else {
+            this.startGame();
+        }
+    }
+    
+    adjustGameForDifficulty() {
+        switch(this.difficulty) {
+            case 'easy':
+                this.gameState.cash = 100;
+                this.gameState.goal = 50;
+                break;
+            case 'medium':
+                this.gameState.cash = 150;
+                this.gameState.goal = 100;
+                break;
+            case 'hard':
+                this.gameState.cash = 200;
+                this.gameState.goal = 200;
+                break;
+        }
+        
+        // Add difficulty class to body for styling
+        document.body.className = document.body.className.replace(/easy-mode|medium-mode|hard-mode/g, '');
+        document.body.classList.add(`${this.difficulty}-mode`);
+    }
+    
+    startGame() {
+        this.updateUI();
+        this.generateCustomers();
     }
     
     showTutorial() {

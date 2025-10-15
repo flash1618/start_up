@@ -627,6 +627,159 @@ body {
     line-height: 1.4;
 }
 
+/* Difficulty Selection */
+.difficulty-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #F0E68C 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.difficulty-content {
+    background: white;
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 1000px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.difficulty-header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: #2D5016;
+    margin-bottom: 15px;
+}
+
+.difficulty-header p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.difficulty-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.difficulty-card {
+    background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+    border-radius: 20px;
+    padding: 30px 20px;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.difficulty-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.difficulty-card[data-difficulty="easy"]:hover {
+    border-color: #4CAF50;
+    background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+}
+
+.difficulty-card[data-difficulty="medium"]:hover {
+    border-color: #FF9800;
+    background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+}
+
+.difficulty-card[data-difficulty="hard"]:hover {
+    border-color: #9C27B0;
+    background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+}
+
+.difficulty-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.difficulty-card h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    color: #2D5016;
+    margin-bottom: 8px;
+}
+
+.difficulty-age {
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.difficulty-features ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.difficulty-features li {
+    padding: 8px 0;
+    color: #555;
+    font-size: 0.95rem;
+    position: relative;
+    padding-left: 20px;
+}
+
+.difficulty-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.difficulty-btn {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.difficulty-btn:hover {
+    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+}
+
+.medium-btn {
+    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+}
+
+.medium-btn:hover {
+    background: linear-gradient(135deg, #F57C00 0%, #EF6C00 100%);
+    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
+}
+
+.hard-btn {
+    background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+}
+
+.hard-btn:hover {
+    background: linear-gradient(135deg, #7B1FA2 0%, #6A1B9A 100%);
+    box-shadow: 0 6px 20px rgba(156, 39, 176, 0.3);
+}
+
 /* Tutorial Overlay */
 .tutorial-overlay {
     position: fixed;
@@ -959,6 +1112,26 @@ body {
     }
 }
 
+@media (max-width: 768px) {
+    .difficulty-options {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .difficulty-content {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+    
+    .difficulty-header h1 {
+        font-size: 2rem;
+    }
+    
+    .difficulty-header p {
+        font-size: 1rem;
+    }
+}
+
 @media (max-width: 480px) {
     .game-container {
         padding: 10px;
@@ -975,5 +1148,18 @@ body {
     .cash-display, .day-counter {
         padding: 8px 15px;
         font-size: 1rem;
+    }
+    
+    .difficulty-content {
+        padding: 20px 15px;
+        margin: 10px;
+    }
+    
+    .difficulty-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .difficulty-card {
+        padding: 20px 15px;
     }
 }

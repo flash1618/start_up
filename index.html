@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Simulator: Build Your Dream Business</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="game-header">
+            <h1><i class="fas fa-rocket"></i> Startup Simulator</h1>
+            <p>Build Your Dream Business</p>
+            <div class="user-controls">
+                <div id="user-info" class="user-info hidden">
+                    <span id="username-display"></span>
+                    <button id="logout-btn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                <div id="login-section" class="login-section">
+                    <input type="text" id="username-input" placeholder="Enter your name" maxlength="20">
+                    <button id="login-btn" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <button id="guest-btn" class="guest-btn">
+                        <i class="fas fa-user-secret"></i> Play as Guest
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Setup Screen -->
+        <div id="setup-screen" class="screen active">
+            <div class="setup-content">
+                <h2>Choose Your Business Idea</h2>
+                <p>You have $1,000 in seed money. Pick your startup and start building!</p>
+                
+                <div class="business-options">
+                    <div class="business-card" data-business="food">
+                        <i class="fas fa-utensils"></i>
+                        <h3>Food Brand</h3>
+                        <p>Launch a healthy snack company</p>
+                        <div class="business-stats">
+                            <span>Base Price: $5</span>
+                            <span>COGS: $2</span>
+                            <span>Demand: High</span>
+                        </div>
+                    </div>
+                    
+                    <div class="business-card" data-business="saas">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>SaaS Tool</h3>
+                        <p>Build a productivity software</p>
+                        <div class="business-stats">
+                            <span>Base Price: $29/mo</span>
+                            <span>COGS: $5</span>
+                            <span>Demand: Medium</span>
+                        </div>
+                    </div>
+                    
+                    <div class="business-card" data-business="fashion">
+                        <i class="fas fa-tshirt"></i>
+                        <h3>Fashion Store</h3>
+                        <p>Create a trendy clothing line</p>
+                        <div class="business-stats">
+                            <span>Base Price: $45</span>
+                            <span>COGS: $18</span>
+                            <span>Demand: Medium</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-layout">
+                <!-- Left Panel: Metrics Dashboard -->
+                <div class="metrics-panel">
+                    <h3><i class="fas fa-chart-line"></i> Business Metrics</h3>
+                    
+                    <div class="metric-group">
+                        <h4>Financial Health</h4>
+                        <div class="metric" data-tooltip="Total money you have available">
+                            <span class="metric-label">Cash</span>
+                            <span class="metric-value" id="cash">$1,000</span>
+                        </div>
+                        <div class="metric" data-tooltip="Money earned from sales this month">
+                            <span class="metric-label">Revenue</span>
+                            <span class="metric-value" id="revenue">$0</span>
+                        </div>
+                        <div class="metric" data-tooltip="Cost of goods sold - what it costs to make your product">
+                            <span class="metric-label">COGS</span>
+                            <span class="metric-value" id="cogs">$0</span>
+                        </div>
+                        <div class="metric" data-tooltip="Revenue minus COGS - your gross profit">
+                            <span class="metric-label">Gross Margin</span>
+                            <span class="metric-value" id="gross-margin">$0</span>
+                        </div>
+                        <div class="metric" data-tooltip="Total profit after all expenses">
+                            <span class="metric-label">Net Profit</span>
+                            <span class="metric-value" id="net-profit">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <h4>Growth Metrics</h4>
+                        <div class="metric" data-tooltip="Cost to acquire one new customer">
+                            <span class="metric-label">CAC</span>
+                            <span class="metric-value" id="cac">$0</span>
+                        </div>
+                        <div class="metric" data-tooltip="Lifetime value of a customer">
+                            <span class="metric-label">LTV</span>
+                            <span class="metric-value" id="ltv">$0</span>
+                        </div>
+                        <div class="metric" data-tooltip="How fast you're spending money each month">
+                            <span class="metric-label">Burn Rate</span>
+                            <span class="metric-value" id="burn-rate">$0</span>
+                        </div>
+                        <div class="metric" data-tooltip="How many months until you run out of cash">
+                            <span class="metric-label">Runway</span>
+                            <span class="metric-value" id="runway">∞</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <h4>Business Stats</h4>
+                        <div class="metric">
+                            <span class="metric-label">Customers</span>
+                            <span class="metric-value" id="customers">0</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Price</span>
+                            <span class="metric-value" id="price">$0</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Demand</span>
+                            <span class="metric-value" id="demand">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center Panel: Actions -->
+                <div class="actions-panel">
+                    <div class="month-header">
+                        <h3><i class="fas fa-calendar"></i> Month <span id="current-month">1</span></h3>
+                        <div class="business-info">
+                            <span id="business-name">Your Business</span>
+                        </div>
+                    </div>
+
+                    <div class="action-groups">
+                        <div class="action-group">
+                            <h4><i class="fas fa-dollar-sign"></i> Pricing & Sales</h4>
+                            <div class="action">
+                                <label for="price-input">Set Price per Unit</label>
+                                <div class="input-group">
+                                    <input type="number" id="price-input" min="1" step="0.01">
+                                    <button id="set-price-btn">Update</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-group">
+                            <h4><i class="fas fa-bullhorn"></i> Marketing</h4>
+                            <div class="action">
+                                <label>Marketing Campaign</label>
+                                <div class="action-buttons">
+                                    <button class="action-btn" data-action="marketing" data-amount="100">
+                                        <i class="fas fa-ad"></i> Social Media ($100)
+                                    </button>
+                                    <button class="action-btn" data-action="marketing" data-amount="300">
+                                        <i class="fas fa-tv"></i> Online Ads ($300)
+                                    </button>
+                                    <button class="action-btn" data-action="marketing" data-amount="500">
+                                        <i class="fas fa-microphone"></i> Influencer ($500)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-group">
+                            <h4><i class="fas fa-boxes"></i> Operations</h4>
+                            <div class="action">
+                                <label>Inventory/Resources</label>
+                                <div class="action-buttons">
+                                    <button class="action-btn" data-action="inventory" data-amount="200">
+                                        <i class="fas fa-shopping-cart"></i> Buy Inventory ($200)
+                                    </button>
+                                    <button class="action-btn" data-action="inventory" data-amount="500">
+                                        <i class="fas fa-warehouse"></i> Bulk Order ($500)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-group">
+                            <h4><i class="fas fa-users"></i> Team</h4>
+                            <div class="action">
+                                <label>Hiring & Development</label>
+                                <div class="action-buttons">
+                                    <button class="action-btn" data-action="hire" data-amount="800">
+                                        <i class="fas fa-user-plus"></i> Hire Employee ($800)
+                                    </button>
+                                    <button class="action-btn" data-action="rd" data-amount="400">
+                                        <i class="fas fa-flask"></i> R&D ($400)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="game-controls">
+                        <button id="next-month-btn" class="primary-btn">
+                            <i class="fas fa-forward"></i> Next Month
+                        </button>
+                        <button id="save-game-btn" class="secondary-btn">
+                            <i class="fas fa-save"></i> Save Game
+                        </button>
+                        <button id="restart-btn" class="secondary-btn">
+                            <i class="fas fa-redo"></i> Restart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Events & News -->
+                <div class="events-panel">
+                    <h3><i class="fas fa-newspaper"></i> Market News</h3>
+                    <div id="events-log" class="events-log">
+                        <div class="event-item">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Welcome to Startup Simulator! Make your first business decision.</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Visualization -->
+                    <div class="product-showcase">
+                        <h4><i class="fas fa-box"></i> Your Product</h4>
+                        <div id="product-display" class="product-display">
+                            <div class="product-placeholder">
+                                <i class="fas fa-question-circle"></i>
+                                <p>Choose a business to see your product</p>
+                            </div>
+                        </div>
+                        <div id="sales-animation" class="sales-animation hidden">
+                            <div class="sale-bubble">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>+$<span id="sale-amount">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Achievements -->
+                    <div class="achievements-section">
+                        <h4><i class="fas fa-trophy"></i> Achievements</h4>
+                        <div id="achievements-list" class="achievements-list">
+                            <div class="achievement-item locked" data-achievement="firstSale">
+                                <i class="fas fa-lock"></i>
+                                <span>First Sale</span>
+                            </div>
+                            <div class="achievement-item locked" data-achievement="profitability">
+                                <i class="fas fa-lock"></i>
+                                <span>Profitability</span>
+                            </div>
+                            <div class="achievement-item locked" data-achievement="hundredCustomers">
+                                <i class="fas fa-lock"></i>
+                                <span>100 Customers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen">
+            <div class="game-over-content">
+                <h2 id="game-over-title">Game Over</h2>
+                <p id="game-over-message">Your startup has run out of cash!</p>
+                <div class="final-stats">
+                    <h3>Final Results</h3>
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="stat-label">Months Survived</span>
+                            <span class="stat-value" id="final-months">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Total Revenue</span>
+                            <span class="stat-value" id="final-revenue">$0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Peak Customers</span>
+                            <span class="stat-value" id="final-customers">0</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="play-again-btn" class="primary-btn">
+                    <i class="fas fa-play"></i> Play Again
+                </button>
+            </div>
+        </div>
+
+        <!-- Victory Screen -->
+        <div id="victory-screen" class="screen">
+            <div class="victory-content">
+                <h2><i class="fas fa-trophy"></i> Congratulations!</h2>
+                <p>You've built a successful startup!</p>
+                <div class="achievement">
+                    <i class="fas fa-star"></i>
+                    <span id="achievement-text">Profitability Achieved!</span>
+                </div>
+                <div class="final-stats">
+                    <h3>Final Results</h3>
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="stat-label">Months to Success</span>
+                            <span class="stat-value" id="victory-months">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Final Valuation</span>
+                            <span class="stat-value" id="final-valuation">$0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Total Customers</span>
+                            <span class="stat-value" id="victory-customers">0</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="victory-play-again-btn" class="primary-btn">
+                    <i class="fas fa-play"></i> Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

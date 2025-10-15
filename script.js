@@ -111,25 +111,92 @@ class LemonadeStandGame {
             case 'easy':
                 this.gameState.cash = 100;
                 this.gameState.goal = 50;
+                this.gameState.weather = 'sunny';
+                this.gameState.competition = 0;
+                this.gameState.marketing = 0;
                 break;
             case 'medium':
                 this.gameState.cash = 150;
                 this.gameState.goal = 100;
+                this.gameState.weather = this.getRandomWeather();
+                this.gameState.competition = 1;
+                this.gameState.marketing = 0;
+                this.gameState.products = ['lemonade'];
                 break;
             case 'hard':
                 this.gameState.cash = 200;
                 this.gameState.goal = 200;
+                this.gameState.weather = this.getRandomWeather();
+                this.gameState.competition = 2;
+                this.gameState.marketing = 0;
+                this.gameState.products = ['lemonade', 'iced_tea', 'snacks'];
+                this.gameState.employees = 0;
+                this.gameState.marketResearch = 0;
                 break;
         }
         
         // Add difficulty class to body for styling
         document.body.className = document.body.className.replace(/easy-mode|medium-mode|hard-mode/g, '');
         document.body.classList.add(`${this.difficulty}-mode`);
+        
+        // Show/hide difficulty-specific features
+        this.toggleDifficultyFeatures();
+    }
+    
+    getRandomWeather() {
+        const weathers = ['sunny', 'cloudy', 'rainy', 'hot'];
+        return weathers[Math.floor(Math.random() * weathers.length)];
+    }
+    
+    toggleDifficultyFeatures() {
+        // Hide all difficulty-specific elements first
+        document.querySelectorAll('.hard-mode-only').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // Show features based on difficulty
+        if (this.difficulty === 'hard') {
+            // Show Hard Mode features
+            document.querySelectorAll('.hard-mode-only').forEach(el => {
+                el.style.display = 'block';
+            });
+        }
     }
     
     startGame() {
         this.updateUI();
+        this.updateWeatherDisplay();
         this.generateCustomers();
+    }
+    
+    updateWeatherDisplay() {
+        const weatherDisplay = document.getElementById('weather-display');
+        const weatherIcon = document.getElementById('weather-icon');
+        const weatherText = document.getElementById('weather-text');
+        
+        if (this.difficulty === 'easy') {
+            weatherDisplay.style.display = 'none';
+            return;
+        }
+        
+        weatherDisplay.style.display = 'flex';
+        
+        const weatherIcons = {
+            'sunny': '☀️',
+            'cloudy': '☁️',
+            'rainy': '🌧️',
+            'hot': '🔥'
+        };
+        
+        const weatherNames = {
+            'sunny': 'Sunny',
+            'cloudy': 'Cloudy',
+            'rainy': 'Rainy',
+            'hot': 'Hot'
+        };
+        
+        weatherIcon.textContent = weatherIcons[this.gameState.weather];
+        weatherText.textContent = weatherNames[this.gameState.weather];
     }
     
     showTutorial() {
@@ -171,6 +238,14 @@ class LemonadeStandGame {
                 quantity = 20;
                 totalCost = 10;
                 break;
+            case 'tea':
+                quantity = 5;
+                totalCost = 40;
+                break;
+            case 'snacks':
+                quantity = 3;
+                totalCost = 36;
+                break;
         }
         
         if (this.gameState.cash >= totalCost) {
@@ -179,7 +254,11 @@ class LemonadeStandGame {
             
             this.showMessage(`Bought ${quantity} ${item} for ₹${totalCost}!`, 'success');
             this.updateUI();
-            this.checkTutorialProgress();
+            
+            // Update tutorial progress (only for basic ingredients in Easy mode)
+            if (this.difficulty === 'easy' && ['lemons', 'sugar', 'ice'].includes(item)) {
+                this.checkTutorialProgress();
+            }
             
             // Animate the purchase
             this.animatePurchase(item);
@@ -223,7 +302,17 @@ class LemonadeStandGame {
         if (this.gameState.price > 15) baseCustomerCount = 2;
         else if (this.gameState.price > 10) baseCustomerCount = 3;
         
-        const customerCount = Math.floor(Math.random() * 2) + baseCustomerCount; // 2-5 customers
+        let customerCount = Math.floor(Math.random() * 2) + baseCustomerCount; // 2-5 customers
+        
+        // Weather effects (Medium & Hard modes)
+        if (this.difficulty !== 'easy') {
+            customerCount = this.applyWeatherEffects(customerCount);
+        }
+        
+        // Competition effects (Medium & Hard modes)
+        if (this.difficulty !== 'easy') {
+            customerCount = this.applyCompetitionEffects(customerCount);
+        }
         
         for (let i = 0; i < customerCount; i++) {
             const customer = document.createElement('div');
@@ -232,13 +321,19 @@ class LemonadeStandGame {
             // Customer willingness to pay affected by price
             let minWilling = Math.max(5, this.gameState.price - 5);
             let maxWilling = Math.min(30, this.gameState.price + 15);
-            const willingToPay = Math.floor(Math.random() * (maxWilling - minWilling + 1)) + minWilling;
+            let willingToPay = Math.floor(Math.random() * (maxWilling - minWilling + 1)) + minWilling;
+            
+            // Weather affects willingness to pay
+            if (this.difficulty !== 'easy') {
+                willingToPay = this.applyWeatherToWillingness(willingToPay);
+            }
+            
             customer.dataset.willingToPay = willingToPay;
             
             // Add customer thoughts for learning
             const customerThoughts = this.getCustomerThoughts(willingToPay);
             customer.innerHTML = `
-                <div class="customer-avatar">😊</div>
+                <div class="customer-avatar">${this.getCustomerEmoji()}</div>
                 <div class="customer-thought" style="display: none;">${customerThoughts}</div>
             `;
             
@@ -258,6 +353,42 @@ class LemonadeStandGame {
         
         // Enable serve button if we have ingredients
         this.updateServeButton();
+    }
+    
+    applyWeatherEffects(customerCount) {
+        switch(this.gameState.weather) {
+            case 'hot':
+                return Math.floor(customerCount * 1.5); // 50% more customers
+            case 'sunny':
+                return customerCount; // Normal
+            case 'cloudy':
+                return Math.floor(customerCount * 0.8); // 20% fewer
+            case 'rainy':
+                return Math.floor(customerCount * 0.5); // 50% fewer
+            default:
+                return customerCount;
+        }
+    }
+    
+    applyCompetitionEffects(customerCount) {
+        const competitionFactor = 1 - (this.gameState.competition * 0.2); // 20% reduction per competitor
+        return Math.floor(customerCount * competitionFactor);
+    }
+    
+    applyWeatherToWillingness(willingToPay) {
+        switch(this.gameState.weather) {
+            case 'hot':
+                return Math.floor(willingToPay * 1.2); // Pay 20% more when hot
+            case 'rainy':
+                return Math.floor(willingToPay * 0.8); // Pay 20% less when rainy
+            default:
+                return willingToPay;
+        }
+    }
+    
+    getCustomerEmoji() {
+        const emojis = ['😊', '😄', '🤔', '😐', '😕'];
+        return emojis[Math.floor(Math.random() * emojis.length)];
     }
     
     getCustomerThoughts(willingToPay) {
@@ -419,6 +550,12 @@ class LemonadeStandGame {
         this.gameState.customersServed = 0;
         this.gameState.day++;
         
+        // Change weather for Medium & Hard modes
+        if (this.difficulty !== 'easy') {
+            this.gameState.weather = this.getRandomWeather();
+            this.updateWeatherDisplay();
+        }
+        
         // Increase goal
         this.gameState.goal = Math.min(this.gameState.goal + 25, 200);
         
@@ -566,6 +703,12 @@ class LemonadeStandGame {
         document.getElementById('lemons-count').textContent = this.gameState.ingredients.lemons;
         document.getElementById('sugar-count').textContent = this.gameState.ingredients.sugar;
         document.getElementById('ice-count').textContent = this.gameState.ingredients.ice;
+        
+        // Update Hard Mode inventory
+        if (this.difficulty === 'hard') {
+            document.getElementById('iced-tea-count').textContent = this.gameState.ingredients.tea || 0;
+            document.getElementById('snacks-count').textContent = this.gameState.ingredients.snacks || 0;
+        }
         
         // Update price display
         document.getElementById('price-display').textContent = `₹${this.gameState.price}`;

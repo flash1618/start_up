@@ -24,6 +24,10 @@
                         <span class="day-icon">📅</span>
                         <span class="day-text">Day <span id="day-number">1</span></span>
                     </div>
+                    <div class="weather-display" id="weather-display" style="display: none;">
+                        <span class="weather-icon" id="weather-icon">☀️</span>
+                        <span id="weather-text">Sunny</span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -46,15 +50,24 @@
                             <span class="inventory-icon">🍋</span>
                             <span class="inventory-count" id="lemons-count">0</span>
                         </div>
-                        <div class="inventory-item">
-                            <span class="inventory-icon">🍯</span>
-                            <span class="inventory-count" id="sugar-count">0</span>
-                        </div>
-                        <div class="inventory-item">
-                            <span class="inventory-icon">🧊</span>
-                            <span class="inventory-count" id="ice-count">0</span>
-                        </div>
+                    <div class="inventory-item">
+                        <span class="inventory-icon">🍯</span>
+                        <span class="inventory-count" id="sugar-count">0</span>
                     </div>
+                    <div class="inventory-item">
+                        <span class="inventory-icon">🧊</span>
+                        <span class="inventory-count" id="ice-count">0</span>
+                    </div>
+                    <!-- Hard Mode Products -->
+                    <div class="inventory-item hard-mode-only" id="iced-tea-item" style="display: none;">
+                        <span class="inventory-icon">🍵</span>
+                        <span class="inventory-count" id="iced-tea-count">0</span>
+                    </div>
+                    <div class="inventory-item hard-mode-only" id="snacks-item" style="display: none;">
+                        <span class="inventory-icon">🍪</span>
+                        <span class="inventory-count" id="snacks-count">0</span>
+                    </div>
+                </div>
                 </div>
                 
                 <!-- Customer Queue -->
@@ -92,6 +105,23 @@
                             <div class="ingredient-price">₹0.5 per cube</div>
                             <button class="buy-btn" id="buy-ice" data-item="ice" data-price="0.5">
                                 Buy 20 for ₹10
+                            </button>
+                        </div>
+                        <!-- Hard Mode Ingredients -->
+                        <div class="ingredient-card hard-mode-only" id="tea-ingredient" style="display: none;">
+                            <div class="ingredient-icon">🍵</div>
+                            <div class="ingredient-name">Tea Leaves</div>
+                            <div class="ingredient-price">₹8 per pack</div>
+                            <button class="buy-btn" id="buy-tea" data-item="tea" data-price="8">
+                                Buy 5 for ₹40
+                            </button>
+                        </div>
+                        <div class="ingredient-card hard-mode-only" id="snacks-ingredient" style="display: none;">
+                            <div class="ingredient-icon">🍪</div>
+                            <div class="ingredient-name">Snacks</div>
+                            <div class="ingredient-price">₹12 per pack</div>
+                            <button class="buy-btn" id="buy-snacks" data-item="snacks" data-price="12">
+                                Buy 3 for ₹36
                             </button>
                         </div>
                     </div>

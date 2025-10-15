@@ -226,6 +226,15 @@ class StartupSimulator {
             this.hideCelebration();
         });
 
+        // Summary screen
+        document.getElementById('summary-play-again-btn').addEventListener('click', () => {
+            this.restart();
+        });
+
+        document.getElementById('summary-share-btn').addEventListener('click', () => {
+            this.shareResults();
+        });
+
         // Tooltips
         document.querySelectorAll('[data-tooltip]').forEach(element => {
             element.addEventListener('mouseenter', (e) => {
@@ -286,6 +295,81 @@ class StartupSimulator {
         this.updateProductDisplay();
         this.updateUI();
         this.addEvent(`Started ${this.businessTypes[this.gameState.businessType].name}! Set your price and make your first business decisions.`, "info");
+        
+        // Show appropriate interface based on difficulty
+        if (this.difficulty === 'easy') {
+            this.showTutorialInterface();
+        } else {
+            this.showFullInterface();
+        }
+    }
+
+    showTutorialInterface() {
+        // Hide full action groups, show tutorial actions
+        document.getElementById('action-groups').classList.add('hidden');
+        document.getElementById('tutorial-actions').classList.remove('hidden');
+        document.getElementById('current-action').classList.add('hidden');
+        
+        // Show mentor guidance
+        document.getElementById('mentor-guidance').classList.remove('hidden');
+        
+        // Set up tutorial event listeners
+        this.setupTutorialListeners();
+    }
+
+    showFullInterface() {
+        // Show full action groups, hide tutorial actions
+        document.getElementById('action-groups').classList.remove('hidden');
+        document.getElementById('tutorial-actions').classList.add('hidden');
+        document.getElementById('current-action').classList.add('hidden');
+        document.getElementById('mentor-guidance').classList.add('hidden');
+    }
+
+    setupTutorialListeners() {
+        // Tutorial price input
+        const tutorialPriceBtn = document.getElementById('tutorial-set-price-btn');
+        if (tutorialPriceBtn) {
+            tutorialPriceBtn.addEventListener('click', () => {
+                const price = parseFloat(document.getElementById('tutorial-price-input').value);
+                if (price > 0) {
+                    this.gameState.price = price;
+                    this.updateUI();
+                    this.addEvent(`Price set to $${price.toFixed(2)} per unit.`, "info");
+                    this.completeMission(1);
+                    this.unlockTutorialStep(2);
+                }
+            });
+        }
+
+        // Tutorial inventory button
+        const inventoryBtn = document.querySelector('[data-action="inventory"]');
+        if (inventoryBtn) {
+            inventoryBtn.addEventListener('click', () => {
+                this.performAction('inventory', 200);
+            });
+        }
+    }
+
+    unlockTutorialStep(stepNumber) {
+        const step = document.getElementById(`step-${stepNumber}`);
+        if (step) {
+            step.classList.remove('locked');
+            step.classList.add('active');
+            
+            // Update unlock condition text
+            const unlockCondition = step.querySelector('.unlock-condition');
+            if (unlockCondition) {
+                unlockCondition.textContent = 'Unlocked!';
+                unlockCondition.style.color = '#22c55e';
+            }
+            
+            // Enable locked buttons in this step
+            const lockedButtons = step.querySelectorAll('.disabled');
+            lockedButtons.forEach(btn => {
+                btn.classList.remove('disabled');
+                btn.disabled = false;
+            });
+        }
     }
 
     setPrice() {
@@ -463,7 +547,7 @@ class StartupSimulator {
         // Check for bankruptcy
         if (this.gameState.cash <= 0) {
             this.gameState.gameOver = true;
-            this.showGameOver();
+            this.showGameSummary();
             return;
         }
 
@@ -482,6 +566,57 @@ class StartupSimulator {
             this.gameState.victory = true;
             this.showVictory();
         }
+    }
+
+    showGameSummary() {
+        this.showScreen('summary-screen');
+        this.updateSummaryStats();
+    }
+
+    updateSummaryStats() {
+        // Update summary message
+        const summaryIcon = document.getElementById('summary-icon');
+        const summaryText = document.getElementById('summary-text');
+        
+        if (this.gameState.gameOver) {
+            summaryIcon.textContent = '💸';
+            summaryText.textContent = `You lasted ${this.gameState.month} months before running out of cash. Better luck next time!`;
+        } else {
+            summaryIcon.textContent = '🎯';
+            summaryText.textContent = `You lasted ${this.gameState.month} months and reached a profit of $${this.gameState.netProfit.toFixed(0)}!`;
+        }
+
+        // Update stats
+        document.getElementById('summary-months').textContent = this.gameState.month;
+        document.getElementById('summary-revenue').textContent = `$${this.gameState.revenue.toFixed(0)}`;
+        document.getElementById('summary-customers').textContent = this.gameState.customers;
+        document.getElementById('summary-profit').textContent = `$${this.gameState.netProfit.toFixed(0)}`;
+
+        // Update achievements
+        this.updateSummaryAchievements();
+    }
+
+    updateSummaryAchievements() {
+        const achievementsList = document.getElementById('summary-achievements');
+        achievementsList.innerHTML = '';
+
+        const achievements = [
+            { key: 'firstSale', name: 'First Sale', icon: '🛒' },
+            { key: 'profitability', name: 'Profitability', icon: '💰' },
+            { key: 'hundredCustomers', name: '100 Customers', icon: '👥' }
+        ];
+
+        achievements.forEach(achievement => {
+            if (this.gameState.achievements[achievement.key]) {
+                const achievementItem = document.createElement('div');
+                achievementItem.className = 'achievement-item';
+                achievementItem.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${achievement.name}</span>
+                `;
+                achievementsList.appendChild(achievementItem);
+            }
+        });
     }
 
     showGameOver() {
@@ -1064,7 +1199,7 @@ class StartupSimulator {
                 id: 1,
                 title: "Set Your Price",
                 description: "Choose how much to charge for your product",
-                icon: "💰",
+                icon: "price",
                 action: "setPrice",
                 completed: false,
                 unlocked: true
@@ -1073,7 +1208,7 @@ class StartupSimulator {
                 id: 2,
                 title: "Make Your First Sale",
                 description: "Sell at least 1 unit",
-                icon: "🛒",
+                icon: "sale",
                 action: "firstSale",
                 completed: false,
                 unlocked: false
@@ -1082,7 +1217,7 @@ class StartupSimulator {
                 id: 3,
                 title: "Reach Break-Even",
                 description: "Make your revenue equal your costs",
-                icon: "📊",
+                icon: "chart",
                 action: "breakEven",
                 completed: false,
                 unlocked: false
@@ -1091,7 +1226,7 @@ class StartupSimulator {
                 id: 4,
                 title: "Achieve Profitability",
                 description: "Make more money than you spend",
-                icon: "🎯",
+                icon: "star",
                 action: "profitability",
                 completed: false,
                 unlocked: false
@@ -1134,15 +1269,31 @@ class StartupSimulator {
             if (missionElement) {
                 missionElement.className = 'mission-item';
                 
+                const statusElement = missionElement.querySelector('.mission-status');
                 if (mission.completed) {
                     missionElement.classList.add('completed');
-                    missionElement.querySelector('.mission-status').textContent = '✅';
+                    statusElement.innerHTML = `
+                        <svg class="status-icon" viewBox="0 0 20 20">
+                            <circle cx="10" cy="10" r="8" fill="#22c55e" stroke="#16a34a" stroke-width="2"/>
+                            <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
+                        </svg>
+                    `;
                 } else if (mission.unlocked) {
                     missionElement.classList.add('active');
-                    missionElement.querySelector('.mission-status').textContent = '⏳';
+                    statusElement.innerHTML = `
+                        <svg class="status-icon" viewBox="0 0 20 20">
+                            <circle cx="10" cy="10" r="8" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+                            <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
+                        </svg>
+                    `;
                 } else {
                     missionElement.classList.add('locked');
-                    missionElement.querySelector('.mission-status').textContent = '🔒';
+                    statusElement.innerHTML = `
+                        <svg class="status-icon" viewBox="0 0 20 20">
+                            <rect x="2" y="2" width="16" height="16" rx="3" fill="#6b7280" stroke="#4b5563" stroke-width="2"/>
+                            <path d="M6 6 L14 14 M14 6 L6 14" stroke="white" stroke-width="2"/>
+                        </svg>
+                    `;
                 }
             }
         });
@@ -1255,13 +1406,52 @@ class StartupSimulator {
     }
 
     // Celebration System
-    showCelebration(title, message, icon) {
+    showCelebration(title, message, iconType) {
         const banner = document.getElementById('celebration-banner');
         const celebrationIcon = document.getElementById('celebration-icon');
         const celebrationTitle = document.getElementById('celebration-title');
         const celebrationMessage = document.getElementById('celebration-message');
 
-        celebrationIcon.textContent = icon;
+        // Set icon based on type
+        let iconSvg = '';
+        switch(iconType) {
+            case 'price':
+                iconSvg = `<svg class="game-icon-medium" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
+                    <text x="30" y="37" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text>
+                </svg>`;
+                break;
+            case 'sale':
+                iconSvg = `<svg class="game-icon-medium" viewBox="0 0 60 60">
+                    <rect x="15" y="20" width="30" height="25" rx="3" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
+                    <rect x="20" y="15" width="20" height="10" rx="2" fill="#4ade80"/>
+                    <circle cx="25" cy="25" r="2" fill="white"/>
+                    <circle cx="35" cy="25" r="2" fill="white"/>
+                </svg>`;
+                break;
+            case 'chart':
+                iconSvg = `<svg class="game-icon-medium" viewBox="0 0 60 60">
+                    <rect x="5" y="30" width="50" height="15" fill="#3b82f6"/>
+                    <path d="M5 30 L15 20 L25 25 L35 15 L45 20 L55 30 Z" fill="#60a5fa"/>
+                    <circle cx="15" cy="20" r="2" fill="white"/>
+                    <circle cx="25" cy="25" r="2" fill="white"/>
+                    <circle cx="35" cy="15" r="2" fill="white"/>
+                </svg>`;
+                break;
+            case 'star':
+                iconSvg = `<svg class="game-icon-medium" viewBox="0 0 60 60">
+                    <polygon points="30,5 35,20 50,20 38,30 43,45 30,35 17,45 22,30 10,20 25,20" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
+                    <circle cx="30" cy="30" r="5" fill="#fbbf24"/>
+                </svg>`;
+                break;
+            default:
+                iconSvg = `<svg class="game-icon-medium" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
+                    <path d="M20 30 L27 37 L40 23" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`;
+        }
+
+        celebrationIcon.innerHTML = iconSvg;
         celebrationTitle.textContent = title;
         celebrationMessage.textContent = message;
 
@@ -1321,6 +1511,24 @@ class StartupSimulator {
         };
         
         requestAnimationFrame(animate);
+    }
+
+    // Share Results
+    shareResults() {
+        const shareText = `I just played Startup Simulator and lasted ${this.gameState.month} months with a profit of $${this.gameState.netProfit.toFixed(0)}! Can you beat my score? 🚀`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Startup Simulator Results',
+                text: shareText,
+                url: window.location.href
+            });
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(shareText).then(() => {
+                this.addEvent('Results copied to clipboard!', 'positive');
+            });
+        }
     }
 }
 

@@ -41,7 +41,12 @@
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" data-difficulty="easy">
-                        <div class="difficulty-icon">🌱</div>
+                        <div class="difficulty-icon">
+                            <svg class="game-icon" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#4ade80" stroke="#22c55e" stroke-width="3"/>
+                                <path d="M30 50 L45 65 L70 35" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <h3>Easy</h3>
                         <p>Perfect for beginners!</p>
                         <div class="difficulty-features">
@@ -55,7 +60,15 @@
                     </div>
                     
                     <div class="difficulty-card" data-difficulty="medium">
-                        <div class="difficulty-icon">🚀</div>
+                        <div class="difficulty-icon">
+                            <svg class="game-icon" viewBox="0 0 100 100">
+                                <rect x="20" y="30" width="60" height="40" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="3"/>
+                                <polygon points="50,20 30,40 70,40" fill="#1d4ed8"/>
+                                <circle cx="35" cy="50" r="3" fill="white"/>
+                                <circle cx="50" cy="50" r="3" fill="white"/>
+                                <circle cx="65" cy="50" r="3" fill="white"/>
+                            </svg>
+                        </div>
                         <h3>Medium</h3>
                         <p>Ready for more challenge?</p>
                         <div class="difficulty-features">
@@ -69,7 +82,12 @@
                     </div>
                     
                     <div class="difficulty-card" data-difficulty="hard">
-                        <div class="difficulty-icon">💎</div>
+                        <div class="difficulty-icon">
+                            <svg class="game-icon" viewBox="0 0 100 100">
+                                <polygon points="50,10 60,35 85,35 68,55 75,80 50,65 25,80 32,55 15,35 40,35" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
+                                <circle cx="50" cy="50" r="8" fill="#fbbf24"/>
+                            </svg>
+                        </div>
                         <h3>Hard</h3>
                         <p>Business expert mode!</p>
                         <div class="difficulty-features">
@@ -93,7 +111,15 @@
                 
                 <div class="business-options">
                     <div class="business-card" data-business="food">
-                        <i class="fas fa-utensils"></i>
+                        <div class="business-icon">
+                            <svg class="game-icon" viewBox="0 0 100 100">
+                                <rect x="30" y="40" width="40" height="30" rx="5" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                                <rect x="35" y="35" width="30" height="10" rx="5" fill="#fbbf24"/>
+                                <circle cx="45" cy="30" r="3" fill="#ef4444"/>
+                                <circle cx="55" cy="30" r="3" fill="#ef4444"/>
+                                <path d="M40 25 Q50 20 60 25" stroke="#22c55e" stroke-width="3" fill="none"/>
+                            </svg>
+                        </div>
                         <h3>Food Brand</h3>
                         <p>Launch a healthy snack company</p>
                         <div class="business-stats">
@@ -104,7 +130,17 @@
                     </div>
                     
                     <div class="business-card" data-business="saas">
-                        <i class="fas fa-laptop-code"></i>
+                        <div class="business-icon">
+                            <svg class="game-icon" viewBox="0 0 100 100">
+                                <rect x="20" y="30" width="60" height="40" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+                                <rect x="25" y="35" width="50" height="25" fill="#1e40af"/>
+                                <circle cx="35" cy="45" r="2" fill="#60a5fa"/>
+                                <circle cx="45" cy="45" r="2" fill="#60a5fa"/>
+                                <circle cx="55" cy="45" r="2" fill="#60a5fa"/>
+                                <rect x="30" y="50" width="40" height="2" fill="#60a5fa"/>
+                                <rect x="30" y="55" width="30" height="2" fill="#60a5fa"/>
+                            </svg>
+                        </div>
                         <h3>SaaS Tool</h3>
                         <p>Build a productivity software</p>
                         <div class="business-stats">
@@ -115,7 +151,16 @@
                     </div>
                     
                     <div class="business-card" data-business="fashion">
-                        <i class="fas fa-tshirt"></i>
+                        <div class="business-icon">
+                            <svg class="game-icon" viewBox="0 0 100 100">
+                                <path d="M30 20 L35 15 L40 20 L45 15 L50 20 L55 15 L60 20 L65 15 L70 20 L70 80 L30 80 Z" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
+                                <rect x="40" y="25" width="20" height="30" fill="#a78bfa"/>
+                                <circle cx="45" cy="35" r="2" fill="#c4b5fd"/>
+                                <circle cx="55" cy="35" r="2" fill="#c4b5fd"/>
+                                <path d="M45 40 L55 40" stroke="#c4b5fd" stroke-width="2"/>
+                                <rect x="35" y="60" width="30" height="15" fill="#a78bfa"/>
+                            </svg>
+                        </div>
                         <h3>Fashion Store</h3>
                         <p>Create a trendy clothing line</p>
                         <div class="business-stats">
@@ -219,37 +264,102 @@
                         <h4>🎯 Your Missions</h4>
                         <div class="missions-list" id="missions-list">
                             <div class="mission-item active" id="mission-1">
-                                <div class="mission-icon">💰</div>
+                                <div class="mission-icon">
+                                    <svg class="game-icon-small" viewBox="0 0 50 50">
+                                        <circle cx="25" cy="25" r="20" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                                        <text x="25" y="30" text-anchor="middle" fill="white" font-size="16" font-weight="bold">$</text>
+                                    </svg>
+                                </div>
                                 <div class="mission-content">
                                     <div class="mission-title">Set Your Price</div>
                                     <div class="mission-description">Choose how much to charge for your product</div>
                                 </div>
-                                <div class="mission-status">⏳</div>
+                                <div class="mission-status">
+                                    <svg class="status-icon" viewBox="0 0 20 20">
+                                        <circle cx="10" cy="10" r="8" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+                                        <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
+                                    </svg>
+                                </div>
                             </div>
                             <div class="mission-item locked" id="mission-2">
-                                <div class="mission-icon">🛒</div>
+                                <div class="mission-icon">
+                                    <svg class="game-icon-small" viewBox="0 0 50 50">
+                                        <rect x="10" y="15" width="30" height="20" rx="3" fill="#22c55e" stroke="#16a34a" stroke-width="2"/>
+                                        <rect x="15" y="10" width="20" height="10" rx="2" fill="#4ade80"/>
+                                        <circle cx="20" cy="20" r="2" fill="white"/>
+                                        <circle cx="30" cy="20" r="2" fill="white"/>
+                                    </svg>
+                                </div>
                                 <div class="mission-content">
                                     <div class="mission-title">Make Your First Sale</div>
                                     <div class="mission-description">Sell at least 1 unit</div>
                                 </div>
-                                <div class="mission-status">🔒</div>
+                                <div class="mission-status">
+                                    <svg class="status-icon" viewBox="0 0 20 20">
+                                        <rect x="2" y="2" width="16" height="16" rx="3" fill="#6b7280" stroke="#4b5563" stroke-width="2"/>
+                                        <path d="M6 6 L14 14 M14 6 L6 14" stroke="white" stroke-width="2"/>
+                                    </svg>
+                                </div>
                             </div>
                             <div class="mission-item locked" id="mission-3">
-                                <div class="mission-icon">📊</div>
+                                <div class="mission-icon">
+                                    <svg class="game-icon-small" viewBox="0 0 50 50">
+                                        <rect x="5" y="30" width="40" height="15" fill="#3b82f6"/>
+                                        <path d="M5 30 L15 20 L25 25 L35 15 L45 20 L45 30 Z" fill="#60a5fa"/>
+                                        <circle cx="15" cy="20" r="2" fill="white"/>
+                                        <circle cx="25" cy="25" r="2" fill="white"/>
+                                        <circle cx="35" cy="15" r="2" fill="white"/>
+                                    </svg>
+                                </div>
                                 <div class="mission-content">
                                     <div class="mission-title">Reach Break-Even</div>
                                     <div class="mission-description">Make your revenue equal your costs</div>
                                 </div>
-                                <div class="mission-status">🔒</div>
+                                <div class="mission-status">
+                                    <svg class="status-icon" viewBox="0 0 20 20">
+                                        <rect x="2" y="2" width="16" height="16" rx="3" fill="#6b7280" stroke="#4b5563" stroke-width="2"/>
+                                        <path d="M6 6 L14 14 M14 6 L6 14" stroke="white" stroke-width="2"/>
+                                    </svg>
+                                </div>
                             </div>
                             <div class="mission-item locked" id="mission-4">
-                                <div class="mission-icon">🎯</div>
+                                <div class="mission-icon">
+                                    <svg class="game-icon-small" viewBox="0 0 50 50">
+                                        <polygon points="25,5 30,20 45,20 35,30 40,45 25,35 10,45 15,30 5,20 20,20" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                                        <circle cx="25" cy="25" r="5" fill="#fbbf24"/>
+                                    </svg>
+                                </div>
                                 <div class="mission-content">
                                     <div class="mission-title">Achieve Profitability</div>
                                     <div class="mission-description">Make more money than you spend</div>
                                 </div>
-                                <div class="mission-status">🔒</div>
+                                <div class="mission-status">
+                                    <svg class="status-icon" viewBox="0 0 20 20">
+                                        <rect x="2" y="2" width="16" height="16" rx="3" fill="#6b7280" stroke="#4b5563" stroke-width="2"/>
+                                        <path d="M6 6 L14 14 M14 6 L6 14" stroke="white" stroke-width="2"/>
+                                    </svg>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Mentor Avatar & Guidance -->
+                    <div class="mentor-guidance" id="mentor-guidance">
+                        <div class="mentor-avatar-large">
+                            <svg class="mentor-avatar" viewBox="0 0 100 100">
+                                <circle cx="50" cy="35" r="20" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                                <rect x="30" y="55" width="40" height="30" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+                                <rect x="35" y="50" width="30" height="15" rx="3" fill="#1e40af"/>
+                                <circle cx="42" cy="30" r="2" fill="#1f2937"/>
+                                <circle cx="58" cy="30" r="2" fill="#1f2937"/>
+                                <path d="M45 35 Q50 40 55 35" stroke="#1f2937" stroke-width="2" fill="none"/>
+                                <rect x="40" y="70" width="8" height="15" fill="#1f2937"/>
+                                <rect x="52" y="70" width="8" height="15" fill="#1f2937"/>
+                            </svg>
+                        </div>
+                        <div class="mentor-speech-bubble">
+                            <div class="speech-text" id="speech-text">Welcome! I'm your business mentor. Let's start by setting your product price!</div>
+                            <div class="speech-arrow"></div>
                         </div>
                     </div>
 
@@ -257,16 +367,21 @@
                     <div class="current-action" id="current-action">
                         <div class="action-card">
                             <div class="action-header">
-                                <div class="action-icon" id="action-icon">💰</div>
+                                <div class="action-icon" id="action-icon">
+                                    <svg class="game-icon-medium" viewBox="0 0 60 60">
+                                        <circle cx="30" cy="30" r="25" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
+                                        <text x="30" y="37" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text>
+                                    </svg>
+                                </div>
                                 <div class="action-title" id="action-title">Set Your Product Price</div>
                             </div>
                             <div class="action-description" id="action-description">
                                 Choose how much to charge for your product. This will affect how many customers you get!
                             </div>
                             <div class="action-content" id="action-content">
-                                <div class="input-group">
-                                    <input type="number" id="price-input" min="1" step="0.01" placeholder="Enter price">
-                                    <button id="set-price-btn" class="primary-action-btn">
+                                <div class="input-group-large">
+                                    <input type="number" id="price-input" min="1" step="0.01" placeholder="Enter price" class="large-input">
+                                    <button id="set-price-btn" class="large-action-btn">
                                         <i class="fas fa-check"></i> Set Price
                                     </button>
                                 </div>
@@ -274,7 +389,102 @@
                         </div>
                     </div>
 
-                    <!-- Locked Action Groups (Hidden Initially) -->
+                    <!-- Linear Tutorial Actions (Easy Mode) -->
+                    <div class="tutorial-actions hidden" id="tutorial-actions">
+                        <!-- Step 1: Set Price & Buy Inventory -->
+                        <div class="tutorial-step active" id="step-1">
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">Set Your Price & Buy Inventory</div>
+                            </div>
+                            <div class="step-actions">
+                                <div class="action-item">
+                                    <div class="action-icon">
+                                        <svg class="game-icon-medium" viewBox="0 0 60 60">
+                                            <circle cx="30" cy="30" r="25" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
+                                            <text x="30" y="37" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text>
+                                        </svg>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Set Price</div>
+                                        <div class="action-description">Choose your product price</div>
+                                        <input type="number" id="tutorial-price-input" min="1" step="0.01" placeholder="Enter price" class="large-input">
+                                        <button id="tutorial-set-price-btn" class="large-action-btn">
+                                            <svg class="btn-icon" viewBox="0 0 20 20">
+                                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill="currentColor"/>
+                                            </svg>
+                                            Set Price
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-icon">
+                                        <svg class="game-icon-medium" viewBox="0 0 60 60">
+                                            <rect x="15" y="20" width="30" height="25" rx="3" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
+                                            <rect x="20" y="15" width="20" height="10" rx="2" fill="#4ade80"/>
+                                            <circle cx="25" cy="25" r="2" fill="white"/>
+                                            <circle cx="35" cy="25" r="2" fill="white"/>
+                                            <rect x="25" y="35" width="10" height="5" fill="#16a34a"/>
+                                        </svg>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Buy Inventory</div>
+                                        <div class="action-description">Stock up on products to sell</div>
+                                        <button class="large-action-btn" data-action="inventory" data-amount="200">
+                                            <svg class="btn-icon" viewBox="0 0 20 20">
+                                                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" fill="currentColor"/>
+                                            </svg>
+                                            Buy Inventory ($200)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Marketing (Unlocked after first sale) -->
+                        <div class="tutorial-step locked" id="step-2">
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">Marketing & Growth</div>
+                                <div class="unlock-condition">Unlocked after first sale</div>
+                            </div>
+                            <div class="step-actions">
+                                <div class="action-item locked">
+                                    <div class="action-icon">📢</div>
+                                    <div class="action-content">
+                                        <div class="action-title">Marketing Campaign</div>
+                                        <div class="action-description">Get more customers</div>
+                                        <button class="large-action-btn disabled" data-action="marketing" data-amount="100">
+                                            <i class="fas fa-bullhorn"></i> Social Media ($100)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Hiring (Unlocked after covering costs) -->
+                        <div class="tutorial-step locked" id="step-3">
+                            <div class="step-header">
+                                <div class="step-number">3</div>
+                                <div class="step-title">Team & Development</div>
+                                <div class="unlock-condition">Unlocked after covering costs</div>
+                            </div>
+                            <div class="step-actions">
+                                <div class="action-item locked">
+                                    <div class="action-icon">👥</div>
+                                    <div class="action-content">
+                                        <div class="action-title">Hire Team</div>
+                                        <div class="action-description">Grow your business</div>
+                                        <button class="large-action-btn disabled" data-action="hire" data-amount="800">
+                                            <i class="fas fa-user-plus"></i> Hire Employee ($800)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Action Groups (Medium/Hard Mode) -->
                     <div class="action-groups hidden" id="action-groups">
                         <div class="action-group" id="marketing-group">
                             <h4><i class="fas fa-bullhorn"></i> Marketing</h4>
@@ -444,6 +654,64 @@
                 <button id="victory-play-again-btn" class="primary-btn">
                     <i class="fas fa-play"></i> Play Again
                 </button>
+            </div>
+        </div>
+
+        <!-- Game Summary Screen -->
+        <div id="summary-screen" class="screen">
+            <div class="summary-content">
+                <h2><i class="fas fa-chart-line"></i> Game Summary</h2>
+                <div class="summary-message" id="summary-message">
+                    <div class="summary-icon" id="summary-icon">🎯</div>
+                    <div class="summary-text" id="summary-text">You lasted 3 months and reached a profit of $500!</div>
+                </div>
+                
+                <div class="summary-stats">
+                    <div class="summary-stat">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Months Survived</div>
+                            <div class="stat-value" id="summary-months">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Revenue</div>
+                            <div class="stat-value" id="summary-revenue">$0</div>
+                        </div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Peak Customers</div>
+                            <div class="stat-value" id="summary-customers">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Final Profit</div>
+                            <div class="stat-value" id="summary-profit">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-achievements">
+                    <h3>🏆 Achievements Unlocked</h3>
+                    <div class="achievements-list" id="summary-achievements">
+                        <!-- Achievements will be populated here -->
+                    </div>
+                </div>
+
+                <div class="summary-actions">
+                    <button id="summary-play-again-btn" class="primary-btn">
+                        <i class="fas fa-play"></i> Play Again
+                    </button>
+                    <button id="summary-share-btn" class="secondary-btn">
+                        <i class="fas fa-share"></i> Share Results
+                    </button>
+                </div>
             </div>
         </div>
     </div>

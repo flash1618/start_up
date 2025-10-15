@@ -98,6 +98,10 @@ class LemonadeStandGame {
         // Hide difficulty selection
         document.getElementById('difficulty-overlay').classList.add('hidden');
         
+        // Add difficulty class to body for any remaining styling
+        document.body.className = document.body.className.replace(/easy-mode|medium-mode|hard-mode/g, '');
+        document.body.classList.add(`${difficulty}-mode`);
+        
         // Show tutorial for easy mode, or start game directly for others
         if (difficulty === 'easy') {
             this.showTutorial();
@@ -681,15 +685,18 @@ class LemonadeStandGame {
     showMessage(text, type = 'info') {
         const messagesContainer = document.getElementById('game-messages');
         const message = document.createElement('div');
-        message.className = `game-message ${type}`;
-        message.textContent = text;
+        message.className = `message ${type}`;
+        message.innerHTML = `
+            <div class="message-title">${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}</div>
+            <div class="message-text">${text}</div>
+        `;
         
         messagesContainer.appendChild(message);
         
-        // Remove message after 3 seconds
+        // Remove message after 4 seconds
         setTimeout(() => {
             message.remove();
-        }, 3000);
+        }, 4000);
     }
     
     updateUI() {

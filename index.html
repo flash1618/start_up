@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🍋 Lemonade Stand Simulator - Learn Business Skills!</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Inter:wght@400;500;600;700&family=Comic+Neue:wght@400;700&family=Roboto:wght@300;400;500;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Game Container -->
@@ -13,20 +13,27 @@
         
         <!-- Header -->
         <header class="game-header">
-            <div class="header-content">
-                <h1 class="game-title">🍋 Lemonade Stand</h1>
-                <div class="player-info">
-                    <div class="cash-display">
-                        <span class="cash-icon">💰</span>
-                        <span class="cash-amount" id="cash-amount">₹100</span>
+            <h1 class="game-title">🍋 Lemonade Stand Simulator</h1>
+            <div class="player-info">
+                <div class="stat-card success">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Cash</div>
+                        <div class="stat-value" id="cash-amount">₹100</div>
                     </div>
-                    <div class="day-counter">
-                        <span class="day-icon">📅</span>
-                        <span class="day-text">Day <span id="day-number">1</span></span>
+                </div>
+                <div class="stat-card info">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Day</div>
+                        <div class="stat-value" id="day-number">1</div>
                     </div>
-                    <div class="weather-display" id="weather-display" style="display: none;">
-                        <span class="weather-icon" id="weather-icon">☀️</span>
-                        <span id="weather-text">Sunny</span>
+                </div>
+                <div class="stat-card warning" id="weather-display" style="display: none;">
+                    <div class="stat-icon" id="weather-icon">☀️</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Weather</div>
+                        <div class="stat-value" id="weather-text">Sunny</div>
                     </div>
                 </div>
             </div>
@@ -35,97 +42,104 @@
         <!-- Main Game Area -->
         <main class="game-main">
             
-            <!-- Lemonade Stand Visual -->
-            <div class="stand-container">
-                <div class="lemonade-stand" id="lemonade-stand">
-                    <div class="stand-counter">
+            <!-- Lemonade Stand Section -->
+            <div class="game-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🍋</span>
+                    Your Stand
+                </h2>
+                
+                <div class="stand-container">
+                    <div class="lemonade-stand">
                         <div class="stand-sign">🍋 LEMONADE 🍋</div>
                         <div class="price-display">
-                            <span class="price-label">Price:</span>
-                            <span class="price-value" id="price-display">₹5</span>
+                            <div class="price-label">Price per cup</div>
+                            <div class="price-value" id="price-display">₹5</div>
+                        </div>
+                        
+                        <div class="inventory-display">
+                            <div class="inventory-item">
+                                <div class="inventory-icon">🍋</div>
+                                <div class="inventory-count" id="lemons-count">0</div>
+                            </div>
+                            <div class="inventory-item">
+                                <div class="inventory-icon">🍯</div>
+                                <div class="inventory-count" id="sugar-count">0</div>
+                            </div>
+                            <div class="inventory-item">
+                                <div class="inventory-icon">🧊</div>
+                                <div class="inventory-count" id="ice-count">0</div>
+                            </div>
+                            <!-- Hard Mode Products -->
+                            <div class="inventory-item hard-mode-only" id="iced-tea-item" style="display: none;">
+                                <div class="inventory-icon">🍵</div>
+                                <div class="inventory-count" id="iced-tea-count">0</div>
+                            </div>
+                            <div class="inventory-item hard-mode-only" id="snacks-item" style="display: none;">
+                                <div class="inventory-icon">🍪</div>
+                                <div class="inventory-count" id="snacks-count">0</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="inventory-display">
-                        <div class="inventory-item">
-                            <span class="inventory-icon">🍋</span>
-                            <span class="inventory-count" id="lemons-count">0</span>
-                        </div>
-                    <div class="inventory-item">
-                        <span class="inventory-icon">🍯</span>
-                        <span class="inventory-count" id="sugar-count">0</span>
+                    
+                    <!-- Customer Queue -->
+                    <div class="customer-queue" id="customer-queue">
+                        <!-- Customers will appear here -->
                     </div>
-                    <div class="inventory-item">
-                        <span class="inventory-icon">🧊</span>
-                        <span class="inventory-count" id="ice-count">0</span>
-                    </div>
-                    <!-- Hard Mode Products -->
-                    <div class="inventory-item hard-mode-only" id="iced-tea-item" style="display: none;">
-                        <span class="inventory-icon">🍵</span>
-                        <span class="inventory-count" id="iced-tea-count">0</span>
-                    </div>
-                    <div class="inventory-item hard-mode-only" id="snacks-item" style="display: none;">
-                        <span class="inventory-icon">🍪</span>
-                        <span class="inventory-count" id="snacks-count">0</span>
-                    </div>
-                </div>
-                </div>
-                
-                <!-- Customer Queue -->
-                <div class="customer-queue" id="customer-queue">
-                    <!-- Customers will appear here -->
                 </div>
             </div>
 
             <!-- Action Panel -->
-            <div class="action-panel">
+            <div class="game-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🛒</span>
+                    Buy Ingredients
+                </h2>
                 
-                <!-- Buy Ingredients Section -->
-                <div class="action-section" id="buy-section">
-                    <h3 class="section-title">🛒 Buy Ingredients</h3>
-                    <div class="ingredient-grid">
-                        <div class="ingredient-card">
-                            <div class="ingredient-icon">🍋</div>
-                            <div class="ingredient-name">Lemons</div>
-                            <div class="ingredient-price">₹2 each</div>
-                            <button class="buy-btn" id="buy-lemons" data-item="lemons" data-price="2">
-                                Buy 5 for ₹10
-                            </button>
-                        </div>
-                        <div class="ingredient-card">
-                            <div class="ingredient-icon">🍯</div>
-                            <div class="ingredient-name">Sugar</div>
-                            <div class="ingredient-price">₹1 per cup</div>
-                            <button class="buy-btn" id="buy-sugar" data-item="sugar" data-price="1">
-                                Buy 10 for ₹10
-                            </button>
-                        </div>
-                        <div class="ingredient-card">
-                            <div class="ingredient-icon">🧊</div>
-                            <div class="ingredient-name">Ice</div>
-                            <div class="ingredient-price">₹0.5 per cube</div>
-                            <button class="buy-btn" id="buy-ice" data-item="ice" data-price="0.5">
-                                Buy 20 for ₹10
-                            </button>
-                        </div>
-                        <!-- Hard Mode Ingredients -->
-                        <div class="ingredient-card hard-mode-only" id="tea-ingredient" style="display: none;">
-                            <div class="ingredient-icon">🍵</div>
-                            <div class="ingredient-name">Tea Leaves</div>
-                            <div class="ingredient-price">₹8 per pack</div>
-                            <button class="buy-btn" id="buy-tea" data-item="tea" data-price="8">
-                                Buy 5 for ₹40
-                            </button>
-                        </div>
-                        <div class="ingredient-card hard-mode-only" id="snacks-ingredient" style="display: none;">
-                            <div class="ingredient-icon">🍪</div>
-                            <div class="ingredient-name">Snacks</div>
-                            <div class="ingredient-price">₹12 per pack</div>
-                            <button class="buy-btn" id="buy-snacks" data-item="snacks" data-price="12">
-                                Buy 3 for ₹36
-                            </button>
-                        </div>
+                <div class="ingredient-grid">
+                    <div class="ingredient-card">
+                        <div class="ingredient-icon">🍋</div>
+                        <div class="ingredient-name">Lemons</div>
+                        <div class="ingredient-price">₹2 each</div>
+                        <button class="btn btn-primary" id="buy-lemons" data-item="lemons" data-price="2">
+                            Buy 5 for ₹10
+                        </button>
+                    </div>
+                    <div class="ingredient-card">
+                        <div class="ingredient-icon">🍯</div>
+                        <div class="ingredient-name">Sugar</div>
+                        <div class="ingredient-price">₹1 per cup</div>
+                        <button class="btn btn-primary" id="buy-sugar" data-item="sugar" data-price="1">
+                            Buy 10 for ₹10
+                        </button>
+                    </div>
+                    <div class="ingredient-card">
+                        <div class="ingredient-icon">🧊</div>
+                        <div class="ingredient-name">Ice</div>
+                        <div class="ingredient-price">₹0.5 per cube</div>
+                        <button class="btn btn-primary" id="buy-ice" data-item="ice" data-price="0.5">
+                            Buy 20 for ₹10
+                        </button>
+                    </div>
+                    <!-- Hard Mode Ingredients -->
+                    <div class="ingredient-card hard-mode-only" id="tea-ingredient" style="display: none;">
+                        <div class="ingredient-icon">🍵</div>
+                        <div class="ingredient-name">Tea Leaves</div>
+                        <div class="ingredient-price">₹8 per pack</div>
+                        <button class="btn btn-primary" id="buy-tea" data-item="tea" data-price="8">
+                            Buy 5 for ₹40
+                        </button>
+                    </div>
+                    <div class="ingredient-card hard-mode-only" id="snacks-ingredient" style="display: none;">
+                        <div class="ingredient-icon">🍪</div>
+                        <div class="ingredient-name">Snacks</div>
+                        <div class="ingredient-price">₹12 per pack</div>
+                        <button class="btn btn-primary" id="buy-snacks" data-item="snacks" data-price="12">
+                            Buy 3 for ₹36
+                        </button>
                     </div>
                 </div>
+            </div>
 
                 <!-- Set Price Section -->
                 <div class="action-section" id="price-section">

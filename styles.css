@@ -2510,3 +2510,98 @@ body::before {
         box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
     }
 }
+
+/* Locked/Unlocked States */
+.locked {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+.locked::after {
+    content: "🔒";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    z-index: 10;
+}
+
+@keyframes unlockAction {
+    0% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6) !important;
+    border: 2px solid rgba(59, 130, 246, 0.8) !important;
+}
+
+/* Medium Mode Specific Styles */
+.medium-mode .action-btn {
+    transition: all 0.3s ease;
+}
+
+.medium-mode .action-btn.locked {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+    color: #9ca3af;
+}
+
+/* Hard Mode Specific Styles */
+.hard-mode .action-btn {
+    transition: all 0.2s ease;
+}
+
+.hard-mode .action-btn.locked {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+}
+
+/* Next Mode Button */
+.next-mode-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.next-mode-btn {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s ease;
+    animation: nextModeGlow 2s ease-in-out infinite;
+}
+
+.next-mode-btn:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    box-shadow: 0 6px 25px rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+@keyframes nextModeGlow {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(139, 92, 246, 0.6);
+    }
+}

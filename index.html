@@ -574,7 +574,7 @@
                             <div class="action">
                                 <label>Marketing Campaign</label>
                                 <div class="action-buttons">
-                                    <button class="action-btn" data-action="marketing" data-amount="100">
+                                    <button id="marketing-action" class="action-btn locked" data-action="marketing" data-amount="100" disabled>
                                         <i class="fas fa-ad"></i> Social Media ($100)
                                     </button>
                                     <button class="action-btn" data-action="marketing" data-amount="300">
@@ -607,10 +607,10 @@
                             <div class="action">
                                 <label>Hiring & Development</label>
                                 <div class="action-buttons">
-                                    <button class="action-btn" data-action="hire" data-amount="800">
+                                    <button id="hire-action" class="action-btn locked" data-action="hire" data-amount="800" disabled>
                                         <i class="fas fa-user-plus"></i> Hire Employee ($800)
                                     </button>
-                                    <button class="action-btn" data-action="rd" data-amount="400">
+                                    <button id="operations-action" class="action-btn locked" data-action="rd" data-amount="400" disabled>
                                         <i class="fas fa-flask"></i> R&D ($400)
                                     </button>
                                 </div>
@@ -823,6 +823,13 @@
     <div class="pinned-next-month hidden" id="pinned-next-month">
         <button id="pinned-next-month-btn" class="pinned-btn pulse">
             Next Month
+        </button>
+    </div>
+
+    <!-- Next Mode Button (appears when all missions complete) -->
+    <div class="next-mode-container hidden" id="next-mode-container">
+        <button id="next-mode-btn" class="next-mode-btn">
+            🚀 Next Level
         </button>
     </div>
 

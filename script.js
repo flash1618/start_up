@@ -142,24 +142,62 @@ class StartupSimulator {
         
         this.currentDialogue = 'welcome';
         
-        // Mission state array for Easy mode
-        this.missions = [
+        // Mission state arrays for all modes
+        this.missionsEasy = [
             { id: 'setPrice', title: 'Set Your Price', completed: false, locked: false },
             { id: 'buyInventory', title: 'Buy Inventory', completed: false, locked: true },
             { id: 'firstSale', title: 'Make First Sale', completed: false, locked: true },
             { id: 'breakEven', title: 'Reach Break-Even', completed: false, locked: true }
         ];
         
+        this.missionsMedium = [
+            { id: 'setPrice', title: 'Set Product Price', completed: false, locked: false },
+            { id: 'buyInventory', title: 'Buy Inventory', completed: false, locked: true },
+            { id: 'runMarketing', title: 'Run Marketing Campaign', completed: false, locked: true },
+            { id: 'nextMonth', title: 'Advance to Next Month', completed: false, locked: true },
+            { id: 'achieveProfit', title: 'Achieve Break-even / Profit', completed: false, locked: true }
+        ];
+        
+        this.missionsHard = [
+            { id: 'setPrice', title: 'Set/Adjust Price Strategy', completed: false, locked: false },
+            { id: 'buyInventory', title: 'Buy Inventory / Manage Production', completed: false, locked: true },
+            { id: 'hireEmployee', title: 'Hire Your First Employee', completed: false, locked: true },
+            { id: 'runMarketing', title: 'Run Multi-Channel Marketing', completed: false, locked: true },
+            { id: 'optimizeOps', title: 'Optimize Operations', completed: false, locked: true },
+            { id: 'reachScale', title: 'Reach Scale', completed: false, locked: true }
+        ];
+        
+        // Set current missions based on difficulty
+        this.missions = this.missionsEasy; // Will be updated in startGame
+        
         // Safe typing controller
         this.currentTyping = null;
         
-        // Exact mentor script for Easy mode
+        // Exact mentor scripts for all modes
         this.mentorLinesEasy = [
             "Hi! I'm your business mentor. Let's start by setting your product price. Click the price field and type a number (example: 25). Then click Confirm Price.",
             "Nice — price set! Now buy some inventory so you can sell. Click the 'Buy Inventory' button and confirm a small batch.",
             "Great — you've got inventory. Now click 'Next Month' to simulate sales and see your first results.",
             "Congrats! You made your first sale! See how revenue and profit updated. Next, let's aim for break-even — keep going!",
             "Amazing — you reached break-even. You covered all your costs. Ready to unlock marketing and scale?"
+        ];
+        
+        this.mentorLinesMedium = [
+            "Welcome back, entrepreneur! You already know the basics — let's get strategic. First, set your product price based on your costs and desired margin.",
+            "Nice move! Inventory doesn't buy itself — grab some stock so you're ready to meet demand.",
+            "Smart! Now let's fuel some sales. Run a marketing campaign to reach new customers. Try a small spend first to see the effect.",
+            "Marketing's live! Time to see the results — click 'Next Month' to watch your sales and expenses update.",
+            "Check that out! You've got data rolling in. Try adjusting price or marketing next month to reach break-even or higher profits.",
+            "Boom — you're profitable! You've mastered basic operations and marketing balance. Time to scale up or unlock harder challenges!"
+        ];
+        
+        this.mentorLinesHard = [
+            "Alright, boss — no training wheels now. Prices, costs, and demand are all yours to balance. Let's start with your pricing strategy.",
+            "Inventory management is everything. Stock too much and you're cash-strapped, too little and you miss out on sales. Keep it tight.",
+            "Team time! Hire your first employee to boost production or marketing efficiency. Choose wisely — salaries add up fast.",
+            "Want growth? Run a multi-channel campaign. Try combining social ads, influencer deals, and discounts — but watch the spend.",
+            "Operations are your backbone. Optimize efficiency and reduce unit cost. You'll see profits scale faster than you expect.",
+            "You've hit scaling mode! Your company's profitable and sustainable — now experiment, expand, or face the next market shock. 🏆"
         ];
         
         this.init();
@@ -405,6 +443,25 @@ class StartupSimulator {
         this.updateUI();
         this.addEvent(`Started ${this.businessTypes[this.gameState.businessType].name}! Set your price and make your first business decisions.`, "info");
         
+        // Set missions based on difficulty
+        switch(this.difficulty) {
+            case 'easy':
+                this.missions = this.missionsEasy;
+                break;
+            case 'medium':
+                this.missions = this.missionsMedium;
+                break;
+            case 'hard':
+                this.missions = this.missionsHard;
+                break;
+            default:
+                this.missions = this.missionsEasy;
+        }
+        
+        // Add difficulty class to body for CSS styling
+        document.body.className = document.body.className.replace(/easy-mode|medium-mode|hard-mode/g, '');
+        document.body.classList.add(`${this.difficulty}-mode`);
+        
         // Show appropriate interface based on difficulty
         if (this.difficulty === 'easy') {
             console.log('Showing tutorial interface');
@@ -422,6 +479,16 @@ class StartupSimulator {
         } else {
             console.log('Showing full interface');
             this.showFullInterface();
+            this.updateMissionUI(); // Initialize mission UI
+            
+            // Auto-focus price input and show first mentor line
+            setTimeout(() => {
+                const priceInput = document.getElementById('tutorial-price-input');
+                if (priceInput) {
+                    priceInput.focus();
+                }
+                this.showMentorLine(0);
+            }, 1000);
         }
     }
 
@@ -447,7 +514,26 @@ class StartupSimulator {
         document.getElementById('action-groups').classList.remove('hidden');
         document.getElementById('tutorial-actions').classList.add('hidden');
         document.getElementById('current-action').classList.add('hidden');
-        document.getElementById('mentor-guidance').classList.add('hidden');
+        document.getElementById('mentor-guidance').classList.remove('hidden'); // Keep mentor visible for Medium/Hard
+        
+        // Initialize locked states for Medium/Hard modes
+        this.initializeLockedStates();
+    }
+
+    initializeLockedStates() {
+        // Lock all actions initially except price setting
+        const actionsToLock = ['marketing-action', 'hire-action', 'operations-action'];
+        
+        actionsToLock.forEach(actionId => {
+            this.lockStep(actionId, "Complete previous steps first");
+        });
+        
+        // Unlock price input
+        const priceInput = document.getElementById('tutorial-price-input');
+        if (priceInput) {
+            priceInput.disabled = false;
+            priceInput.classList.remove('locked');
+        }
     }
 
     setupTutorialListeners() {
@@ -680,9 +766,61 @@ class StartupSimulator {
 
     showMentorLine(lineIndex) {
         const speechText = document.getElementById('speech-text');
-        if (speechText && this.mentorLinesEasy[lineIndex]) {
-            this.safeType(speechText, this.mentorLinesEasy[lineIndex], 40);
+        let mentorLines;
+        
+        // Get the appropriate mentor lines based on difficulty
+        switch(this.difficulty) {
+            case 'easy':
+                mentorLines = this.mentorLinesEasy;
+                break;
+            case 'medium':
+                mentorLines = this.mentorLinesMedium;
+                break;
+            case 'hard':
+                mentorLines = this.mentorLinesHard;
+                break;
+            default:
+                mentorLines = this.mentorLinesEasy;
         }
+        
+        if (speechText && mentorLines[lineIndex]) {
+            this.safeType(speechText, mentorLines[lineIndex], 40);
+        }
+    }
+
+    // Unlock system functions
+    unlockNextStep(elementId) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        
+        // Remove disabled state and visual indicators
+        el.disabled = false;
+        el.classList.remove('opacity-40', 'cursor-not-allowed', 'locked');
+        
+        // Add unlock animation
+        el.style.animation = 'unlockAction 0.6s ease-out';
+        
+        // Auto-scroll and pulse
+        this.scrollAndPulse(elementId);
+    }
+
+    lockStep(elementId, reason = "Complete previous step first") {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        
+        el.disabled = true;
+        el.classList.add('opacity-40', 'cursor-not-allowed', 'locked');
+        el.title = reason;
+    }
+
+    removeAllHighlights() {
+        // Remove pulse from all elements
+        const pulsedElements = document.querySelectorAll('.pulse');
+        pulsedElements.forEach(el => el.classList.remove('pulse'));
+        
+        // Remove glow from all elements
+        const glowingElements = document.querySelectorAll('.glow');
+        glowingElements.forEach(el => el.classList.remove('glow'));
     }
 
     unlockTutorialStep(stepNumber) {
@@ -1947,27 +2085,95 @@ class StartupSimulator {
     }
 
     checkMissions() {
-        // Check setPrice mission
-        if (!this.missions[0].completed && this.gameState.price > 0) {
-            this.completeMission('setPrice');
-        }
+        // Check each mission and update status
+        this.missions.forEach((mission, index) => {
+            let completed = false;
+            
+            switch(mission.id) {
+                case 'setPrice':
+                    completed = this.gameState.price > 0;
+                    break;
+                case 'buyInventory':
+                    completed = this.gameState.inventory > 0;
+                    break;
+                case 'firstSale':
+                    completed = this.gameState.totalRevenue > 0;
+                    break;
+                case 'breakEven':
+                    completed = this.gameState.netProfit >= 0;
+                    break;
+                case 'runMarketing':
+                    completed = this.gameState.marketingSpent > 0;
+                    break;
+                case 'nextMonth':
+                    completed = this.gameState.month > 1;
+                    break;
+                case 'achieveProfit':
+                    completed = this.gameState.netProfit > 0;
+                    break;
+                case 'hireEmployee':
+                    completed = this.gameState.employees > 0;
+                    break;
+                case 'optimizeOps':
+                    completed = this.gameState.rdLevel > 0;
+                    break;
+                case 'reachScale':
+                    completed = this.gameState.cash > 5000 || this.gameState.netProfit > 500;
+                    break;
+            }
+            
+            if (completed && !mission.completed) {
+                this.completeMission(mission.id);
+                
+                // Show milestone popups for key achievements
+                if (mission.id === 'firstSale') {
+                    this.showMilestonePopup('First Sale!', '🎉 Congratulations! You made your first sale!', 'sale');
+                } else if (mission.id === 'breakEven' || mission.id === 'achieveProfit') {
+                    this.showMilestonePopup('Break-Even!', '🎊 Amazing! You\'ve reached profitability!', 'breakEven');
+                }
+                
+                // Unlock next step based on difficulty and current mission
+                this.unlockNextStepBasedOnMission(mission.id, index);
+            }
+        });
+    }
+
+    unlockNextStepBasedOnMission(completedMissionId, missionIndex) {
+        const nextMissionIndex = missionIndex + 1;
+        if (nextMissionIndex >= this.missions.length) return;
         
-        // Check buyInventory mission
-        if (!this.missions[1].completed && this.gameState.inventory > 0) {
-            this.completeMission('buyInventory');
-        }
+        const nextMission = this.missions[nextMissionIndex];
         
-        // Check firstSale mission
-        if (!this.missions[2].completed && this.gameState.customers > 0) {
-            this.completeMission('firstSale');
-            this.showMilestonePopup('First Sale!', '🎉 Congratulations! You made your first sale!', 'sale');
-        }
+        // Remove all highlights first
+        this.removeAllHighlights();
         
-        // Check breakEven mission
-        if (!this.missions[3].completed && this.gameState.netProfit > 0) {
-            this.completeMission('breakEven');
-            this.showMilestonePopup('Break-Even!', '🎊 Amazing! You\'ve reached profitability!', 'breakEven');
-        }
+        // Unlock next step with delay for smooth flow
+        setTimeout(() => {
+            this.unlockNextStep(this.getElementIdForMission(nextMission.id));
+            
+            // Show next mentor line
+            setTimeout(() => {
+                this.showMentorLine(nextMissionIndex);
+            }, 500);
+        }, 800);
+    }
+
+    getElementIdForMission(missionId) {
+        // Map mission IDs to actual element IDs
+        const elementMap = {
+            'setPrice': 'tutorial-price-input',
+            'buyInventory': 'inventory-action',
+            'firstSale': 'pinned-next-month-btn',
+            'breakEven': 'pinned-next-month-btn',
+            'runMarketing': 'marketing-action',
+            'nextMonth': 'pinned-next-month-btn',
+            'achieveProfit': 'pinned-next-month-btn',
+            'hireEmployee': 'hire-action',
+            'optimizeOps': 'operations-action',
+            'reachScale': 'next-mode-btn'
+        };
+        
+        return elementMap[missionId] || 'pinned-next-month-btn';
     }
 
     updateMissionUI() {

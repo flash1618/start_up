@@ -214,32 +214,69 @@
                         </div>
                     </div>
 
-                    <!-- Progress Indicator -->
-                    <div class="progress-section">
-                        <h4>📈 Your Progress</h4>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <div class="progress-milestones">
-                            <div class="milestone" id="milestone-1">💰 First Sale</div>
-                            <div class="milestone" id="milestone-2">📊 Break Even</div>
-                            <div class="milestone" id="milestone-3">🎯 Profitability</div>
+                    <!-- Mission Tracker -->
+                    <div class="mission-tracker">
+                        <h4>🎯 Your Missions</h4>
+                        <div class="missions-list" id="missions-list">
+                            <div class="mission-item active" id="mission-1">
+                                <div class="mission-icon">💰</div>
+                                <div class="mission-content">
+                                    <div class="mission-title">Set Your Price</div>
+                                    <div class="mission-description">Choose how much to charge for your product</div>
+                                </div>
+                                <div class="mission-status">⏳</div>
+                            </div>
+                            <div class="mission-item locked" id="mission-2">
+                                <div class="mission-icon">🛒</div>
+                                <div class="mission-content">
+                                    <div class="mission-title">Make Your First Sale</div>
+                                    <div class="mission-description">Sell at least 1 unit</div>
+                                </div>
+                                <div class="mission-status">🔒</div>
+                            </div>
+                            <div class="mission-item locked" id="mission-3">
+                                <div class="mission-icon">📊</div>
+                                <div class="mission-content">
+                                    <div class="mission-title">Reach Break-Even</div>
+                                    <div class="mission-description">Make your revenue equal your costs</div>
+                                </div>
+                                <div class="mission-status">🔒</div>
+                            </div>
+                            <div class="mission-item locked" id="mission-4">
+                                <div class="mission-icon">🎯</div>
+                                <div class="mission-content">
+                                    <div class="mission-title">Achieve Profitability</div>
+                                    <div class="mission-description">Make more money than you spend</div>
+                                </div>
+                                <div class="mission-status">🔒</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="action-groups">
-                        <div class="action-group">
-                            <h4><i class="fas fa-dollar-sign"></i> Pricing & Sales</h4>
-                            <div class="action">
-                                <label for="price-input">Set Price per Unit</label>
+                    <!-- Current Action (Step-by-Step) -->
+                    <div class="current-action" id="current-action">
+                        <div class="action-card">
+                            <div class="action-header">
+                                <div class="action-icon" id="action-icon">💰</div>
+                                <div class="action-title" id="action-title">Set Your Product Price</div>
+                            </div>
+                            <div class="action-description" id="action-description">
+                                Choose how much to charge for your product. This will affect how many customers you get!
+                            </div>
+                            <div class="action-content" id="action-content">
                                 <div class="input-group">
-                                    <input type="number" id="price-input" min="1" step="0.01">
-                                    <button id="set-price-btn">Update</button>
+                                    <input type="number" id="price-input" min="1" step="0.01" placeholder="Enter price">
+                                    <button id="set-price-btn" class="primary-action-btn">
+                                        <i class="fas fa-check"></i> Set Price
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="action-group">
+                    <!-- Locked Action Groups (Hidden Initially) -->
+                    <div class="action-groups hidden" id="action-groups">
+                        <div class="action-group" id="marketing-group">
                             <h4><i class="fas fa-bullhorn"></i> Marketing</h4>
                             <div class="action">
                                 <label>Marketing Campaign</label>
@@ -257,7 +294,7 @@
                             </div>
                         </div>
 
-                        <div class="action-group">
+                        <div class="action-group" id="operations-group">
                             <h4><i class="fas fa-boxes"></i> Operations</h4>
                             <div class="action">
                                 <label>Inventory/Resources</label>
@@ -272,7 +309,7 @@
                             </div>
                         </div>
 
-                        <div class="action-group">
+                        <div class="action-group" id="team-group">
                             <h4><i class="fas fa-users"></i> Team</h4>
                             <div class="action">
                                 <label>Hiring & Development</label>
@@ -413,6 +450,25 @@
 
     <!-- Tooltip -->
     <div id="tooltip" class="tooltip"></div>
+
+    <!-- Celebration Banner -->
+    <div id="celebration-banner" class="celebration-banner hidden">
+        <div class="celebration-content">
+            <div class="celebration-icon" id="celebration-icon">🎉</div>
+            <div class="celebration-text">
+                <div class="celebration-title" id="celebration-title">Congratulations!</div>
+                <div class="celebration-message" id="celebration-message">You made your first sale!</div>
+            </div>
+            <button id="celebration-close" class="celebration-close">✕</button>
+        </div>
+    </div>
+
+    <!-- Animated Number Display -->
+    <div id="number-animation" class="number-animation hidden">
+        <div class="number-bubble" id="number-bubble">
+            <span id="number-value">+$100</span>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

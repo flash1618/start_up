@@ -4,7 +4,9 @@ class StartupSimulator {
         this.currentUser = null;
         this.difficulty = 'easy'; // easy, medium, hard
         this.currentStep = 0; // For guided gameplay
+        this.currentMission = 1; // Current mission (1-4)
         this.mentorMessages = [];
+        this.missions = [];
         this.gameState = {
             businessType: null,
             cash: 1000,
@@ -135,6 +137,7 @@ class StartupSimulator {
         this.initAudio();
         this.checkForSavedUser();
         this.initializeMentorMessages();
+        this.initializeMissions();
         this.showScreen('difficulty-screen');
     }
 
@@ -218,6 +221,11 @@ class StartupSimulator {
             this.nextMentorMessage();
         });
 
+        // Celebration system
+        document.getElementById('celebration-close').addEventListener('click', () => {
+            this.hideCelebration();
+        });
+
         // Tooltips
         document.querySelectorAll('[data-tooltip]').forEach(element => {
             element.addEventListener('mouseenter', (e) => {
@@ -286,6 +294,9 @@ class StartupSimulator {
             this.gameState.price = newPrice;
             this.updateUI();
             this.addEvent(`Price updated to $${newPrice.toFixed(2)} per unit.`, "info");
+            
+            // Complete the set price mission
+            this.completeMission(1);
         }
     }
 
@@ -965,13 +976,14 @@ class StartupSimulator {
         progressFill.style.width = `${progress}%`;
     }
 
-    // Override updateUI to include progress and mentor messages
+    // Override updateUI to include all new systems
     updateUI() {
-        // Call the original updateUI method
+        // Update all systems
         this.updateMetrics();
         this.updateProductDisplay();
         this.updateAchievements();
-        this.updateProgress();
+        this.updateMissions();
+        this.updateCurrentAction();
         
         // Show mentor message for first-time actions
         if (this.gameState.month === 1 && this.gameState.customers === 0) {
@@ -1043,6 +1055,272 @@ class StartupSimulator {
             default:
                 return baseMetrics;
         }
+    }
+
+    // Mission System Methods
+    initializeMissions() {
+        this.missions = [
+            {
+                id: 1,
+                title: "Set Your Price",
+                description: "Choose how much to charge for your product",
+                icon: "💰",
+                action: "setPrice",
+                completed: false,
+                unlocked: true
+            },
+            {
+                id: 2,
+                title: "Make Your First Sale",
+                description: "Sell at least 1 unit",
+                icon: "🛒",
+                action: "firstSale",
+                completed: false,
+                unlocked: false
+            },
+            {
+                id: 3,
+                title: "Reach Break-Even",
+                description: "Make your revenue equal your costs",
+                icon: "📊",
+                action: "breakEven",
+                completed: false,
+                unlocked: false
+            },
+            {
+                id: 4,
+                title: "Achieve Profitability",
+                description: "Make more money than you spend",
+                icon: "🎯",
+                action: "profitability",
+                completed: false,
+                unlocked: false
+            }
+        ];
+    }
+
+    updateMissions() {
+        // Check mission completion
+        this.missions.forEach(mission => {
+            if (!mission.completed) {
+                switch (mission.action) {
+                    case 'setPrice':
+                        if (this.gameState.price > 0) {
+                            this.completeMission(mission.id);
+                        }
+                        break;
+                    case 'firstSale':
+                        if (this.gameState.customers > 0) {
+                            this.completeMission(mission.id);
+                        }
+                        break;
+                    case 'breakEven':
+                        if (this.gameState.netProfit >= 0 && this.gameState.revenue > 0) {
+                            this.completeMission(mission.id);
+                        }
+                        break;
+                    case 'profitability':
+                        if (this.gameState.netProfit > 0) {
+                            this.completeMission(mission.id);
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Update mission UI
+        this.missions.forEach(mission => {
+            const missionElement = document.getElementById(`mission-${mission.id}`);
+            if (missionElement) {
+                missionElement.className = 'mission-item';
+                
+                if (mission.completed) {
+                    missionElement.classList.add('completed');
+                    missionElement.querySelector('.mission-status').textContent = '✅';
+                } else if (mission.unlocked) {
+                    missionElement.classList.add('active');
+                    missionElement.querySelector('.mission-status').textContent = '⏳';
+                } else {
+                    missionElement.classList.add('locked');
+                    missionElement.querySelector('.mission-status').textContent = '🔒';
+                }
+            }
+        });
+    }
+
+    completeMission(missionId) {
+        const mission = this.missions.find(m => m.id === missionId);
+        if (mission && !mission.completed) {
+            mission.completed = true;
+            
+            // Unlock next mission
+            const nextMission = this.missions.find(m => m.id === missionId + 1);
+            if (nextMission) {
+                nextMission.unlocked = true;
+            }
+
+            // Show celebration
+            this.showCelebration(mission.title, mission.description, mission.icon);
+            
+            // Update current action if needed
+            this.updateCurrentAction();
+        }
+    }
+
+    updateCurrentAction() {
+        const currentMission = this.missions.find(m => m.unlocked && !m.completed);
+        
+        if (currentMission) {
+            this.currentMission = currentMission.id;
+            this.showCurrentAction(currentMission);
+        } else {
+            // All missions completed, show full action groups
+            this.showFullActionGroups();
+        }
+    }
+
+    showCurrentAction(mission) {
+        const currentAction = document.getElementById('current-action');
+        const actionGroups = document.getElementById('action-groups');
+        
+        currentAction.classList.remove('hidden');
+        actionGroups.classList.add('hidden');
+
+        // Update action card content
+        document.getElementById('action-icon').textContent = mission.icon;
+        document.getElementById('action-title').textContent = mission.title;
+        document.getElementById('action-description').textContent = mission.description;
+
+        // Update action content based on mission
+        const actionContent = document.getElementById('action-content');
+        switch (mission.action) {
+            case 'setPrice':
+                actionContent.innerHTML = `
+                    <div class="input-group">
+                        <input type="number" id="price-input" min="1" step="0.01" placeholder="Enter price" value="${this.gameState.price}">
+                        <button id="set-price-btn" class="primary-action-btn">
+                            <i class="fas fa-check"></i> Set Price
+                        </button>
+                    </div>
+                `;
+                // Re-attach event listener
+                document.getElementById('set-price-btn').addEventListener('click', () => {
+                    this.setPrice();
+                });
+                break;
+            case 'firstSale':
+                actionContent.innerHTML = `
+                    <div class="action-description">
+                        Great! Your price is set. Now let's make your first sale by clicking "Next Month" to see what happens!
+                    </div>
+                    <button id="next-month-btn" class="primary-action-btn">
+                        <i class="fas fa-forward"></i> Next Month
+                    </button>
+                `;
+                break;
+            case 'breakEven':
+                actionContent.innerHTML = `
+                    <div class="action-description">
+                        You're making sales! Now let's work on reaching break-even. Try spending some money on marketing or inventory to improve your business.
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn" data-action="marketing" data-amount="100">
+                            <i class="fas fa-bullhorn"></i> Marketing ($100)
+                        </button>
+                        <button class="action-btn" data-action="inventory" data-amount="200">
+                            <i class="fas fa-shopping-cart"></i> Inventory ($200)
+                        </button>
+                    </div>
+                `;
+                break;
+            case 'profitability':
+                actionContent.innerHTML = `
+                    <div class="action-description">
+                        You're so close to profitability! Keep optimizing your business to make more profit than you spend.
+                    </div>
+                    <button id="next-month-btn" class="primary-action-btn">
+                        <i class="fas fa-forward"></i> Next Month
+                    </button>
+                `;
+                break;
+        }
+    }
+
+    showFullActionGroups() {
+        const currentAction = document.getElementById('current-action');
+        const actionGroups = document.getElementById('action-groups');
+        
+        currentAction.classList.add('hidden');
+        actionGroups.classList.remove('hidden');
+    }
+
+    // Celebration System
+    showCelebration(title, message, icon) {
+        const banner = document.getElementById('celebration-banner');
+        const celebrationIcon = document.getElementById('celebration-icon');
+        const celebrationTitle = document.getElementById('celebration-title');
+        const celebrationMessage = document.getElementById('celebration-message');
+
+        celebrationIcon.textContent = icon;
+        celebrationTitle.textContent = title;
+        celebrationMessage.textContent = message;
+
+        banner.classList.remove('hidden');
+        this.playSuccessSound();
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            this.hideCelebration();
+        }, 5000);
+    }
+
+    hideCelebration() {
+        document.getElementById('celebration-banner').classList.add('hidden');
+    }
+
+    // Animated Number Changes
+    animateNumberChange(elementId, newValue, prefix = '$', suffix = '') {
+        const element = document.getElementById(elementId);
+        const oldValue = parseFloat(element.textContent.replace(/[^0-9.-]/g, '')) || 0;
+        const difference = newValue - oldValue;
+        
+        if (Math.abs(difference) > 0.1) {
+            this.showNumberAnimation(difference, prefix);
+            this.animateCountUp(element, oldValue, newValue, prefix, suffix);
+        }
+    }
+
+    showNumberAnimation(value, prefix = '$') {
+        const animation = document.getElementById('number-animation');
+        const numberValue = document.getElementById('number-value');
+        
+        const sign = value >= 0 ? '+' : '';
+        numberValue.textContent = `${sign}${prefix}${value.toFixed(0)}`;
+        
+        animation.classList.remove('hidden');
+        
+        setTimeout(() => {
+            animation.classList.add('hidden');
+        }, 2000);
+    }
+
+    animateCountUp(element, start, end, prefix, suffix) {
+        const duration = 1000;
+        const startTime = performance.now();
+        
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            const current = start + (end - start) * progress;
+            element.textContent = `${prefix}${current.toFixed(0)}${suffix}`;
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        
+        requestAnimationFrame(animate);
     }
 }
 

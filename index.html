@@ -345,7 +345,7 @@
 
                     <!-- Mentor Avatar & Guidance -->
                     <div class="mentor-guidance" id="mentor-guidance">
-                        <div class="mentor-avatar-large">
+                        <div class="mentor-avatar-large clickable-mentor" id="mentor-avatar" data-tooltip="Click me for guidance!">
                             <svg class="mentor-avatar" viewBox="0 0 100 100">
                                 <circle cx="50" cy="35" r="20" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
                                 <rect x="30" y="55" width="40" height="30" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
@@ -356,10 +356,38 @@
                                 <rect x="40" y="70" width="8" height="15" fill="#1f2937"/>
                                 <rect x="52" y="70" width="8" height="15" fill="#1f2937"/>
                             </svg>
+                            <div class="mentor-click-hint">💡</div>
                         </div>
                         <div class="mentor-speech-bubble">
                             <div class="speech-text" id="speech-text">Welcome! I'm your business mentor. Let's start by setting your product price!</div>
                             <div class="speech-arrow"></div>
+                        </div>
+                    </div>
+
+                    <!-- Mentor Guidance Popup -->
+                    <div class="mentor-popup hidden" id="mentor-popup">
+                        <div class="popup-content">
+                            <div class="popup-header">
+                                <div class="popup-avatar">
+                                    <svg class="mentor-avatar-small" viewBox="0 0 60 60">
+                                        <circle cx="30" cy="20" r="12" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                                        <rect x="18" y="32" width="24" height="18" rx="3" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+                                        <rect x="21" y="29" width="18" height="9" rx="2" fill="#1e40af"/>
+                                        <circle cx="25" cy="18" r="1" fill="#1f2937"/>
+                                        <circle cx="35" cy="18" r="1" fill="#1f2937"/>
+                                        <path d="M27 22 Q30 24 33 22" stroke="#1f2937" stroke-width="1" fill="none"/>
+                                    </svg>
+                                </div>
+                                <div class="popup-title">Business Mentor</div>
+                                <button class="popup-close" id="mentor-popup-close">×</button>
+                            </div>
+                            <div class="popup-body">
+                                <div class="guidance-text" id="guidance-text">
+                                    Let's set your price first — that's how you'll make your first sale! 
+                                    <br><br>
+                                    💡 <strong>Tip:</strong> Start with a price that covers your costs plus some profit.
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -380,9 +408,16 @@
                             </div>
                             <div class="action-content" id="action-content">
                                 <div class="input-group-large">
-                                    <input type="number" id="price-input" min="1" step="0.01" placeholder="Enter price" class="large-input">
-                                    <button id="set-price-btn" class="large-action-btn">
-                                        <i class="fas fa-check"></i> Set Price
+                                    <div class="input-wrapper">
+                                        <label for="price-input" class="input-label">Price per unit</label>
+                                        <input type="number" id="price-input" min="1" step="0.01" placeholder="Enter price per unit" class="large-input price-input" data-tooltip="This is how much you'll charge customers per product">
+                                        <div class="input-error hidden" id="price-error">Please enter a valid price > $0</div>
+                                    </div>
+                                    <button id="set-price-btn" class="large-action-btn confirm-btn">
+                                        <svg class="btn-icon" viewBox="0 0 20 20">
+                                            <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill="currentColor"/>
+                                        </svg>
+                                        Confirm Price
                                     </button>
                                 </div>
                             </div>
@@ -398,7 +433,7 @@
                                 <div class="step-title">Set Your Price & Buy Inventory</div>
                             </div>
                             <div class="step-actions">
-                                <div class="action-item">
+                                <div class="action-item active-action">
                                     <div class="action-icon">
                                         <svg class="game-icon-medium" viewBox="0 0 60 60">
                                             <circle cx="30" cy="30" r="25" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
@@ -408,16 +443,19 @@
                                     <div class="action-content">
                                         <div class="action-title">Set Price</div>
                                         <div class="action-description">Choose your product price</div>
-                                        <input type="number" id="tutorial-price-input" min="1" step="0.01" placeholder="Enter price" class="large-input">
-                                        <button id="tutorial-set-price-btn" class="large-action-btn">
+                                        <div class="input-wrapper">
+                                            <input type="number" id="tutorial-price-input" min="1" step="0.01" placeholder="Enter price per unit" class="large-input price-input" data-tooltip="This is how much you'll charge customers per product">
+                                            <div class="input-error hidden" id="tutorial-price-error">Please enter a valid price > $0</div>
+                                        </div>
+                                        <button id="tutorial-set-price-btn" class="large-action-btn confirm-btn">
                                             <svg class="btn-icon" viewBox="0 0 20 20">
                                                 <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill="currentColor"/>
                                             </svg>
-                                            Set Price
+                                            Confirm Price
                                         </button>
                                     </div>
                                 </div>
-                                <div class="action-item">
+                                <div class="action-item locked-action" id="inventory-action">
                                     <div class="action-icon">
                                         <svg class="game-icon-medium" viewBox="0 0 60 60">
                                             <rect x="15" y="20" width="30" height="25" rx="3" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
@@ -430,7 +468,8 @@
                                     <div class="action-content">
                                         <div class="action-title">Buy Inventory</div>
                                         <div class="action-description">Stock up on products to sell</div>
-                                        <button class="large-action-btn" data-action="inventory" data-amount="200">
+                                        <div class="unlock-condition">Unlocked after setting price</div>
+                                        <button class="large-action-btn disabled" data-action="inventory" data-amount="200" disabled>
                                             <svg class="btn-icon" viewBox="0 0 20 20">
                                                 <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" fill="currentColor"/>
                                             </svg>
@@ -722,12 +761,34 @@
     <!-- Celebration Banner -->
     <div id="celebration-banner" class="celebration-banner hidden">
         <div class="celebration-content">
-            <div class="celebration-icon" id="celebration-icon">🎉</div>
+            <div class="celebration-icon" id="celebration-icon">
+                <svg class="game-icon-medium" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
+                    <path d="M20 30 L27 37 L40 23" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
             <div class="celebration-text">
                 <div class="celebration-title" id="celebration-title">Congratulations!</div>
                 <div class="celebration-message" id="celebration-message">You made your first sale!</div>
             </div>
             <button id="celebration-close" class="celebration-close">✕</button>
+        </div>
+    </div>
+
+    <!-- Milestone Popup -->
+    <div class="milestone-popup hidden" id="milestone-popup">
+        <div class="milestone-content">
+            <div class="milestone-icon" id="milestone-icon">
+                <svg class="game-icon-large" viewBox="0 0 80 80">
+                    <circle cx="40" cy="40" r="35" fill="#f59e0b" stroke="#d97706" stroke-width="4"/>
+                    <text x="40" y="50" text-anchor="middle" fill="white" font-size="24" font-weight="bold">$</text>
+                </svg>
+            </div>
+            <div class="milestone-text">
+                <div class="milestone-title" id="milestone-title">First Sale!</div>
+                <div class="milestone-message" id="milestone-message">You made your first sale! 🎉</div>
+            </div>
+            <button class="milestone-close" id="milestone-close">Got it!</button>
         </div>
     </div>
 

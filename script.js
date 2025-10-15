@@ -235,6 +235,20 @@ class StartupSimulator {
             this.shareResults();
         });
 
+        // Mentor popup
+        document.getElementById('mentor-avatar').addEventListener('click', () => {
+            this.showMentorPopup();
+        });
+
+        document.getElementById('mentor-popup-close').addEventListener('click', () => {
+            this.hideMentorPopup();
+        });
+
+        // Milestone popup
+        document.getElementById('milestone-close').addEventListener('click', () => {
+            this.hideMilestonePopup();
+        });
+
         // Tooltips
         document.querySelectorAll('[data-tooltip]').forEach(element => {
             element.addEventListener('mouseenter', (e) => {
@@ -326,18 +340,28 @@ class StartupSimulator {
     }
 
     setupTutorialListeners() {
-        // Tutorial price input
+        // Tutorial price input with validation
         const tutorialPriceBtn = document.getElementById('tutorial-set-price-btn');
-        if (tutorialPriceBtn) {
+        const tutorialPriceInput = document.getElementById('tutorial-price-input');
+        const tutorialPriceError = document.getElementById('tutorial-price-error');
+        
+        if (tutorialPriceBtn && tutorialPriceInput) {
             tutorialPriceBtn.addEventListener('click', () => {
-                const price = parseFloat(document.getElementById('tutorial-price-input').value);
-                if (price > 0) {
+                const price = parseFloat(tutorialPriceInput.value);
+                if (this.validatePrice(price, tutorialPriceError)) {
                     this.gameState.price = price;
                     this.updateUI();
                     this.addEvent(`Price set to $${price.toFixed(2)} per unit.`, "info");
                     this.completeMission(1);
                     this.unlockTutorialStep(2);
+                    this.showMilestonePopup('Price Set!', 'Great! You\'ve set your product price. Now let\'s buy some inventory!', 'price');
                 }
+            });
+
+            // Real-time validation
+            tutorialPriceInput.addEventListener('input', () => {
+                const price = parseFloat(tutorialPriceInput.value);
+                this.validatePrice(price, tutorialPriceError);
             });
         }
 
@@ -347,6 +371,20 @@ class StartupSimulator {
             inventoryBtn.addEventListener('click', () => {
                 this.performAction('inventory', 200);
             });
+        }
+    }
+
+    validatePrice(price, errorElement) {
+        if (isNaN(price) || price <= 0) {
+            if (errorElement) {
+                errorElement.classList.remove('hidden');
+            }
+            return false;
+        } else {
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+            }
+            return true;
         }
     }
 
@@ -361,6 +399,8 @@ class StartupSimulator {
             if (unlockCondition) {
                 unlockCondition.textContent = 'Unlocked!';
                 unlockCondition.style.color = '#22c55e';
+                unlockCondition.style.borderLeftColor = '#22c55e';
+                unlockCondition.style.background = '#f0fff4';
             }
             
             // Enable locked buttons in this step
@@ -368,19 +408,34 @@ class StartupSimulator {
             lockedButtons.forEach(btn => {
                 btn.classList.remove('disabled');
                 btn.disabled = false;
+                btn.style.animation = 'unlockAction 0.6s ease-out';
             });
+
+            // Unlock inventory action specifically
+            if (stepNumber === 2) {
+                const inventoryAction = document.getElementById('inventory-action');
+                if (inventoryAction) {
+                    inventoryAction.classList.remove('locked-action');
+                    inventoryAction.classList.add('active-action');
+                    inventoryAction.style.animation = 'unlockAction 0.6s ease-out';
+                }
+            }
         }
     }
 
     setPrice() {
-        const newPrice = parseFloat(document.getElementById('price-input').value);
-        if (newPrice > 0) {
+        const priceInput = document.getElementById('price-input');
+        const priceError = document.getElementById('price-error');
+        const newPrice = parseFloat(priceInput.value);
+        
+        if (this.validatePrice(newPrice, priceError)) {
             this.gameState.price = newPrice;
             this.updateUI();
             this.addEvent(`Price updated to $${newPrice.toFixed(2)} per unit.`, "info");
             
             // Complete the set price mission
             this.completeMission(1);
+            this.showMilestonePopup('Price Set!', 'Great! You\'ve set your product price.', 'price');
         }
     }
 
@@ -956,8 +1011,15 @@ class StartupSimulator {
             }
         });
 
-        this.playSuccessSound();
-        this.addEvent(`🏆 Achievement Unlocked: ${name}!`, "positive");
+        // Show milestone popup for key achievements
+        if (id === 'firstSale') {
+            this.showMilestonePopup('First Sale!', 'You made your first sale! 🎉', 'sale');
+        } else if (id === 'profitability') {
+            this.showMilestonePopup('Break-Even!', 'You\'ve reached profitability! 📊', 'breakEven');
+        } else {
+            this.addEvent(`🏆 Achievement Unlocked: ${name}!`, "positive");
+            this.playSuccessSound();
+        }
     }
 
     addEventToUI(message, type = 'info') {
@@ -1466,6 +1528,84 @@ class StartupSimulator {
 
     hideCelebration() {
         document.getElementById('celebration-banner').classList.add('hidden');
+    }
+
+    // Mentor Popup Methods
+    showMentorPopup() {
+        const popup = document.getElementById('mentor-popup');
+        const guidanceText = document.getElementById('guidance-text');
+        
+        // Set context-appropriate guidance
+        let guidance = "Let's set your price first — that's how you'll make your first sale!";
+        let tip = "Start with a price that covers your costs plus some profit.";
+        
+        if (this.gameState.price > 0 && this.gameState.customers === 0) {
+            guidance = "Great! Now let's buy some inventory so you have products to sell.";
+            tip = "You'll need inventory before you can make your first sale.";
+        } else if (this.gameState.customers > 0) {
+            guidance = "Excellent! You're making sales. Now let's work on growing your business.";
+            tip = "Consider spending on marketing to get more customers.";
+        }
+        
+        guidanceText.innerHTML = `${guidance}<br><br>💡 <strong>Tip:</strong> ${tip}`;
+        popup.classList.remove('hidden');
+    }
+
+    hideMentorPopup() {
+        document.getElementById('mentor-popup').classList.add('hidden');
+    }
+
+    // Milestone Popup Methods
+    showMilestonePopup(title, message, iconType) {
+        const popup = document.getElementById('milestone-popup');
+        const milestoneTitle = document.getElementById('milestone-title');
+        const milestoneMessage = document.getElementById('milestone-message');
+        const milestoneIcon = document.getElementById('milestone-icon');
+        
+        milestoneTitle.textContent = title;
+        milestoneMessage.textContent = message;
+        
+        // Set icon based on type
+        let iconSvg = '';
+        switch(iconType) {
+            case 'price':
+                iconSvg = `<svg class="game-icon-large" viewBox="0 0 80 80">
+                    <circle cx="40" cy="40" r="35" fill="#f59e0b" stroke="#d97706" stroke-width="4"/>
+                    <text x="40" y="50" text-anchor="middle" fill="white" font-size="24" font-weight="bold">$</text>
+                </svg>`;
+                break;
+            case 'sale':
+                iconSvg = `<svg class="game-icon-large" viewBox="0 0 80 80">
+                    <rect x="20" y="25" width="40" height="30" rx="4" fill="#22c55e" stroke="#16a34a" stroke-width="4"/>
+                    <rect x="25" y="20" width="30" height="15" rx="3" fill="#4ade80"/>
+                    <circle cx="30" cy="32" r="3" fill="white"/>
+                    <circle cx="50" cy="32" r="3" fill="white"/>
+                </svg>`;
+                break;
+            case 'breakEven':
+                iconSvg = `<svg class="game-icon-large" viewBox="0 0 80 80">
+                    <rect x="10" y="40" width="60" height="20" fill="#3b82f6"/>
+                    <path d="M10 40 L20 30 L30 35 L40 25 L50 30 L60 25 L70 40 Z" fill="#60a5fa"/>
+                    <circle cx="20" cy="30" r="3" fill="white"/>
+                    <circle cx="30" cy="35" r="3" fill="white"/>
+                    <circle cx="40" cy="25" r="3" fill="white"/>
+                    <circle cx="50" cy="30" r="3" fill="white"/>
+                </svg>`;
+                break;
+            default:
+                iconSvg = `<svg class="game-icon-large" viewBox="0 0 80 80">
+                    <circle cx="40" cy="40" r="35" fill="#22c55e" stroke="#16a34a" stroke-width="4"/>
+                    <path d="M25 40 L35 50 L55 30" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`;
+        }
+        
+        milestoneIcon.innerHTML = iconSvg;
+        popup.classList.remove('hidden');
+        this.playSuccessSound();
+    }
+
+    hideMilestonePopup() {
+        document.getElementById('milestone-popup').classList.add('hidden');
     }
 
     // Animated Number Changes

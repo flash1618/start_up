@@ -472,6 +472,108 @@ body {
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
 }
 
+/* Clickable Mentor */
+.clickable-mentor {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.clickable-mentor:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+}
+
+.mentor-click-hint {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #f59e0b;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    animation: pulse 2s infinite;
+}
+
+/* Mentor Popup */
+.mentor-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    max-width: 500px;
+    width: 90%;
+    animation: popupSlideIn 0.3s ease-out;
+}
+
+.popup-content {
+    padding: 0;
+}
+
+.popup-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.popup-avatar {
+    flex-shrink: 0;
+}
+
+.mentor-avatar-small {
+    width: 40px;
+    height: 40px;
+}
+
+.popup-title {
+    flex: 1;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.popup-close:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.popup-body {
+    padding: 25px;
+}
+
+.guidance-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #2d3748;
+}
+
 .mentor-content {
     flex: 1;
 }
@@ -675,6 +777,53 @@ body {
     color: rgba(255,255,255,0.7);
 }
 
+/* Enhanced Input Styling */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.price-input {
+    border: 3px solid #f59e0b !important;
+    background: rgba(245, 158, 11, 0.1) !important;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.price-input:focus {
+    border-color: #f59e0b !important;
+    background: rgba(245, 158, 11, 0.2) !important;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3);
+}
+
+.input-error {
+    color: #ef4444;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.confirm-btn:hover {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
 .large-action-btn {
     background: white;
     color: #667eea;
@@ -782,6 +931,112 @@ body {
 .action-item.locked {
     opacity: 0.5;
     background: #f7fafc;
+}
+
+/* Action Gating */
+.active-action {
+    border-color: #22c55e !important;
+    background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%) !important;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.locked-action {
+    opacity: 0.6;
+    background: #f7fafc !important;
+    border-color: #e2e8f0 !important;
+}
+
+.locked-action .action-title {
+    color: #9ca3af !important;
+}
+
+.locked-action .action-description {
+    color: #9ca3af !important;
+}
+
+.unlock-condition {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    border-left: 3px solid #9ca3af;
+}
+
+.large-action-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #e5e7eb !important;
+    color: #9ca3af !important;
+}
+
+.large-action-btn.disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Milestone Popup */
+.milestone-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 90%;
+    animation: milestoneBounce 0.6s ease-out;
+}
+
+.milestone-content {
+    padding: 30px;
+    text-align: center;
+}
+
+.milestone-icon {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.game-icon-large {
+    width: 80px;
+    height: 80px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+.milestone-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 10px;
+}
+
+.milestone-message {
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.milestone-close {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.milestone-close:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
 }
 
 .action-item .action-icon {
@@ -1641,4 +1896,55 @@ body {
 .error {
     border-color: #e53e3e !important;
     background-color: #fed7d7 !important;
+}
+
+/* New Animation Keyframes */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes popupSlideIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes milestoneBounce {
+    0% {
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes unlockAction {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+    }
 }

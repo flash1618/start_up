@@ -138,7 +138,51 @@ class StartupSimulator {
         this.checkForSavedUser();
         this.initializeMentorMessages();
         this.initializeMissions();
+        this.initAnimations();
         this.showScreen('difficulty-screen');
+    }
+
+    initAnimations() {
+        // Initialize GSAP animations
+        this.gsap = window.gsap;
+        if (this.gsap) {
+            this.gsap.registerPlugin(window.TextPlugin);
+        }
+        
+        // Start background animations
+        this.startBackgroundAnimations();
+    }
+
+    startBackgroundAnimations() {
+        // Animate the gradient orbs
+        if (this.gsap) {
+            this.gsap.to('.orb-1', {
+                x: 50,
+                y: -30,
+                duration: 20,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+            
+            this.gsap.to('.orb-2', {
+                x: -40,
+                y: 40,
+                duration: 25,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+            
+            this.gsap.to('.orb-3', {
+                x: 60,
+                y: -20,
+                duration: 30,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+        }
     }
 
     setupEventListeners() {
@@ -244,9 +288,11 @@ class StartupSimulator {
             this.hideMentorPopup();
         });
 
-        // Milestone popup
-        document.getElementById('milestone-close').addEventListener('click', () => {
-            this.hideMilestonePopup();
+        // Milestone popup - use event delegation to ensure it works
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'milestone-close') {
+                this.hideMilestonePopup();
+            }
         });
 
         // Tooltips
@@ -372,6 +418,9 @@ class StartupSimulator {
                 this.performAction('inventory', 200);
             });
         }
+
+        // Add button glow effects
+        this.addButtonGlowEffects();
     }
 
     validatePrice(price, errorElement) {
@@ -522,6 +571,12 @@ class StartupSimulator {
         if (this.gameState.customers > 0) {
             this.showSalesAnimation(this.gameState.revenue);
             this.playSaleSound();
+            
+            // Create floating coins animation
+            const revenueElement = document.querySelector('[data-metric="revenue"] .metric-value');
+            if (revenueElement) {
+                this.createFloatingCoins(this.gameState.customers, revenueElement);
+            }
         }
 
         // Calculate revenue and costs
@@ -804,10 +859,35 @@ class StartupSimulator {
     }
 
     showScreen(screenId) {
+        // Hide all screens with animation
         document.querySelectorAll('.screen').forEach(screen => {
-            screen.classList.remove('active');
+            if (screen.classList.contains('active')) {
+                if (this.gsap) {
+                    this.gsap.to(screen, {
+                        opacity: 0,
+                        y: -20,
+                        duration: 0.2,
+                        ease: 'power2.in',
+                        onComplete: () => {
+                            screen.classList.remove('active');
+                        }
+                    });
+                } else {
+                    screen.classList.remove('active');
+                }
+            }
         });
-        document.getElementById(screenId).classList.add('active');
+        
+        // Show target screen with animation
+        const targetScreen = document.getElementById(screenId);
+        targetScreen.classList.add('active');
+        
+        if (this.gsap) {
+            this.gsap.fromTo(targetScreen, 
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out', delay: 0.1 }
+            );
+        }
     }
 
     showTooltip(element, text) {
@@ -1547,8 +1627,19 @@ class StartupSimulator {
             tip = "Consider spending on marketing to get more customers.";
         }
         
-        guidanceText.innerHTML = `${guidance}<br><br>💡 <strong>Tip:</strong> ${tip}`;
         popup.classList.remove('hidden');
+        
+        // Animate popup entrance
+        if (this.gsap) {
+            this.gsap.fromTo(popup, 
+                { scale: 0.8, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' }
+            );
+        }
+        
+        // Type the text with animation
+        const fullText = `${guidance}<br><br>💡 <strong>Tip:</strong> ${tip}`;
+        this.typeText(guidanceText, fullText, 30);
     }
 
     hideMentorPopup() {
@@ -1601,11 +1692,157 @@ class StartupSimulator {
         
         milestoneIcon.innerHTML = iconSvg;
         popup.classList.remove('hidden');
+        
+        // Create confetti animation
+        this.createConfetti();
+        
+        // Animate the popup entrance
+        if (this.gsap) {
+            this.gsap.fromTo(popup, 
+                { scale: 0, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' }
+            );
+        }
+        
         this.playSuccessSound();
     }
 
     hideMilestonePopup() {
         document.getElementById('milestone-popup').classList.add('hidden');
+        // Clear confetti
+        const confettiContainer = document.getElementById('confetti-container');
+        confettiContainer.innerHTML = '';
+    }
+
+    // Floating Coin Animation
+    createFloatingCoins(amount, element) {
+        const container = document.getElementById('floating-coins');
+        const rect = element.getBoundingClientRect();
+        
+        for (let i = 0; i < amount; i++) {
+            const coin = document.createElement('div');
+            coin.className = 'floating-coin';
+            coin.innerHTML = '💰';
+            coin.style.left = (rect.left + Math.random() * rect.width) + 'px';
+            coin.style.top = (rect.top + Math.random() * rect.height) + 'px';
+            coin.style.animationDelay = (Math.random() * 0.5) + 's';
+            
+            container.appendChild(coin);
+            
+            // Remove coin after animation
+            setTimeout(() => {
+                if (coin.parentNode) {
+                    coin.parentNode.removeChild(coin);
+                }
+            }, 3000);
+        }
+    }
+
+    // Confetti Animation
+    createConfetti() {
+        const container = document.getElementById('confetti-container');
+        const colors = ['#f59e0b', '#22c55e', '#3b82f6', '#ef4444', '#8b5cf6'];
+        
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+            
+            container.appendChild(confetti);
+            
+            // Remove confetti after animation
+            setTimeout(() => {
+                if (confetti.parentNode) {
+                    confetti.parentNode.removeChild(confetti);
+                }
+            }, 5000);
+        }
+    }
+
+    // Animated Number Counting
+    animateNumberCount(element, startValue, endValue, duration = 1000, prefix = '$') {
+        if (this.gsap) {
+            this.gsap.to(element, {
+                innerHTML: endValue,
+                duration: duration / 1000,
+                ease: 'power2.out',
+                snap: { innerHTML: 1 },
+                onUpdate: function() {
+                    element.innerHTML = prefix + Math.round(this.targets()[0].innerHTML);
+                },
+                onComplete: () => {
+                    element.classList.add('animating');
+                    setTimeout(() => {
+                        element.classList.remove('animating');
+                    }, 600);
+                }
+            });
+        } else {
+            // Fallback without GSAP
+            let current = startValue;
+            const increment = (endValue - startValue) / (duration / 16);
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= endValue) || (increment < 0 && current <= endValue)) {
+                    current = endValue;
+                    clearInterval(timer);
+                }
+                element.innerHTML = prefix + Math.round(current);
+            }, 16);
+        }
+    }
+
+    // Typing Animation for Speech Bubble
+    typeText(element, text, speed = 50) {
+        element.innerHTML = '';
+        let i = 0;
+        const timer = setInterval(() => {
+            element.innerHTML += text.charAt(i);
+            i++;
+            if (i > text.length) {
+                clearInterval(timer);
+            }
+        }, speed);
+    }
+
+    // Button Glow Effects
+    addButtonGlowEffects() {
+        const buttons = document.querySelectorAll('.large-action-btn, .primary-btn, .secondary-btn');
+        
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                if (!button.disabled) {
+                    button.classList.add('glow');
+                }
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('glow');
+            });
+            
+            button.addEventListener('click', (e) => {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                button.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
     }
 
     // Animated Number Changes

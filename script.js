@@ -379,6 +379,7 @@ class StartupSimulator {
     }
 
     startGame() {
+        console.log('Starting game with difficulty:', this.difficulty);
         this.showScreen('game-screen');
         this.updateProductDisplay();
         this.updateUI();
@@ -386,8 +387,10 @@ class StartupSimulator {
         
         // Show appropriate interface based on difficulty
         if (this.difficulty === 'easy') {
+            console.log('Showing tutorial interface');
             this.showTutorialInterface();
         } else {
+            console.log('Showing full interface');
             this.showFullInterface();
         }
     }
@@ -419,10 +422,15 @@ class StartupSimulator {
         const tutorialPriceInput = document.getElementById('tutorial-price-input');
         const tutorialPriceError = document.getElementById('tutorial-price-error');
         
+        console.log('Setting up tutorial listeners:', { tutorialPriceBtn, tutorialPriceInput, tutorialPriceError });
+        
         if (tutorialPriceBtn && tutorialPriceInput) {
             tutorialPriceBtn.addEventListener('click', () => {
+                console.log('Price button clicked!');
                 const price = parseFloat(tutorialPriceInput.value);
+                console.log('Price value:', price);
                 if (this.validatePrice(price, tutorialPriceError)) {
+                    console.log('Price validation passed, setting price...');
                     this.gameState.price = price;
                     this.updateUI();
                     this.addEvent(`Price set to $${price.toFixed(2)} per unit.`, "info");

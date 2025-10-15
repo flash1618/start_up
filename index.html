@@ -3,861 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Startup Simulator: Build Your Dream Business</title>
+    <title>🍋 Lemonade Stand Simulator - Learn Business Skills!</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Game Container -->
     <div class="game-container">
-        <!-- Animated Background -->
-        <div class="animated-background">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
-        </div>
-
-        <!-- Floating Coins Container -->
-        <div class="floating-coins" id="floating-coins"></div>
-
+        
         <!-- Header -->
         <header class="game-header">
-            <h1><i class="fas fa-rocket"></i> Startup Simulator</h1>
-            <p>Build Your Dream Business</p>
-            <div class="user-controls">
-                <div id="user-info" class="user-info hidden">
-                    <span id="username-display"></span>
-                    <button id="logout-btn" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-                <div id="login-section" class="login-section">
-                    <input type="text" id="username-input" placeholder="Enter your name" maxlength="20">
-                    <button id="login-btn" class="login-btn">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </button>
-                    <button id="guest-btn" class="guest-btn">
-                        <i class="fas fa-user-secret"></i> Play as Guest
-                    </button>
+            <div class="header-content">
+                <h1 class="game-title">🍋 Lemonade Stand</h1>
+                <div class="player-info">
+                    <div class="cash-display">
+                        <span class="cash-icon">💰</span>
+                        <span class="cash-amount" id="cash-amount">₹100</span>
+                    </div>
+                    <div class="day-counter">
+                        <span class="day-icon">📅</span>
+                        <span class="day-text">Day <span id="day-number">1</span></span>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- Difficulty Selection Screen -->
-        <div id="difficulty-screen" class="screen active">
-            <div class="difficulty-content">
-                <h2>🎯 Choose Your Learning Level</h2>
-                <p>Don't worry - you can always change this later!</p>
-                
-                <div class="difficulty-options">
-                    <div class="difficulty-card" data-difficulty="easy">
-                        <div class="difficulty-icon">
-                            <svg class="game-icon" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="40" fill="#4ade80" stroke="#22c55e" stroke-width="3"/>
-                                <path d="M30 50 L45 65 L70 35" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <h3>Easy</h3>
-                        <p>Perfect for beginners!</p>
-                        <div class="difficulty-features">
-                            <span>Revenue & Costs</span>
-                            <span>Profit & Gross Margin</span>
-                            <span>Simple pricing</span>
-                        </div>
-                        <div class="difficulty-description">
-                            Learn the basics of running a business with friendly guidance every step of the way.
+        <!-- Main Game Area -->
+        <main class="game-main">
+            
+            <!-- Lemonade Stand Visual -->
+            <div class="stand-container">
+                <div class="lemonade-stand" id="lemonade-stand">
+                    <div class="stand-counter">
+                        <div class="stand-sign">🍋 LEMONADE 🍋</div>
+                        <div class="price-display">
+                            <span class="price-label">Price:</span>
+                            <span class="price-value" id="price-display">₹5</span>
                         </div>
                     </div>
-                    
-                    <div class="difficulty-card" data-difficulty="medium">
-                        <div class="difficulty-icon">
-                            <svg class="game-icon" viewBox="0 0 100 100">
-                                <rect x="20" y="30" width="60" height="40" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="3"/>
-                                <polygon points="50,20 30,40 70,40" fill="#1d4ed8"/>
-                                <circle cx="35" cy="50" r="3" fill="white"/>
-                                <circle cx="50" cy="50" r="3" fill="white"/>
-                                <circle cx="65" cy="50" r="3" fill="white"/>
-                            </svg>
+                    <div class="inventory-display">
+                        <div class="inventory-item">
+                            <span class="inventory-icon">🍋</span>
+                            <span class="inventory-count" id="lemons-count">0</span>
                         </div>
-                        <h3>Medium</h3>
-                        <p>Ready for more challenge?</p>
-                        <div class="difficulty-features">
-                            <span>Everything from Easy</span>
-                            <span>Break-even & ROI</span>
-                            <span>Runway planning</span>
+                        <div class="inventory-item">
+                            <span class="inventory-icon">🍯</span>
+                            <span class="inventory-count" id="sugar-count">0</span>
                         </div>
-                        <div class="difficulty-description">
-                            Add strategic thinking with break-even analysis and return on investment concepts.
+                        <div class="inventory-item">
+                            <span class="inventory-icon">🧊</span>
+                            <span class="inventory-count" id="ice-count">0</span>
                         </div>
                     </div>
-                    
-                    <div class="difficulty-card" data-difficulty="hard">
-                        <div class="difficulty-icon">
-                            <svg class="game-icon" viewBox="0 0 100 100">
-                                <polygon points="50,10 60,35 85,35 68,55 75,80 50,65 25,80 32,55 15,35 40,35" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
-                                <circle cx="50" cy="50" r="8" fill="#fbbf24"/>
-                            </svg>
-                        </div>
-                        <h3>Hard</h3>
-                        <p>Business expert mode!</p>
-                        <div class="difficulty-features">
-                            <span>Everything from Medium</span>
-                            <span>CAC, LTV, Burn Rate</span>
-                            <span>ARR & Advanced Metrics</span>
-                        </div>
-                        <div class="difficulty-description">
-                            Master advanced startup metrics like customer acquisition cost and lifetime value.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game Setup Screen -->
-        <div id="setup-screen" class="screen">
-            <div class="setup-content">
-                <h2>🏢 Choose Your Business Idea</h2>
-                <p>You have $1,000 in seed money. Pick your startup and start building!</p>
-                
-                <div class="business-options">
-                    <div class="business-card" data-business="food">
-                        <div class="business-icon">
-                            <svg class="game-icon" viewBox="0 0 100 100">
-                                <rect x="30" y="40" width="40" height="30" rx="5" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
-                                <rect x="35" y="35" width="30" height="10" rx="5" fill="#fbbf24"/>
-                                <circle cx="45" cy="30" r="3" fill="#ef4444"/>
-                                <circle cx="55" cy="30" r="3" fill="#ef4444"/>
-                                <path d="M40 25 Q50 20 60 25" stroke="#22c55e" stroke-width="3" fill="none"/>
-                            </svg>
-                        </div>
-                        <h3>Food Brand</h3>
-                        <p>Launch a healthy snack company</p>
-                        <div class="business-stats">
-                            <span>Base Price: $5</span>
-                            <span>COGS: $2</span>
-                            <span>Demand: High</span>
-                        </div>
-                    </div>
-                    
-                    <div class="business-card" data-business="saas">
-                        <div class="business-icon">
-                            <svg class="game-icon" viewBox="0 0 100 100">
-                                <rect x="20" y="30" width="60" height="40" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
-                                <rect x="25" y="35" width="50" height="25" fill="#1e40af"/>
-                                <circle cx="35" cy="45" r="2" fill="#60a5fa"/>
-                                <circle cx="45" cy="45" r="2" fill="#60a5fa"/>
-                                <circle cx="55" cy="45" r="2" fill="#60a5fa"/>
-                                <rect x="30" y="50" width="40" height="2" fill="#60a5fa"/>
-                                <rect x="30" y="55" width="30" height="2" fill="#60a5fa"/>
-                            </svg>
-                        </div>
-                        <h3>SaaS Tool</h3>
-                        <p>Build a productivity software</p>
-                        <div class="business-stats">
-                            <span>Base Price: $29/mo</span>
-                            <span>COGS: $5</span>
-                            <span>Demand: Medium</span>
-                        </div>
-                    </div>
-                    
-                    <div class="business-card" data-business="fashion">
-                        <div class="business-icon">
-                            <svg class="game-icon" viewBox="0 0 100 100">
-                                <path d="M30 20 L35 15 L40 20 L45 15 L50 20 L55 15 L60 20 L65 15 L70 20 L70 80 L30 80 Z" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
-                                <rect x="40" y="25" width="20" height="30" fill="#a78bfa"/>
-                                <circle cx="45" cy="35" r="2" fill="#c4b5fd"/>
-                                <circle cx="55" cy="35" r="2" fill="#c4b5fd"/>
-                                <path d="M45 40 L55 40" stroke="#c4b5fd" stroke-width="2"/>
-                                <rect x="35" y="60" width="30" height="15" fill="#a78bfa"/>
-                            </svg>
-                        </div>
-                        <h3>Fashion Store</h3>
-                        <p>Create a trendy clothing line</p>
-                        <div class="business-stats">
-                            <span>Base Price: $45</span>
-                            <span>COGS: $18</span>
-                            <span>Demand: Medium</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Game Screen -->
-        <div id="game-screen" class="screen">
-            <!-- Mission Tracker Sidebar -->
-            <div class="mission-tracker" id="mission-tracker">
-                <div class="mission-header">
-                    <h3>Missions</h3>
-                    <div class="mission-progress">
-                        <span id="mission-progress-text">1/4</span>
-                    </div>
-                </div>
-                <div class="mission-list" id="mission-list">
-                    <div class="mission-item active" id="mission-1">
-                        <div class="mission-icon">💰</div>
-                        <div class="mission-content">
-                            <div class="mission-title">Set Your Price</div>
-                            <div class="mission-status">Active</div>
-                        </div>
-                    </div>
-                    <div class="mission-item locked" id="mission-2">
-                        <div class="mission-icon">🛒</div>
-                        <div class="mission-content">
-                            <div class="mission-title">Buy Inventory</div>
-                            <div class="mission-status">Locked</div>
-                        </div>
-                    </div>
-                    <div class="mission-item locked" id="mission-3">
-                        <div class="mission-icon">🎯</div>
-                        <div class="mission-content">
-                            <div class="mission-title">Make First Sale</div>
-                            <div class="mission-status">Locked</div>
-                        </div>
-                    </div>
-                    <div class="mission-item locked" id="mission-4">
-                        <div class="mission-icon">📈</div>
-                        <div class="mission-content">
-                            <div class="mission-title">Reach Break-Even</div>
-                            <div class="mission-status">Locked</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="game-layout">
-                <!-- Left Panel: Metrics Dashboard -->
-                <div class="metrics-panel">
-                    <h3><i class="fas fa-chart-line"></i> Business Metrics</h3>
-                    
-                    <div class="metric-group">
-                        <h4>Financial Health</h4>
-                        <div class="metric" data-tooltip="Total money you have available">
-                            <span class="metric-label">Cash</span>
-                            <span class="metric-value" id="cash">$1,000</span>
-                        </div>
-                        <div class="metric" data-tooltip="Money earned from sales this month">
-                            <span class="metric-label">Revenue</span>
-                            <span class="metric-value" id="revenue">$0</span>
-                        </div>
-                        <div class="metric" data-tooltip="Cost of goods sold - what it costs to make your product">
-                            <span class="metric-label">COGS</span>
-                            <span class="metric-value" id="cogs">$0</span>
-                        </div>
-                        <div class="metric" data-tooltip="Revenue minus COGS - your gross profit">
-                            <span class="metric-label">Gross Margin</span>
-                            <span class="metric-value" id="gross-margin">$0</span>
-                        </div>
-                        <div class="metric" data-tooltip="Total profit after all expenses">
-                            <span class="metric-label">Net Profit</span>
-                            <span class="metric-value" id="net-profit">$0</span>
-                        </div>
-                    </div>
-
-                    <div class="metric-group">
-                        <h4>Growth Metrics</h4>
-                        <div class="metric" data-tooltip="Cost to acquire one new customer">
-                            <span class="metric-label">CAC</span>
-                            <span class="metric-value" id="cac">$0</span>
-                        </div>
-                        <div class="metric" data-tooltip="Lifetime value of a customer">
-                            <span class="metric-label">LTV</span>
-                            <span class="metric-value" id="ltv">$0</span>
-                        </div>
-                        <div class="metric" data-tooltip="How fast you're spending money each month">
-                            <span class="metric-label">Burn Rate</span>
-                            <span class="metric-value" id="burn-rate">$0</span>
-                        </div>
-                        <div class="metric" data-tooltip="How many months until you run out of cash">
-                            <span class="metric-label">Runway</span>
-                            <span class="metric-value" id="runway">∞</span>
-                        </div>
-                    </div>
-
-                    <div class="metric-group">
-                        <h4>Business Stats</h4>
-                        <div class="metric">
-                            <span class="metric-label">Customers</span>
-                            <span class="metric-value" id="customers">0</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Price</span>
-                            <span class="metric-value" id="price">$0</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Demand</span>
-                            <span class="metric-value" id="demand">0%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Center Panel: Actions -->
-                <div class="actions-panel">
-                    <div class="month-header">
-                        <h3><i class="fas fa-calendar"></i> Month <span id="current-month">1</span></h3>
-                        <div class="business-info">
-                            <span id="business-name">Your Business</span>
-                        </div>
-                    </div>
-
-
-                    <!-- Mission Tracker -->
-                    <div class="mission-tracker">
-                        <h4>🎯 Your Missions</h4>
-                        <div class="missions-list" id="missions-list">
-                            <div class="mission-item active" id="mission-1">
-                                <div class="mission-icon">
-                                    <svg class="game-icon-small" viewBox="0 0 50 50">
-                                        <circle cx="25" cy="25" r="20" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
-                                        <text x="25" y="30" text-anchor="middle" fill="white" font-size="16" font-weight="bold">$</text>
-                                    </svg>
-                                </div>
-                                <div class="mission-content">
-                                    <div class="mission-title">Set Your Price</div>
-                                    <div class="mission-description">Choose how much to charge for your product</div>
-                                </div>
-                                <div class="mission-status">
-                                    <svg class="status-icon" viewBox="0 0 20 20">
-                                        <circle cx="10" cy="10" r="8" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
-                                        <path d="M6 10 L9 13 L14 7" stroke="white" stroke-width="2" fill="none"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="mission-item locked" id="mission-2">
-                                <div class="mission-icon">
-                                    <svg class="game-icon-small" viewBox="0 0 50 50">
-                                        <rect x="10" y="15" width="30" height="20" rx="3" fill="#22c55e" stroke="#16a34a" stroke-width="2"/>
-                                        <rect x="15" y="10" width="20" height="10" rx="2" fill="#4ade80"/>
-                                        <circle cx="20" cy="20" r="2" fill="white"/>
-                                        <circle cx="30" cy="20" r="2" fill="white"/>
-                                    </svg>
-                                </div>
-                                <div class="mission-content">
-                                    <div class="mission-title">Make Your First Sale</div>
-                                    <div class="mission-description">Sell at least 1 unit</div>
-                                </div>
-                                <div class="mission-status">
-                                    <svg class="status-icon" viewBox="0 0 20 20">
-                                        <rect x="2" y="2" width="16" height="16" rx="3" fill="#6b7280" stroke="#4b5563" stroke-width="2"/>
-                                        <path d="M6 6 L14 14 M14 6 L6 14" stroke="white" stroke-width="2"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="mission-item locked" id="mission-3">
-                                <div class="mission-icon">
-                                    <svg class="game-icon-small" viewBox="0 0 50 50">
-                                        <rect x="5" y="30" width="40" height="15" fill="#3b82f6"/>
-                                        <path d="M5 30 L15 20 L25 25 L35 15 L45 20 L45 30 Z" fill="#60a5fa"/>
-                                        <circle cx="15" cy="20" r="2" fill="white"/>
-                                        <circle cx="25" cy="25" r="2" fill="white"/>
-                                        <circle cx="35" cy="15" r="2" fill="white"/>
-                                    </svg>
-                                </div>
-                                <div class="mission-content">
-                                    <div class="mission-title">Reach Break-Even</div>
-                                    <div class="mission-description">Make your revenue equal your costs</div>
-                                </div>
-                                <div class="mission-status">
-                                    <svg class="status-icon" viewBox="0 0 20 20">
-                                        <rect x="2" y="2" width="16" height="16" rx="3" fill="#6b7280" stroke="#4b5563" stroke-width="2"/>
-                                        <path d="M6 6 L14 14 M14 6 L6 14" stroke="white" stroke-width="2"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="mission-item locked" id="mission-4">
-                                <div class="mission-icon">
-                                    <svg class="game-icon-small" viewBox="0 0 50 50">
-                                        <polygon points="25,5 30,20 45,20 35,30 40,45 25,35 10,45 15,30 5,20 20,20" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
-                                        <circle cx="25" cy="25" r="5" fill="#fbbf24"/>
-                                    </svg>
-                                </div>
-                                <div class="mission-content">
-                                    <div class="mission-title">Achieve Profitability</div>
-                                    <div class="mission-description">Make more money than you spend</div>
-                                </div>
-                                <div class="mission-status">
-                                    <svg class="status-icon" viewBox="0 0 20 20">
-                                        <rect x="2" y="2" width="16" height="16" rx="3" fill="#6b7280" stroke="#4b5563" stroke-width="2"/>
-                                        <path d="M6 6 L14 14 M14 6 L6 14" stroke="white" stroke-width="2"/>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mentor Avatar & Guidance -->
-                    <div class="mentor-guidance" id="mentor-guidance">
-                        <div class="mentor-avatar-large clickable-mentor" id="mentor-avatar" data-tooltip="Click me for guidance!">
-                            <svg class="mentor-avatar" viewBox="0 0 100 100">
-                                <circle cx="50" cy="35" r="20" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
-                                <rect x="30" y="55" width="40" height="30" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
-                                <rect x="35" y="50" width="30" height="15" rx="3" fill="#1e40af"/>
-                                <circle cx="42" cy="30" r="2" fill="#1f2937"/>
-                                <circle cx="58" cy="30" r="2" fill="#1f2937"/>
-                                <path d="M45 35 Q50 40 55 35" stroke="#1f2937" stroke-width="2" fill="none"/>
-                                <rect x="40" y="70" width="8" height="15" fill="#1f2937"/>
-                                <rect x="52" y="70" width="8" height="15" fill="#1f2937"/>
-                            </svg>
-                            <div class="mentor-click-hint">💡</div>
-                        </div>
-                        <div class="mentor-speech-bubble">
-                            <div class="speech-text" id="speech-text">Welcome! I'm your business mentor. Let's start by setting your product price!</div>
-                            <div class="speech-arrow"></div>
-                        </div>
-                    </div>
-
-                    <!-- Mentor Guidance Popup -->
-                    <div class="mentor-popup hidden" id="mentor-popup">
-                        <div class="popup-content">
-                            <div class="popup-header">
-                                <div class="popup-avatar">
-                                    <svg class="mentor-avatar-small" viewBox="0 0 60 60">
-                                        <circle cx="30" cy="20" r="12" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
-                                        <rect x="18" y="32" width="24" height="18" rx="3" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
-                                        <rect x="21" y="29" width="18" height="9" rx="2" fill="#1e40af"/>
-                                        <circle cx="25" cy="18" r="1" fill="#1f2937"/>
-                                        <circle cx="35" cy="18" r="1" fill="#1f2937"/>
-                                        <path d="M27 22 Q30 24 33 22" stroke="#1f2937" stroke-width="1" fill="none"/>
-                                    </svg>
-                                </div>
-                                <div class="popup-title">Business Mentor</div>
-                                <button class="popup-close" id="mentor-popup-close">×</button>
-                            </div>
-                            <div class="popup-body">
-                                <div class="guidance-text" id="guidance-text">
-                                    Let's set your price first — that's how you'll make your first sale! 
-                                    <br><br>
-                                    💡 <strong>Tip:</strong> Start with a price that covers your costs plus some profit.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Current Action (Step-by-Step) -->
-                    <div class="current-action" id="current-action">
-                        <div class="action-card">
-                            <div class="action-header">
-                                <div class="action-icon" id="action-icon">
-                                    <svg class="game-icon-medium" viewBox="0 0 60 60">
-                                        <circle cx="30" cy="30" r="25" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
-                                        <text x="30" y="37" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text>
-                                    </svg>
-                                </div>
-                                <div class="action-title" id="action-title">Set Your Product Price</div>
-                            </div>
-                            <div class="action-description" id="action-description">
-                                Choose how much to charge for your product. This will affect how many customers you get!
-                            </div>
-                            <div class="action-content" id="action-content">
-                                <div class="input-group-large">
-                                    <div class="input-wrapper">
-                                        <label for="price-input" class="input-label">Price per unit</label>
-                                        <input type="number" id="price-input" min="1" step="0.01" placeholder="Enter price per unit" class="large-input price-input" data-tooltip="This is how much you'll charge customers per product">
-                                        <div class="input-error hidden" id="price-error">Please enter a valid price > $0</div>
-                                    </div>
-                                    <button id="set-price-btn" class="large-action-btn confirm-btn">
-                                        <svg class="btn-icon" viewBox="0 0 20 20">
-                                            <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill="currentColor"/>
-                                        </svg>
-                                        Confirm Price
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Linear Tutorial Actions (Easy Mode) -->
-                    <div class="tutorial-actions" id="tutorial-actions">
-                        <!-- Step 1: Set Price & Buy Inventory -->
-                        <div class="tutorial-step active" id="step-1">
-                            <div class="step-header">
-                                <div class="step-number">1</div>
-                                <div class="step-title">Set Your Price & Buy Inventory</div>
-                            </div>
-                            <div class="step-actions">
-                                <div class="action-item active-action">
-                                    <div class="action-icon">
-                                        <svg class="game-icon-medium" viewBox="0 0 60 60">
-                                            <circle cx="30" cy="30" r="25" fill="#f59e0b" stroke="#d97706" stroke-width="3"/>
-                                            <text x="30" y="37" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text>
-                                        </svg>
-                                    </div>
-                                    <div class="action-content">
-                                        <div class="action-title">Set Price</div>
-                                        <div class="action-description">Choose your product price</div>
-                                        <div class="input-wrapper">
-                                            <input type="number" id="tutorial-price-input" min="0.01" step="0.01" placeholder="Enter price per unit (₹)" class="large-input price-input" data-tooltip="This is how much you'll charge customers per product" inputmode="decimal" pattern="[0-9]*">
-                                            <div class="input-error hidden" id="tutorial-price-error">Please enter price greater than ₹0</div>
-                                        </div>
-                                        <button id="tutorial-set-price-btn" class="large-action-btn confirm-btn">
-                                            <svg class="btn-icon" viewBox="0 0 20 20">
-                                                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill="currentColor"/>
-                                            </svg>
-                                            Confirm Price
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="action-item locked-action" id="inventory-action">
-                                    <div class="action-icon">
-                                        <svg class="game-icon-medium" viewBox="0 0 60 60">
-                                            <rect x="15" y="20" width="30" height="25" rx="3" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
-                                            <rect x="20" y="15" width="20" height="10" rx="2" fill="#4ade80"/>
-                                            <circle cx="25" cy="25" r="2" fill="white"/>
-                                            <circle cx="35" cy="25" r="2" fill="white"/>
-                                            <rect x="25" y="35" width="10" height="5" fill="#16a34a"/>
-                                        </svg>
-                                    </div>
-                                    <div class="action-content">
-                                        <div class="action-title">Buy Inventory</div>
-                                        <div class="action-description">Stock up on products to sell</div>
-                                        <div class="unlock-condition">Unlocked after setting price</div>
-                                        <button class="large-action-btn disabled" data-action="inventory" data-amount="200" disabled>
-                                            <svg class="btn-icon" viewBox="0 0 20 20">
-                                                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" fill="currentColor"/>
-                                            </svg>
-                                            Buy Inventory ($200)
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Step 2: Marketing (Unlocked after first sale) -->
-                        <div class="tutorial-step locked" id="step-2">
-                            <div class="step-header">
-                                <div class="step-number">2</div>
-                                <div class="step-title">Marketing & Growth</div>
-                                <div class="unlock-condition">Unlocked after first sale</div>
-                            </div>
-                            <div class="step-actions">
-                                <div class="action-item locked">
-                                    <div class="action-icon">📢</div>
-                                    <div class="action-content">
-                                        <div class="action-title">Marketing Campaign</div>
-                                        <div class="action-description">Get more customers</div>
-                                        <button class="large-action-btn disabled" data-action="marketing" data-amount="100">
-                                            <i class="fas fa-bullhorn"></i> Social Media ($100)
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Hiring (Unlocked after covering costs) -->
-                        <div class="tutorial-step locked" id="step-3">
-                            <div class="step-header">
-                                <div class="step-number">3</div>
-                                <div class="step-title">Team & Development</div>
-                                <div class="unlock-condition">Unlocked after covering costs</div>
-                            </div>
-                            <div class="step-actions">
-                                <div class="action-item locked">
-                                    <div class="action-icon">👥</div>
-                                    <div class="action-content">
-                                        <div class="action-title">Hire Team</div>
-                                        <div class="action-description">Grow your business</div>
-                                        <button class="large-action-btn disabled" data-action="hire" data-amount="800">
-                                            <i class="fas fa-user-plus"></i> Hire Employee ($800)
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Full Action Groups (Medium/Hard Mode) -->
-                    <div class="action-groups hidden" id="action-groups">
-                        <div class="action-group" id="marketing-group">
-                            <h4><i class="fas fa-bullhorn"></i> Marketing</h4>
-                            <div class="action">
-                                <label>Marketing Campaign</label>
-                                <div class="action-buttons">
-                                    <button id="marketing-action" class="action-btn locked" data-action="marketing" data-amount="100" disabled>
-                                        <i class="fas fa-ad"></i> Social Media ($100)
-                                    </button>
-                                    <button class="action-btn" data-action="marketing" data-amount="300">
-                                        <i class="fas fa-tv"></i> Online Ads ($300)
-                                    </button>
-                                    <button class="action-btn" data-action="marketing" data-amount="500">
-                                        <i class="fas fa-microphone"></i> Influencer ($500)
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="action-group" id="operations-group">
-                            <h4><i class="fas fa-boxes"></i> Operations</h4>
-                            <div class="action">
-                                <label>Inventory/Resources</label>
-                                <div class="action-buttons">
-                                    <button class="action-btn" data-action="inventory" data-amount="200">
-                                        <i class="fas fa-shopping-cart"></i> Buy Inventory ($200)
-                                    </button>
-                                    <button class="action-btn" data-action="inventory" data-amount="500">
-                                        <i class="fas fa-warehouse"></i> Bulk Order ($500)
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="action-group" id="team-group">
-                            <h4><i class="fas fa-users"></i> Team</h4>
-                            <div class="action">
-                                <label>Hiring & Development</label>
-                                <div class="action-buttons">
-                                    <button id="hire-action" class="action-btn locked" data-action="hire" data-amount="800" disabled>
-                                        <i class="fas fa-user-plus"></i> Hire Employee ($800)
-                                    </button>
-                                    <button id="operations-action" class="action-btn locked" data-action="rd" data-amount="400" disabled>
-                                        <i class="fas fa-flask"></i> R&D ($400)
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="game-controls">
-                        <button id="next-month-btn" class="primary-btn">
-                            <i class="fas fa-forward"></i> Next Month
-                        </button>
-                        <button id="save-game-btn" class="secondary-btn">
-                            <i class="fas fa-save"></i> Save Game
-                        </button>
-                        <button id="restart-btn" class="secondary-btn">
-                            <i class="fas fa-redo"></i> Restart
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right Panel: Events & News -->
-                <div class="events-panel">
-                    <h3><i class="fas fa-newspaper"></i> Market News</h3>
-                    <div id="events-log" class="events-log">
-                        <div class="event-item">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Welcome to Startup Simulator! Make your first business decision.</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Product Visualization -->
-                    <div class="product-showcase">
-                        <h4><i class="fas fa-box"></i> Your Product</h4>
-                        <div id="product-display" class="product-display">
-                            <div class="product-placeholder">
-                                <i class="fas fa-question-circle"></i>
-                                <p>Choose a business to see your product</p>
-                            </div>
-                        </div>
-                        <div id="sales-animation" class="sales-animation hidden">
-                            <div class="sale-bubble">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span>+$<span id="sale-amount">0</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Achievements -->
-                    <div class="achievements-section">
-                        <h4><i class="fas fa-trophy"></i> Achievements</h4>
-                        <div id="achievements-list" class="achievements-list">
-                            <div class="achievement-item locked" data-achievement="firstSale">
-                                <i class="fas fa-lock"></i>
-                                <span>First Sale</span>
-                            </div>
-                            <div class="achievement-item locked" data-achievement="profitability">
-                                <i class="fas fa-lock"></i>
-                                <span>Profitability</span>
-                            </div>
-                            <div class="achievement-item locked" data-achievement="hundredCustomers">
-                                <i class="fas fa-lock"></i>
-                                <span>100 Customers</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game Over Screen -->
-        <div id="game-over-screen" class="screen">
-            <div class="game-over-content">
-                <h2 id="game-over-title">Game Over</h2>
-                <p id="game-over-message">Your startup has run out of cash!</p>
-                <div class="final-stats">
-                    <h3>Final Results</h3>
-                    <div class="stats-grid">
-                        <div class="stat">
-                            <span class="stat-label">Months Survived</span>
-                            <span class="stat-value" id="final-months">0</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Total Revenue</span>
-                            <span class="stat-value" id="final-revenue">$0</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Peak Customers</span>
-                            <span class="stat-value" id="final-customers">0</span>
-                        </div>
-                    </div>
-                </div>
-                <button id="play-again-btn" class="primary-btn">
-                    <i class="fas fa-play"></i> Play Again
-                </button>
-            </div>
-        </div>
-
-        <!-- Victory Screen -->
-        <div id="victory-screen" class="screen">
-            <div class="victory-content">
-                <h2><i class="fas fa-trophy"></i> Congratulations!</h2>
-                <p>You've built a successful startup!</p>
-                <div class="achievement">
-                    <i class="fas fa-star"></i>
-                    <span id="achievement-text">Profitability Achieved!</span>
-                </div>
-                <div class="final-stats">
-                    <h3>Final Results</h3>
-                    <div class="stats-grid">
-                        <div class="stat">
-                            <span class="stat-label">Months to Success</span>
-                            <span class="stat-value" id="victory-months">0</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Final Valuation</span>
-                            <span class="stat-value" id="final-valuation">$0</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Total Customers</span>
-                            <span class="stat-value" id="victory-customers">0</span>
-                        </div>
-                    </div>
-                </div>
-                <button id="victory-play-again-btn" class="primary-btn">
-                    <i class="fas fa-play"></i> Play Again
-                </button>
-            </div>
-        </div>
-
-        <!-- Game Summary Screen -->
-        <div id="summary-screen" class="screen">
-            <div class="summary-content">
-                <h2><i class="fas fa-chart-line"></i> Game Summary</h2>
-                <div class="summary-message" id="summary-message">
-                    <div class="summary-icon" id="summary-icon">🎯</div>
-                    <div class="summary-text" id="summary-text">You lasted 3 months and reached a profit of $500!</div>
                 </div>
                 
-                <div class="summary-stats">
-                    <div class="summary-stat">
-                        <div class="stat-icon">📅</div>
-                        <div class="stat-info">
-                            <div class="stat-label">Months Survived</div>
-                            <div class="stat-value" id="summary-months">0</div>
+                <!-- Customer Queue -->
+                <div class="customer-queue" id="customer-queue">
+                    <!-- Customers will appear here -->
+                </div>
+            </div>
+
+            <!-- Action Panel -->
+            <div class="action-panel">
+                
+                <!-- Buy Ingredients Section -->
+                <div class="action-section" id="buy-section">
+                    <h3 class="section-title">🛒 Buy Ingredients</h3>
+                    <div class="ingredient-grid">
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">🍋</div>
+                            <div class="ingredient-name">Lemons</div>
+                            <div class="ingredient-price">₹2 each</div>
+                            <button class="buy-btn" id="buy-lemons" data-item="lemons" data-price="2">
+                                Buy 5 for ₹10
+                            </button>
                         </div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="stat-icon">💰</div>
-                        <div class="stat-info">
-                            <div class="stat-label">Total Revenue</div>
-                            <div class="stat-value" id="summary-revenue">$0</div>
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">🍯</div>
+                            <div class="ingredient-name">Sugar</div>
+                            <div class="ingredient-price">₹1 per cup</div>
+                            <button class="buy-btn" id="buy-sugar" data-item="sugar" data-price="1">
+                                Buy 10 for ₹10
+                            </button>
                         </div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-info">
-                            <div class="stat-label">Peak Customers</div>
-                            <div class="stat-value" id="summary-customers">0</div>
-                        </div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="stat-icon">📊</div>
-                        <div class="stat-info">
-                            <div class="stat-label">Final Profit</div>
-                            <div class="stat-value" id="summary-profit">$0</div>
+                        <div class="ingredient-card">
+                            <div class="ingredient-icon">🧊</div>
+                            <div class="ingredient-name">Ice</div>
+                            <div class="ingredient-price">₹0.5 per cube</div>
+                            <button class="buy-btn" id="buy-ice" data-item="ice" data-price="0.5">
+                                Buy 20 for ₹10
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="summary-achievements">
-                    <h3>🏆 Achievements Unlocked</h3>
-                    <div class="achievements-list" id="summary-achievements">
-                        <!-- Achievements will be populated here -->
+                <!-- Set Price Section -->
+                <div class="action-section" id="price-section">
+                    <h3 class="section-title">💰 Set Your Price</h3>
+                    <div class="price-controls">
+                        <div class="price-input-group">
+                            <label for="price-input">Price per cup:</label>
+                            <div class="price-input-wrapper">
+                                <span class="currency">₹</span>
+                                <input type="number" id="price-input" min="1" max="50" value="5" step="0.5">
+                            </div>
+                        </div>
+                        <button class="set-price-btn" id="set-price-btn">Set Price</button>
                     </div>
                 </div>
 
-                <div class="summary-actions">
-                    <button id="summary-play-again-btn" class="primary-btn">
-                        <i class="fas fa-play"></i> Play Again
-                    </button>
-                    <button id="summary-share-btn" class="secondary-btn">
-                        <i class="fas fa-share"></i> Share Results
+                <!-- Serve Customers Section -->
+                <div class="action-section" id="serve-section">
+                    <h3 class="section-title">👥 Serve Customers</h3>
+                    <div class="serve-controls">
+                        <button class="serve-btn" id="serve-btn" disabled>
+                            <span class="serve-icon">🍋</span>
+                            Serve Lemonade
+                        </button>
+                        <div class="serve-info">
+                            <span id="serve-count">0</span> customers served today
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Day Button -->
+                <div class="action-section" id="next-day-section">
+                    <button class="next-day-btn" id="next-day-btn" disabled>
+                        <span class="next-day-icon">🌅</span>
+                        End Day & See Results
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Tooltip -->
-    <div id="tooltip" class="tooltip"></div>
-
-    <!-- Celebration Banner -->
-    <div id="celebration-banner" class="celebration-banner hidden">
-        <div class="celebration-content">
-            <div class="celebration-icon" id="celebration-icon">
-                <svg class="game-icon-medium" viewBox="0 0 60 60">
-                    <circle cx="30" cy="30" r="25" fill="#22c55e" stroke="#16a34a" stroke-width="3"/>
-                    <path d="M20 30 L27 37 L40 23" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+            <!-- Progress & Goals -->
+            <div class="progress-panel">
+                <div class="goal-card">
+                    <h4 class="goal-title">🎯 Today's Goal</h4>
+                    <div class="goal-progress">
+                        <div class="goal-text">Make ₹<span id="goal-amount">50</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="goal-status" id="goal-status">Not started</div>
+                    </div>
+                </div>
+                
+                <div class="achievement-card">
+                    <h4 class="achievement-title">🏆 Achievements</h4>
+                    <div class="achievement-list" id="achievement-list">
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon">🥇</span>
+                            <span class="achievement-text">First Sale</span>
+                        </div>
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon">💰</span>
+                            <span class="achievement-text">₹100 Day</span>
+                        </div>
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon">👑</span>
+                            <span class="achievement-text">Business Owner</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="celebration-text">
-                <div class="celebration-title" id="celebration-title">Congratulations!</div>
-                <div class="celebration-message" id="celebration-message">You made your first sale!</div>
-            </div>
-            <button id="celebration-close" class="celebration-close">✕</button>
+        </main>
+
+        <!-- Game Messages -->
+        <div class="game-messages" id="game-messages">
+            <!-- Messages will appear here -->
         </div>
-    </div>
 
-    <!-- Pinned Next Month Button -->
-    <div class="pinned-next-month hidden" id="pinned-next-month">
-        <button id="pinned-next-month-btn" class="pinned-btn pulse">
-            Next Month
-        </button>
-    </div>
-
-    <!-- Next Mode Button (appears when all missions complete) -->
-    <div class="next-mode-container hidden" id="next-mode-container">
-        <button id="next-mode-btn" class="next-mode-btn">
-            🚀 Next Level
-        </button>
-    </div>
-
-    <!-- Milestone Popup -->
-    <div class="milestone-popup hidden" id="milestone-popup">
-        <div class="confetti-container" id="confetti-container"></div>
-        <div class="milestone-content">
-            <div class="milestone-icon" id="milestone-icon">
-                <svg class="game-icon-large" viewBox="0 0 80 80">
-                    <circle cx="40" cy="40" r="35" fill="#f59e0b" stroke="#d97706" stroke-width="4"/>
-                    <text x="40" y="50" text-anchor="middle" fill="white" font-size="24" font-weight="bold">$</text>
-                </svg>
+        <!-- Tutorial Overlay -->
+        <div class="tutorial-overlay" id="tutorial-overlay">
+            <div class="tutorial-content">
+                <div class="tutorial-header">
+                    <h2>🍋 Welcome to Your Lemonade Stand!</h2>
+                    <p>Your goal: Save up ₹500 to buy a new bike! 🚲</p>
+                </div>
+                <div class="tutorial-steps">
+                    <div class="tutorial-step active" id="tutorial-step-1">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Buy Ingredients</h4>
+                            <p>Start by buying lemons, sugar, and ice to make lemonade!</p>
+                        </div>
+                    </div>
+                    <div class="tutorial-step" id="tutorial-step-2">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Set Your Price</h4>
+                            <p>Choose how much to charge per cup. Higher price = more profit, but fewer customers!</p>
+                        </div>
+                    </div>
+                    <div class="tutorial-step" id="tutorial-step-3">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Serve Customers</h4>
+                            <p>When customers arrive, serve them lemonade to earn money!</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tutorial-btn" id="tutorial-start-btn">Let's Start! 🚀</button>
             </div>
-            <div class="milestone-text">
-                <div class="milestone-title" id="milestone-title">First Sale!</div>
-                <div class="milestone-message" id="milestone-message">You made your first sale! 🎉</div>
+        </div>
+
+        <!-- Day Results Modal -->
+        <div class="modal-overlay hidden" id="day-results-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📊 Day <span id="results-day">1</span> Results</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-icon">👥</div>
+                            <div class="result-label">Customers Served</div>
+                            <div class="result-value" id="result-customers">0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">💰</div>
+                            <div class="result-label">Money Earned</div>
+                            <div class="result-value" id="result-earned">₹0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">🎯</div>
+                            <div class="result-label">Goal Progress</div>
+                            <div class="result-value" id="result-goal">0%</div>
+                        </div>
+                    </div>
+                    <div class="results-message" id="results-message">
+                        <!-- Dynamic message will appear here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn primary" id="continue-btn">Continue to Next Day</button>
+                </div>
             </div>
-            <button class="milestone-close" id="milestone-close">Got it!</button>
         </div>
+
+        <!-- Achievement Popup -->
+        <div class="achievement-popup hidden" id="achievement-popup">
+            <div class="achievement-content">
+                <div class="achievement-icon-large">🏆</div>
+                <div class="achievement-title">Achievement Unlocked!</div>
+                <div class="achievement-description" id="achievement-description">First Sale</div>
+                <div class="achievement-reward">+₹10 Bonus!</div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Animated Number Display -->
-    <div id="number-animation" class="number-animation hidden">
-        <div class="number-bubble" id="number-bubble">
-            <span id="number-value">+$100</span>
-        </div>
-    </div>
-
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

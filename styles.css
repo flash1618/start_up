@@ -8,9 +8,29 @@
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
     min-height: 100vh;
     color: #333;
     line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+    animation: parallaxFloat 20s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
 }
 
 /* Utility Classes */
@@ -906,6 +926,10 @@ body {
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
     color: #1f2937 !important;
     font-weight: 600 !important;
+    font-size: 1.2rem !important;
+    padding: 15px 20px !important;
+    height: 60px !important;
+    border-radius: 12px !important;
 }
 
 .price-input:focus {
@@ -927,6 +951,13 @@ body {
     color: white !important;
     border: none !important;
     box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    font-size: 1.1rem !important;
+    padding: 15px 30px !important;
+    height: 60px !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
 }
 
 .confirm-btn:hover {
@@ -2398,5 +2429,32 @@ body {
     100% {
         transform: scale(1);
         color: inherit;
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes parallaxFloat {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    25% {
+        transform: translateY(-20px) translateX(10px);
+    }
+    50% {
+        transform: translateY(-10px) translateX(-15px);
+    }
+    75% {
+        transform: translateY(-30px) translateX(5px);
     }
 }

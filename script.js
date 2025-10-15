@@ -1849,18 +1849,28 @@ class StartupSimulator {
         }
     }
 
-    // Floating Coin Animation
+    // Enhanced Floating Coin Animation
     createFloatingCoins(amount, element) {
         const container = document.getElementById('floating-coins');
-        const rect = element.getBoundingClientRect();
+        if (!container || !element) return;
         
-        for (let i = 0; i < amount; i++) {
+        const rect = element.getBoundingClientRect();
+        const coins = ['💰', '💎', '⭐', '✨'];
+        
+        for (let i = 0; i < Math.min(amount, 8); i++) {
             const coin = document.createElement('div');
             coin.className = 'floating-coin';
-            coin.innerHTML = '💰';
+            coin.innerHTML = coins[Math.floor(Math.random() * coins.length)];
+            
+            // Random positioning around the element
             coin.style.left = (rect.left + Math.random() * rect.width) + 'px';
             coin.style.top = (rect.top + Math.random() * rect.height) + 'px';
-            coin.style.animationDelay = (Math.random() * 0.5) + 's';
+            coin.style.animationDelay = (Math.random() * 0.8) + 's';
+            
+            // Random size
+            const size = Math.random() * 0.5 + 1;
+            coin.style.fontSize = (size * 1.5) + 'rem';
+            coin.style.transform = `scale(${size})`;
             
             container.appendChild(coin);
             
@@ -1873,18 +1883,38 @@ class StartupSimulator {
         }
     }
 
-    // Confetti Animation
+    // Enhanced Confetti Animation
     createConfetti() {
         const container = document.getElementById('confetti-container');
-        const colors = ['#f59e0b', '#22c55e', '#3b82f6', '#ef4444', '#8b5cf6'];
+        if (!container) return;
         
-        for (let i = 0; i < 50; i++) {
+        const colors = ['#f59e0b', '#22c55e', '#3b82f6', '#ef4444', '#8b5cf6', '#f97316', '#ec4899', '#06b6d4'];
+        const shapes = ['circle', 'square', 'triangle'];
+        
+        for (let i = 0; i < 80; i++) {
             const confetti = document.createElement('div');
             confetti.className = 'confetti-piece';
+            
+            // Random positioning
             confetti.style.left = Math.random() * 100 + '%';
             confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 2 + 's';
-            confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+            
+            // Random size
+            const size = Math.random() * 8 + 6;
+            confetti.style.width = size + 'px';
+            confetti.style.height = size + 'px';
+            
+            // Random shape
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            if (shape === 'circle') {
+                confetti.style.borderRadius = '50%';
+            } else if (shape === 'triangle') {
+                confetti.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+            }
+            
+            // Random animation timing
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            confetti.style.animationDuration = (3 + Math.random() * 2) + 's';
             
             container.appendChild(confetti);
             
@@ -1893,7 +1923,7 @@ class StartupSimulator {
                 if (confetti.parentNode) {
                     confetti.parentNode.removeChild(confetti);
                 }
-            }, 5000);
+            }, 6000);
         }
     }
 

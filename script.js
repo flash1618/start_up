@@ -1,26 +1,120 @@
-// Lemonade Stand - Real Business Simulation
-class LemonadeStandGame {
+// Business Academy - Complete Learning Platform
+class BusinessAcademy {
     constructor() {
+        this.currentDifficulty = null;
         this.gameState = {
             day: 1,
             cash: 100,
-            price: 5,
-            inventory: 0,
-            costPerCup: 3,
-            streak: 0,
             level: 1,
+            xp: 0,
+            streak: 0,
             totalProfit: 0,
             totalSales: 0
         };
         
-        this.weather = ['☀️ Sunny', '🌤️ Partly Cloudy', '☁️ Cloudy', '🌧️ Rainy'];
-        this.currentWeather = '☀️ Sunny';
+        this.scenarios = {
+            beginner: {
+                title: "Lemonade Stand",
+                scenarios: [
+                    {
+                        title: "Day 1: Starting Your Business",
+                        context: "You have ₹100 to start your lemonade stand. You need to decide on pricing and inventory.",
+                        decisions: [
+                            {
+                                id: "set-price",
+                                text: "Set Price per Cup",
+                                icon: "💰",
+                                action: "showPriceModal"
+                            },
+                            {
+                                id: "buy-inventory",
+                                text: "Buy Inventory",
+                                icon: "🛒",
+                                action: "buyInventory"
+                            }
+                        ],
+                        metrics: ["Revenue", "Costs", "Profit"],
+                        learning: "Basic business concepts: Revenue = Price × Quantity, Profit = Revenue - Costs"
+                    },
+                    {
+                        title: "Day 2: Understanding Customers",
+                        context: "Yesterday you learned about pricing. Today, let's understand customer behavior.",
+                        decisions: [
+                            {
+                                id: "analyze-demand",
+                                text: "Analyze Customer Demand",
+                                icon: "📊",
+                                action: "analyzeDemand"
+                            },
+                            {
+                                id: "adjust-price",
+                                text: "Adjust Price Strategy",
+                                icon: "⚖️",
+                                action: "adjustPrice"
+                            }
+                        ],
+                        metrics: ["Customer Count", "Conversion Rate", "Average Order Value"],
+                        learning: "Customer behavior affects sales. Higher prices = fewer customers, lower prices = more customers"
+                    }
+                ]
+            },
+            intermediate: {
+                title: "Coffee Shop",
+                scenarios: [
+                    {
+                        title: "Day 1: Market Analysis",
+                        context: "You're opening a coffee shop. Analyze the market and set your strategy.",
+                        decisions: [
+                            {
+                                id: "market-research",
+                                text: "Conduct Market Research",
+                                icon: "🔍",
+                                action: "marketResearch"
+                            },
+                            {
+                                id: "set-pricing",
+                                text: "Set Pricing Strategy",
+                                icon: "💎",
+                                action: "setPricing"
+                            }
+                        ],
+                        metrics: ["Market Share", "Customer Acquisition Cost", "Lifetime Value"],
+                        learning: "Market analysis helps you understand competition and customer needs"
+                    }
+                ]
+            },
+            advanced: {
+                title: "Tech Startup",
+                scenarios: [
+                    {
+                        title: "Day 1: Financial Modeling",
+                        context: "You're launching a tech startup. Build your financial model and growth strategy.",
+                        decisions: [
+                            {
+                                id: "build-model",
+                                text: "Build Financial Model",
+                                icon: "📈",
+                                action: "buildModel"
+                            },
+                            {
+                                id: "growth-strategy",
+                                text: "Plan Growth Strategy",
+                                icon: "🚀",
+                                action: "growthStrategy"
+                            }
+                        ],
+                        metrics: ["Burn Rate", "Runway", "ROI", "Growth Rate"],
+                        learning: "Financial modeling helps predict cash flow and plan for growth"
+                    }
+                ]
+            }
+        };
         
         this.achievements = {
             firstSale: false,
             profitableDay: false,
-            highSales: false,
-            perfectPricing: false
+            marketLeader: false,
+            growthExpert: false
         };
         
         this.init();
@@ -28,15 +122,26 @@ class LemonadeStandGame {
     
     init() {
         this.setupEventListeners();
-        this.updateUI();
-        this.showLearningMoment('Welcome to your lemonade stand!', 'Start by setting your price and buying inventory.', '🍋');
+        this.loadUserData();
+        this.showWelcomeScreen();
     }
     
     setupEventListeners() {
-        // Decision buttons
-        document.getElementById('set-price-btn').addEventListener('click', () => this.showPriceModal());
-        document.getElementById('buy-inventory-btn').addEventListener('click', () => this.buyInventory());
-        document.getElementById('start-day-btn').addEventListener('click', () => this.startDay());
+        // Difficulty selection
+        document.querySelectorAll('.difficulty-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const difficulty = e.currentTarget.dataset.difficulty;
+                this.selectDifficulty(difficulty);
+            });
+        });
+        
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const section = e.currentTarget.dataset.section;
+                this.navigateToSection(section);
+            });
+        });
         
         // Modal buttons
         document.getElementById('confirm-btn').addEventListener('click', () => this.confirmPrice());
@@ -50,7 +155,7 @@ class LemonadeStandGame {
         document.getElementById('price-input').addEventListener('input', (e) => {
             const value = parseInt(e.target.value);
             if (value < 1) e.target.value = 1;
-            if (value > 20) e.target.value = 20;
+            if (value > 50) e.target.value = 50;
         });
         
         document.getElementById('price-input').addEventListener('keypress', (e) => {
@@ -60,53 +165,143 @@ class LemonadeStandGame {
         });
     }
     
-    updateUI() {
-        document.getElementById('current-day').textContent = this.gameState.day;
-        document.getElementById('weather-info').textContent = this.currentWeather;
-        document.getElementById('cash-amount').textContent = `₹${this.gameState.cash}`;
-        document.getElementById('price-per-cup').textContent = `₹${this.gameState.price}`;
-        document.getElementById('inventory-count').textContent = `${this.gameState.inventory} cups`;
-        document.getElementById('cost-per-cup').textContent = `₹${this.gameState.costPerCup}`;
-        document.getElementById('streak-count').textContent = this.gameState.streak;
-        document.getElementById('level-count').textContent = this.gameState.level;
-        
-        this.updateDecisionButtons();
+    loadUserData() {
+        const savedData = localStorage.getItem('businessAcademyData');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            this.gameState = { ...this.gameState, ...data.gameState };
+            this.achievements = { ...this.achievements, ...data.achievements };
+            this.currentDifficulty = data.difficulty;
+        }
+        this.updateUI();
     }
     
-    updateDecisionButtons() {
-        const setPriceBtn = document.getElementById('set-price-btn');
-        const buyInventoryBtn = document.getElementById('buy-inventory-btn');
-        const startDayBtn = document.getElementById('start-day-btn');
+    saveUserData() {
+        const data = {
+            gameState: this.gameState,
+            achievements: this.achievements,
+            difficulty: this.currentDifficulty
+        };
+        localStorage.setItem('businessAcademyData', JSON.stringify(data));
+    }
+    
+    updateUI() {
+        document.getElementById('streak-count').textContent = this.gameState.streak;
+        document.getElementById('xp-count').textContent = this.gameState.xp;
+        document.getElementById('level-count').textContent = this.gameState.level;
+        document.getElementById('cash-amount').textContent = `₹${this.gameState.cash}`;
+        document.getElementById('current-day').textContent = this.gameState.day;
+        document.getElementById('current-level').textContent = this.gameState.level;
+    }
+    
+    showWelcomeScreen() {
+        document.getElementById('welcome-screen').classList.remove('hidden');
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('leaderboard-screen').classList.add('hidden');
+    }
+    
+    selectDifficulty(difficulty) {
+        this.currentDifficulty = difficulty;
+        this.gameState.day = 1;
+        this.showGameScreen();
+        this.saveUserData();
+    }
+    
+    showGameScreen() {
+        document.getElementById('welcome-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        document.getElementById('leaderboard-screen').classList.add('hidden');
         
-        // Reset all buttons
-        setPriceBtn.classList.remove('completed');
-        buyInventoryBtn.classList.remove('completed');
-        startDayBtn.disabled = true;
+        this.renderCurrentScenario();
+    }
+    
+    renderCurrentScenario() {
+        const difficulty = this.scenarios[this.currentDifficulty];
+        const scenario = difficulty.scenarios[this.gameState.day - 1];
         
-        // Enable start day only if both price and inventory are set
-        if (this.gameState.price > 0 && this.gameState.inventory > 0) {
-            startDayBtn.disabled = false;
+        if (!scenario) {
+            this.showCompletionScreen();
+            return;
+        }
+        
+        // Update business title
+        document.getElementById('business-title').textContent = difficulty.title;
+        
+        // Update scenario
+        document.getElementById('scenario-title').textContent = scenario.title;
+        document.getElementById('scenario-context').textContent = scenario.context;
+        
+        // Render decisions
+        this.renderDecisions(scenario.decisions);
+        
+        // Hide other screens
+        document.getElementById('learning-moment').classList.add('hidden');
+        document.getElementById('results-screen').classList.add('hidden');
+    }
+    
+    renderDecisions(decisions) {
+        const decisionOptions = document.getElementById('decision-options');
+        decisionOptions.innerHTML = '';
+        
+        decisions.forEach(decision => {
+            const button = document.createElement('button');
+            button.className = 'decision-btn';
+            button.innerHTML = `
+                <span class="btn-icon">${decision.icon}</span>
+                <span class="btn-text">${decision.text}</span>
+            `;
+            button.addEventListener('click', () => this.handleDecision(decision));
+            decisionOptions.appendChild(button);
+        });
+    }
+    
+    handleDecision(decision) {
+        switch (decision.action) {
+            case 'showPriceModal':
+                this.showPriceModal();
+                break;
+            case 'buyInventory':
+                this.buyInventory();
+                break;
+            case 'analyzeDemand':
+                this.analyzeDemand();
+                break;
+            case 'adjustPrice':
+                this.adjustPrice();
+                break;
+            case 'marketResearch':
+                this.marketResearch();
+                break;
+            case 'setPricing':
+                this.setPricing();
+                break;
+            case 'buildModel':
+                this.buildModel();
+                break;
+            case 'growthStrategy':
+                this.growthStrategy();
+                break;
         }
     }
     
     showPriceModal() {
         document.getElementById('modal-title').textContent = 'Set Your Price';
-        document.getElementById('modal-description').textContent = 'How much will you charge per cup of lemonade?';
-        document.getElementById('price-input').value = this.gameState.price;
+        document.getElementById('modal-description').textContent = 'How much will you charge per cup?';
+        document.getElementById('price-input').value = 5;
         document.getElementById('input-modal').classList.remove('hidden');
         document.getElementById('price-input').focus();
     }
     
     confirmPrice() {
         const price = parseInt(document.getElementById('price-input').value);
-        if (price >= 1 && price <= 20) {
+        if (price >= 1 && price <= 50) {
             this.gameState.price = price;
             this.hideModal();
-            this.updateUI();
             this.showLearningMoment(
                 'Price Set!',
-                `You're charging ₹${price} per cup. Higher prices mean more profit per sale, but fewer customers might buy.`,
-                '💰'
+                `You're charging ₹${price} per cup. This affects how many customers will buy.`,
+                '💰',
+                `Price: ₹${price} per cup`
             );
         }
     }
@@ -116,160 +311,174 @@ class LemonadeStandGame {
     }
     
     buyInventory() {
-        if (this.gameState.cash < this.gameState.costPerCup) {
+        if (this.gameState.cash < 30) {
             this.showLearningMoment(
                 'Not Enough Cash!',
-                `You need ₹${this.gameState.costPerCup} to make one cup, but you only have ₹${this.gameState.cash}.`,
+                'You need at least ₹30 to buy inventory.',
                 '💸'
             );
             return;
         }
         
-        // Buy as many cups as possible
-        const maxCups = Math.floor(this.gameState.cash / this.gameState.costPerCup);
-        const cupsToBuy = Math.min(maxCups, 10); // Limit to 10 cups per day
-        
-        this.gameState.inventory += cupsToBuy;
-        this.gameState.cash -= cupsToBuy * this.gameState.costPerCup;
+        const cost = 30;
+        this.gameState.cash -= cost;
+        this.gameState.inventory = 10;
         
         this.updateUI();
         this.showLearningMoment(
             'Inventory Purchased!',
-            `You bought ${cupsToBuy} cups for ₹${cupsToBuy * this.gameState.costPerCup}. Each cup costs ₹${this.gameState.costPerCup} to make.`,
-            '🛒'
+            'You bought 10 cups for ₹30. Each cup costs ₹3 to make.',
+            '🛒',
+            `Cost: ₹${cost}, Inventory: 10 cups`
         );
     }
     
-    startDay() {
-        if (this.gameState.inventory === 0) {
-            this.showLearningMoment(
-                'No Inventory!',
-                'You need to buy inventory before you can start selling.',
-                '⚠️'
-            );
-            return;
-        }
+    analyzeDemand() {
+        const price = this.gameState.price || 5;
+        const demand = this.calculateDemand(price);
         
-        this.simulateDay();
-        this.showDayResults();
+        this.showLearningMoment(
+            'Demand Analysis',
+            `At ₹${price} per cup, you can expect ${demand} customers. Higher prices = fewer customers.`,
+            '📊',
+            `Price: ₹${price}, Expected Customers: ${demand}`
+        );
     }
     
-    simulateDay() {
-        // Weather affects customer demand
-        const weatherMultiplier = this.getWeatherMultiplier();
+    adjustPrice() {
+        this.showPriceModal();
+    }
+    
+    marketResearch() {
+        this.showLearningMoment(
+            'Market Research Complete',
+            'You found that the average coffee price is ₹80. Your target market prefers quality over price.',
+            '🔍',
+            'Market Average: ₹80, Target: Quality-focused customers'
+        );
+    }
+    
+    setPricing() {
+        this.showPriceModal();
+    }
+    
+    buildModel() {
+        this.showLearningMoment(
+            'Financial Model Built',
+            'Your startup needs ₹50,000 monthly. With current revenue, you have 6 months runway.',
+            '📈',
+            'Monthly Burn: ₹50,000, Runway: 6 months'
+        );
+    }
+    
+    growthStrategy() {
+        this.showLearningMoment(
+            'Growth Strategy Planned',
+            'Focus on customer acquisition. Target 20% monthly growth rate.',
+            '🚀',
+            'Target Growth: 20% monthly'
+        );
+    }
+    
+    calculateDemand(price) {
+        // Simple demand curve
+        if (price <= 3) return 20;
+        if (price <= 5) return 15;
+        if (price <= 8) return 10;
+        if (price <= 12) return 5;
+        return 2;
+    }
+    
+    showLearningMoment(title, text, icon, metrics = '') {
+        document.getElementById('learning-title').textContent = title;
+        document.getElementById('learning-text').textContent = text;
+        document.getElementById('learning-icon').textContent = icon;
         
-        // Price affects willingness to buy
-        const priceMultiplier = this.getPriceMultiplier();
+        const metricsElement = document.getElementById('learning-metrics');
+        if (metrics) {
+            metricsElement.innerHTML = `<p><strong>${metrics}</strong></p>`;
+        } else {
+            metricsElement.innerHTML = '';
+        }
         
-        // Calculate potential customers
-        const baseCustomers = Math.floor(Math.random() * 15) + 5; // 5-20 customers
-        const adjustedCustomers = Math.floor(baseCustomers * weatherMultiplier * priceMultiplier);
+        document.getElementById('learning-moment').classList.remove('hidden');
         
-        // Calculate sales
-        const potentialSales = Math.min(adjustedCustomers, this.gameState.inventory);
-        const actualSales = Math.max(0, potentialSales);
+        // Award XP
+        this.gameState.xp += 10;
+        this.gameState.streak++;
+        this.updateUI();
+        this.saveUserData();
+    }
+    
+    hideLearningMoment() {
+        document.getElementById('learning-moment').classList.add('hidden');
         
-        // Update game state
-        this.gameState.inventory -= actualSales;
-        const revenue = actualSales * this.gameState.price;
-        const costs = actualSales * this.gameState.costPerCup;
+        // Check if all decisions are made
+        if (this.allDecisionsMade()) {
+            this.showResults();
+        }
+    }
+    
+    allDecisionsMade() {
+        // Simple check - in real implementation, track which decisions were made
+        return this.gameState.price > 0 && this.gameState.inventory > 0;
+    }
+    
+    showResults() {
+        const results = this.calculateResults();
+        
+        const resultsGrid = document.getElementById('results-grid');
+        resultsGrid.innerHTML = '';
+        
+        Object.entries(results).forEach(([key, value]) => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            resultItem.innerHTML = `
+                <span class="result-label">${key}</span>
+                <span class="result-value">${value}</span>
+            `;
+            resultsGrid.appendChild(resultItem);
+        });
+        
+        // Generate insight
+        const insight = this.generateInsight(results);
+        document.getElementById('insight-text').textContent = insight;
+        
+        document.getElementById('results-screen').classList.remove('hidden');
+    }
+    
+    calculateResults() {
+        const price = this.gameState.price || 5;
+        const demand = this.calculateDemand(price);
+        const sales = Math.min(demand, this.gameState.inventory || 0);
+        const revenue = sales * price;
+        const costs = sales * 3; // Cost per cup
         const profit = revenue - costs;
         
-        this.gameState.cash += revenue;
-        this.gameState.totalProfit += profit;
-        this.gameState.totalSales += actualSales;
-        
-        // Store results for display
-        this.dayResults = {
-            cupsSold: actualSales,
-            revenue: revenue,
-            costs: costs,
-            profit: profit,
-            customers: adjustedCustomers
+        return {
+            'Cups Sold': sales,
+            'Revenue': `₹${revenue}`,
+            'Costs': `₹${costs}`,
+            'Profit': `₹${profit}`
         };
-        
-        // Check achievements
-        this.checkAchievements(actualSales, profit);
     }
     
-    getWeatherMultiplier() {
-        switch (this.currentWeather) {
-            case '☀️ Sunny': return 1.2;
-            case '🌤️ Partly Cloudy': return 1.0;
-            case '☁️ Cloudy': return 0.8;
-            case '🌧️ Rainy': return 0.5;
-            default: return 1.0;
-        }
-    }
-    
-    getPriceMultiplier() {
-        // Price sensitivity curve
-        if (this.gameState.price <= 3) return 1.3;
-        if (this.gameState.price <= 5) return 1.0;
-        if (this.gameState.price <= 8) return 0.7;
-        if (this.gameState.price <= 12) return 0.4;
-        return 0.2;
-    }
-    
-    checkAchievements(sales, profit) {
-        if (sales > 0 && !this.achievements.firstSale) {
-            this.achievements.firstSale = true;
-            this.showAchievement('First Sale!', 'You made your first sale!');
-        }
-        
-        if (profit > 0 && !this.achievements.profitableDay) {
-            this.achievements.profitableDay = true;
-            this.showAchievement('Profitable Day!', 'You made a profit today!');
-        }
-        
-        if (sales >= 15 && !this.achievements.highSales) {
-            this.achievements.highSales = true;
-            this.showAchievement('High Sales!', 'You sold 15+ cups in one day!');
-        }
-        
-        if (this.gameState.price >= 8 && sales >= 10 && !this.achievements.perfectPricing) {
-            this.achievements.perfectPricing = true;
-            this.showAchievement('Perfect Pricing!', 'You found the sweet spot for pricing!');
-        }
-    }
-    
-    showAchievement(title, text) {
-        document.getElementById('achievement-text').textContent = text;
-        document.getElementById('achievement-popup').classList.remove('hidden');
-        
-        setTimeout(() => {
-            document.getElementById('achievement-popup').classList.add('hidden');
-        }, 3000);
-    }
-    
-    showDayResults() {
-        const results = this.dayResults;
-        
-        document.getElementById('cups-sold').textContent = results.cupsSold;
-        document.getElementById('revenue').textContent = `₹${results.revenue}`;
-        document.getElementById('costs').textContent = `₹${results.costs}`;
-        document.getElementById('profit').textContent = `₹${results.profit}`;
-        
-        // Generate learning insight
-        let insight = '';
-        if (results.profit > 0) {
-            insight = `Great job! You made a profit of ₹${results.profit}. Your pricing strategy is working!`;
-        } else if (results.profit < 0) {
-            insight = `You lost ₹${Math.abs(results.profit)} today. Consider adjusting your price or reducing costs.`;
+    generateInsight(results) {
+        const profit = parseInt(results.Profit.replace('₹', ''));
+        if (profit > 0) {
+            return `Great job! You made a profit of ₹${profit}. Your pricing strategy is working!`;
+        } else if (profit < 0) {
+            return `You lost ₹${Math.abs(profit)} today. Consider adjusting your price or reducing costs.`;
         } else {
-            insight = `You broke even today. Try to optimize your pricing for better profits.`;
+            return `You broke even today. Try to optimize your pricing for better profits.`;
         }
-        
-        document.getElementById('insight-text').textContent = insight;
-        document.getElementById('day-results').classList.remove('hidden');
     }
     
     nextDay() {
         this.gameState.day++;
-        this.gameState.streak++;
         
-        // Level up every 5 days
-        if (this.gameState.day % 5 === 0) {
+        // Level up every 3 days
+        if (this.gameState.day % 3 === 0) {
             this.gameState.level++;
             this.showLearningMoment(
                 'Level Up!',
@@ -278,37 +487,88 @@ class LemonadeStandGame {
             );
         }
         
-        // Random weather
-        this.currentWeather = this.weather[Math.floor(Math.random() * this.weather.length)];
-        
         // Reset for new day
-        this.gameState.price = 5;
+        this.gameState.price = 0;
         this.gameState.inventory = 0;
         
         // Hide results
-        document.getElementById('day-results').classList.add('hidden');
+        document.getElementById('results-screen').classList.add('hidden');
         
         this.updateUI();
-        this.showLearningMoment(
-            `Day ${this.gameState.day}`,
-            `Weather: ${this.currentWeather}. Start by setting your price and buying inventory.`,
-            '🌅'
-        );
+        this.renderCurrentScenario();
     }
     
-    showLearningMoment(title, text, icon) {
-        document.getElementById('learning-title').textContent = title;
-        document.getElementById('learning-text').textContent = text;
-        document.getElementById('learning-icon').textContent = icon;
-        document.getElementById('learning-moment').classList.remove('hidden');
+    showCompletionScreen() {
+        const scenarioContent = document.getElementById('scenario-content');
+        scenarioContent.innerHTML = `
+            <div class="completion-content">
+                <h3>🎉 Congratulations!</h3>
+                <p>You've completed all scenarios in ${this.currentDifficulty} mode!</p>
+                <div class="completion-stats">
+                    <p><strong>Total XP:</strong> ${this.gameState.xp}</p>
+                    <p><strong>Current Streak:</strong> ${this.gameState.streak} days</p>
+                    <p><strong>Level:</strong> ${this.gameState.level}</p>
+                </div>
+                <button class="continue-btn" onclick="location.reload()">Start Over</button>
+            </div>
+        `;
     }
     
-    hideLearningMoment() {
-        document.getElementById('learning-moment').classList.add('hidden');
+    navigateToSection(section) {
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-section="${section}"]`).classList.add('active');
+        
+        // Handle different sections
+        switch(section) {
+            case 'learn':
+                this.showWelcomeScreen();
+                break;
+            case 'practice':
+                // Show practice mode
+                break;
+            case 'leaderboard':
+                this.showLeaderboard();
+                break;
+            case 'profile':
+                // Show profile
+                break;
+        }
+    }
+    
+    showLeaderboard() {
+        document.getElementById('welcome-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('leaderboard-screen').classList.remove('hidden');
+        
+        // Generate mock leaderboard
+        const leaderboardList = document.getElementById('leaderboard-list');
+        leaderboardList.innerHTML = '';
+        
+        const mockData = [
+            { name: 'Business Pro', score: 1250 },
+            { name: 'Startup Master', score: 1100 },
+            { name: 'You', score: this.gameState.xp },
+            { name: 'Coffee Expert', score: 950 },
+            { name: 'Lemonade King', score: 800 }
+        ];
+        
+        mockData.forEach((player, index) => {
+            const item = document.createElement('div');
+            item.className = 'leaderboard-item';
+            item.innerHTML = `
+                <span class="leaderboard-rank">${index + 1}</span>
+                <span class="leaderboard-name">${player.name}</span>
+                <span class="leaderboard-score">${player.score} XP</span>
+            `;
+            leaderboardList.appendChild(item);
+        });
     }
 }
 
-// Initialize the game when DOM is loaded
+// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new LemonadeStandGame();
+    new BusinessAcademy();
 });

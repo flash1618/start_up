@@ -1,4 +1,4 @@
-// Business Academy - Complete Learning Platform
+// Business Academy - Real Business Simulation with Adaptive Learning
 class BusinessAcademy {
     constructor() {
         this.currentDifficulty = null;
@@ -9,7 +9,27 @@ class BusinessAcademy {
             xp: 0,
             streak: 0,
             totalProfit: 0,
-            totalSales: 0
+            totalSales: 0,
+            price: 0,
+            inventory: 0,
+            costPerCup: 3,
+            weather: 'sunny',
+            marketConditions: 'normal',
+            competition: 'low'
+        };
+        
+        this.learningState = {
+            concepts: {
+                revenue: { mastery: 0, lastPracticed: 0, difficulty: 1 },
+                costs: { mastery: 0, lastPracticed: 0, difficulty: 1 },
+                profit: { mastery: 0, lastPracticed: 0, difficulty: 1 },
+                pricing: { mastery: 0, lastPracticed: 0, difficulty: 1 },
+                demand: { mastery: 0, lastPracticed: 0, difficulty: 1 }
+            },
+            spacedRepetition: {
+                intervals: [1, 3, 7, 14, 30], // days
+                currentInterval: 0
+            }
         };
         
         this.scenarios = {
@@ -24,13 +44,15 @@ class BusinessAcademy {
                                 id: "set-price",
                                 text: "Set Price per Cup",
                                 icon: "💰",
-                                action: "showPriceModal"
+                                action: "showPriceModal",
+                                learning: "pricing"
                             },
                             {
                                 id: "buy-inventory",
                                 text: "Buy Inventory",
                                 icon: "🛒",
-                                action: "buyInventory"
+                                action: "buyInventory",
+                                learning: "costs"
                             }
                         ],
                         metrics: ["Revenue", "Costs", "Profit"],
@@ -44,13 +66,15 @@ class BusinessAcademy {
                                 id: "analyze-demand",
                                 text: "Analyze Customer Demand",
                                 icon: "📊",
-                                action: "analyzeDemand"
+                                action: "analyzeDemand",
+                                learning: "demand"
                             },
                             {
                                 id: "adjust-price",
                                 text: "Adjust Price Strategy",
                                 icon: "⚖️",
-                                action: "adjustPrice"
+                                action: "adjustPrice",
+                                learning: "pricing"
                             }
                         ],
                         metrics: ["Customer Count", "Conversion Rate", "Average Order Value"],
@@ -69,13 +93,15 @@ class BusinessAcademy {
                                 id: "market-research",
                                 text: "Conduct Market Research",
                                 icon: "🔍",
-                                action: "marketResearch"
+                                action: "marketResearch",
+                                learning: "market"
                             },
                             {
                                 id: "set-pricing",
                                 text: "Set Pricing Strategy",
                                 icon: "💎",
-                                action: "setPricing"
+                                action: "setPricing",
+                                learning: "pricing"
                             }
                         ],
                         metrics: ["Market Share", "Customer Acquisition Cost", "Lifetime Value"],
@@ -94,13 +120,15 @@ class BusinessAcademy {
                                 id: "build-model",
                                 text: "Build Financial Model",
                                 icon: "📈",
-                                action: "buildModel"
+                                action: "buildModel",
+                                learning: "finance"
                             },
                             {
                                 id: "growth-strategy",
                                 text: "Plan Growth Strategy",
                                 icon: "🚀",
-                                action: "growthStrategy"
+                                action: "growthStrategy",
+                                learning: "strategy"
                             }
                         ],
                         metrics: ["Burn Rate", "Runway", "ROI", "Growth Rate"],
@@ -170,6 +198,7 @@ class BusinessAcademy {
         if (savedData) {
             const data = JSON.parse(savedData);
             this.gameState = { ...this.gameState, ...data.gameState };
+            this.learningState = { ...this.learningState, ...data.learningState };
             this.achievements = { ...this.achievements, ...data.achievements };
             this.currentDifficulty = data.difficulty;
         }
@@ -179,6 +208,7 @@ class BusinessAcademy {
     saveUserData() {
         const data = {
             gameState: this.gameState,
+            learningState: this.learningState,
             achievements: this.achievements,
             difficulty: this.currentDifficulty
         };
@@ -287,7 +317,7 @@ class BusinessAcademy {
     showPriceModal() {
         document.getElementById('modal-title').textContent = 'Set Your Price';
         document.getElementById('modal-description').textContent = 'How much will you charge per cup?';
-        document.getElementById('price-input').value = 5;
+        document.getElementById('price-input').value = this.gameState.price || 5;
         document.getElementById('input-modal').classList.remove('hidden');
         document.getElementById('price-input').focus();
     }
@@ -297,6 +327,7 @@ class BusinessAcademy {
         if (price >= 1 && price <= 50) {
             this.gameState.price = price;
             this.hideModal();
+            this.updateLearningState('pricing', true);
             this.showLearningMoment(
                 'Price Set!',
                 `You're charging ₹${price} per cup. This affects how many customers will buy.`,
@@ -324,6 +355,7 @@ class BusinessAcademy {
         this.gameState.cash -= cost;
         this.gameState.inventory = 10;
         
+        this.updateLearningState('costs', true);
         this.updateUI();
         this.showLearningMoment(
             'Inventory Purchased!',
@@ -337,6 +369,7 @@ class BusinessAcademy {
         const price = this.gameState.price || 5;
         const demand = this.calculateDemand(price);
         
+        this.updateLearningState('demand', true);
         this.showLearningMoment(
             'Demand Analysis',
             `At ₹${price} per cup, you can expect ${demand} customers. Higher prices = fewer customers.`,
@@ -350,6 +383,7 @@ class BusinessAcademy {
     }
     
     marketResearch() {
+        this.updateLearningState('market', true);
         this.showLearningMoment(
             'Market Research Complete',
             'You found that the average coffee price is ₹80. Your target market prefers quality over price.',
@@ -363,6 +397,7 @@ class BusinessAcademy {
     }
     
     buildModel() {
+        this.updateLearningState('finance', true);
         this.showLearningMoment(
             'Financial Model Built',
             'Your startup needs ₹50,000 monthly. With current revenue, you have 6 months runway.',
@@ -372,6 +407,7 @@ class BusinessAcademy {
     }
     
     growthStrategy() {
+        this.updateLearningState('strategy', true);
         this.showLearningMoment(
             'Growth Strategy Planned',
             'Focus on customer acquisition. Target 20% monthly growth rate.',
@@ -381,12 +417,45 @@ class BusinessAcademy {
     }
     
     calculateDemand(price) {
-        // Simple demand curve
-        if (price <= 3) return 20;
-        if (price <= 5) return 15;
-        if (price <= 8) return 10;
-        if (price <= 12) return 5;
-        return 2;
+        // Simple demand curve with weather and competition effects
+        let baseDemand = 20;
+        
+        // Price sensitivity
+        if (price <= 3) baseDemand = 25;
+        else if (price <= 5) baseDemand = 20;
+        else if (price <= 8) baseDemand = 15;
+        else if (price <= 12) baseDemand = 10;
+        else baseDemand = 5;
+        
+        // Weather effects
+        if (this.gameState.weather === 'sunny') baseDemand *= 1.2;
+        else if (this.gameState.weather === 'rainy') baseDemand *= 0.6;
+        
+        // Competition effects
+        if (this.gameState.competition === 'high') baseDemand *= 0.7;
+        
+        return Math.floor(baseDemand);
+    }
+    
+    updateLearningState(concept, correct) {
+        if (this.learningState.concepts[concept]) {
+            const conceptState = this.learningState.concepts[concept];
+            
+            if (correct) {
+                conceptState.mastery += 1;
+                conceptState.lastPracticed = Date.now();
+                
+                // Increase difficulty if mastery is high
+                if (conceptState.mastery > 3) {
+                    conceptState.difficulty = Math.min(conceptState.difficulty + 0.1, 3);
+                }
+            } else {
+                conceptState.mastery = Math.max(conceptState.mastery - 0.5, 0);
+                conceptState.difficulty = Math.max(conceptState.difficulty - 0.1, 0.5);
+            }
+        }
+        
+        this.saveUserData();
     }
     
     showLearningMoment(title, text, icon, metrics = '') {
@@ -403,11 +472,31 @@ class BusinessAcademy {
         
         document.getElementById('learning-moment').classList.remove('hidden');
         
-        // Award XP
-        this.gameState.xp += 10;
+        // Award XP based on learning state
+        const xpGain = this.calculateXPGain();
+        this.gameState.xp += xpGain;
         this.gameState.streak++;
+        
+        // Level up check
+        if (this.gameState.xp >= this.gameState.level * 100) {
+            this.gameState.level++;
+            this.showAchievement('Level Up!', `You've reached level ${this.gameState.level}!`);
+        }
+        
         this.updateUI();
         this.saveUserData();
+    }
+    
+    calculateXPGain() {
+        // Base XP + bonus for mastery
+        let baseXP = 10;
+        let masteryBonus = 0;
+        
+        Object.values(this.learningState.concepts).forEach(concept => {
+            masteryBonus += concept.mastery * 2;
+        });
+        
+        return Math.floor(baseXP + masteryBonus);
     }
     
     hideLearningMoment() {
@@ -440,7 +529,7 @@ class BusinessAcademy {
             resultsGrid.appendChild(resultItem);
         });
         
-        // Generate insight
+        // Generate insight based on learning state
         const insight = this.generateInsight(results);
         document.getElementById('insight-text').textContent = insight;
         
@@ -452,8 +541,13 @@ class BusinessAcademy {
         const demand = this.calculateDemand(price);
         const sales = Math.min(demand, this.gameState.inventory || 0);
         const revenue = sales * price;
-        const costs = sales * 3; // Cost per cup
+        const costs = sales * this.gameState.costPerCup;
         const profit = revenue - costs;
+        
+        // Update game state
+        this.gameState.cash += revenue;
+        this.gameState.totalProfit += profit;
+        this.gameState.totalSales += sales;
         
         return {
             'Cups Sold': sales,
@@ -465,8 +559,15 @@ class BusinessAcademy {
     
     generateInsight(results) {
         const profit = parseInt(results.Profit.replace('₹', ''));
-        if (profit > 0) {
-            return `Great job! You made a profit of ₹${profit}. Your pricing strategy is working!`;
+        
+        // Use learning state to personalize insights
+        const pricingMastery = this.learningState.concepts.pricing.mastery;
+        const demandMastery = this.learningState.concepts.demand.mastery;
+        
+        if (pricingMastery > 3 && demandMastery > 3) {
+            return `Excellent! Your pricing strategy is working perfectly. You understand both pricing and demand.`;
+        } else if (profit > 0) {
+            return `Great job! You made a profit of ₹${profit}. Keep learning about pricing and demand.`;
         } else if (profit < 0) {
             return `You lost ₹${Math.abs(profit)} today. Consider adjusting your price or reducing costs.`;
         } else {
@@ -477,15 +578,10 @@ class BusinessAcademy {
     nextDay() {
         this.gameState.day++;
         
-        // Level up every 3 days
-        if (this.gameState.day % 3 === 0) {
-            this.gameState.level++;
-            this.showLearningMoment(
-                'Level Up!',
-                `You've reached level ${this.gameState.level}! You're becoming a better business owner.`,
-                '⭐'
-            );
-        }
+        // Random weather and market conditions
+        this.gameState.weather = ['sunny', 'cloudy', 'rainy'][Math.floor(Math.random() * 3)];
+        this.gameState.marketConditions = ['normal', 'boom', 'recession'][Math.floor(Math.random() * 3)];
+        this.gameState.competition = ['low', 'medium', 'high'][Math.floor(Math.random() * 3)];
         
         // Reset for new day
         this.gameState.price = 0;
@@ -512,6 +608,15 @@ class BusinessAcademy {
                 <button class="continue-btn" onclick="location.reload()">Start Over</button>
             </div>
         `;
+    }
+    
+    showAchievement(title, text) {
+        document.getElementById('achievement-text').textContent = text;
+        document.getElementById('achievement-popup').classList.remove('hidden');
+        
+        setTimeout(() => {
+            document.getElementById('achievement-popup').classList.add('hidden');
+        }, 3000);
     }
     
     navigateToSection(section) {

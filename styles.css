@@ -1,4 +1,4 @@
-/* Business Academy - Complete Learning Platform */
+/* Business Academy - Real Business Simulation with Adaptive Learning */
 
 :root {
     --primary-green: #58CC02;
@@ -104,6 +104,12 @@ body {
     border-radius: var(--border-radius);
     font-weight: 600;
     font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.streak-display:hover, .xp-display:hover, .level-display:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-sm);
 }
 
 .streak-icon, .xp-icon, .level-icon {
@@ -156,30 +162,63 @@ body {
     padding: 24px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.difficulty-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.difficulty-card:hover::before {
+    left: 100%;
 }
 
 .difficulty-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
 .difficulty-card.beginner {
     border-color: var(--primary-green);
 }
 
+.difficulty-card.beginner:hover {
+    border-color: var(--primary-green);
+    box-shadow: 0 10px 25px rgba(88, 204, 2, 0.2);
+}
+
 .difficulty-card.intermediate {
     border-color: var(--primary-orange);
+}
+
+.difficulty-card.intermediate:hover {
+    border-color: var(--primary-orange);
+    box-shadow: 0 10px 25px rgba(255, 150, 0, 0.2);
 }
 
 .difficulty-card.advanced {
     border-color: var(--primary-red);
 }
 
+.difficulty-card.advanced:hover {
+    border-color: var(--primary-red);
+    box-shadow: 0 10px 25px rgba(255, 75, 75, 0.2);
+}
+
 .difficulty-icon {
     font-size: 48px;
     margin-bottom: 16px;
+    animation: pulse 2s infinite;
 }
 
 .difficulty-card h4 {
@@ -221,6 +260,19 @@ body {
     padding: 20px;
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.business-overview::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
 }
 
 .business-header h2 {
@@ -237,6 +289,10 @@ body {
 
 .stat-item {
     text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(10px);
 }
 
 .stat-label {
@@ -257,6 +313,18 @@ body {
     border-radius: var(--border-radius-lg);
     padding: 24px;
     box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary-green), var(--primary-blue));
 }
 
 .scenario-header h3 {
@@ -308,16 +376,33 @@ body {
     align-items: center;
     gap: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     font-size: 16px;
     font-weight: 600;
     color: var(--gray-700);
+    position: relative;
+    overflow: hidden;
+}
+
+.decision-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(88, 204, 2, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.decision-btn:hover::before {
+    left: 100%;
 }
 
 .decision-btn:hover:not(:disabled) {
     border-color: var(--primary-blue);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .decision-btn:disabled {
@@ -349,6 +434,7 @@ body {
     padding: 24px;
     box-shadow: var(--shadow-md);
     text-align: center;
+    animation: slideIn 0.5s ease-out;
 }
 
 .learning-content {
@@ -393,12 +479,30 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.continue-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.continue-btn:hover::before {
+    left: 100%;
 }
 
 .continue-btn:hover {
     background: #4CAF00;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 /* Results Screen */
@@ -407,6 +511,7 @@ body {
     border-radius: var(--border-radius-lg);
     padding: 24px;
     box-shadow: var(--shadow-md);
+    animation: slideIn 0.5s ease-out;
 }
 
 .results-content h3 {
@@ -429,6 +534,12 @@ body {
     border-radius: var(--border-radius);
     padding: 12px;
     text-align: center;
+    transition: all 0.2s ease;
+}
+
+.result-item:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-sm);
 }
 
 .result-label {
@@ -467,13 +578,31 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.next-day-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.next-day-btn:hover::before {
+    left: 100%;
 }
 
 .next-day-btn:hover {
     background: #E6850E;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 /* Leaderboard Screen */
@@ -505,6 +634,12 @@ body {
     padding: 12px;
     background: var(--gray-50);
     border-radius: var(--border-radius);
+    transition: all 0.2s ease;
+}
+
+.leaderboard-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
 }
 
 .leaderboard-rank {
@@ -542,13 +677,31 @@ body {
     gap: 4px;
     padding: 12px 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     border-radius: var(--border-radius);
     margin: 0 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(88, 204, 2, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.nav-item:hover::before {
+    left: 100%;
 }
 
 .nav-item:hover {
     background: var(--gray-50);
+    transform: translateY(-2px);
 }
 
 .nav-item.active {
@@ -577,6 +730,7 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .modal-content {
@@ -586,6 +740,7 @@ body {
     max-width: 400px;
     width: 90%;
     box-shadow: var(--shadow-xl);
+    animation: modalSlideIn 0.3s ease-out;
 }
 
 .modal-content h3 {
@@ -610,11 +765,12 @@ body {
     border-radius: var(--border-radius);
     padding: 12px 16px;
     margin-bottom: 24px;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.3s ease;
 }
 
 .input-group:focus-within {
     border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(28, 176, 246, 0.1);
 }
 
 .currency {
@@ -645,7 +801,9 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .cancel-btn {
@@ -656,6 +814,7 @@ body {
 
 .cancel-btn:hover {
     background: var(--gray-200);
+    transform: translateY(-1px);
 }
 
 .confirm-btn {
@@ -666,6 +825,8 @@ body {
 
 .confirm-btn:hover {
     background: #4CAF00;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Achievement Popup */
@@ -732,6 +893,46 @@ body {
     }
     50% {
         transform: scale(1.1);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 

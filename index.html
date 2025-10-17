@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lemonade Stand - Learn Business</title>
+    <title>Business Academy - Learn Business Skills</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="game-container">
+    <div class="app-container">
         
         <!-- Header -->
-        <header class="game-header">
+        <header class="app-header">
             <div class="header-left">
-                <div class="logo">🍋</div>
-                <h1>Lemonade Stand</h1>
+                <div class="logo">💼</div>
+                <h1>Business Academy</h1>
             </div>
             <div class="header-right">
                 <div class="streak-display">
@@ -32,105 +32,170 @@
             </div>
         </header>
 
-        <!-- Main Game Area -->
-        <main class="game-main">
+        <!-- Main Content -->
+        <main class="main-content">
             
-            <!-- Day Overview -->
-            <div class="day-overview">
-                <div class="day-info">
-                    <h2>Day <span id="current-day">1</span></h2>
-                    <p class="weather-info" id="weather-info">☀️ Sunny</p>
-                </div>
-                <div class="cash-display">
-                    <span class="cash-icon">💰</span>
-                    <span class="cash-amount" id="cash-amount">₹100</span>
-                </div>
-            </div>
-
-            <!-- Business Stats -->
-            <div class="business-stats">
-                <div class="stat-card">
-                    <div class="stat-label">Price per cup</div>
-                    <div class="stat-value" id="price-per-cup">₹5</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Inventory</div>
-                    <div class="stat-value" id="inventory-count">0 cups</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Cost per cup</div>
-                    <div class="stat-value" id="cost-per-cup">₹3</div>
-                </div>
-            </div>
-
-            <!-- Decision Panel -->
-            <div class="decision-panel" id="decision-panel">
-                <h3>What would you like to do?</h3>
-                <div class="decision-options">
-                    <button class="decision-btn" id="set-price-btn">
-                        <span class="btn-icon">💰</span>
-                        <span class="btn-text">Set Price</span>
-                    </button>
-                    <button class="decision-btn" id="buy-inventory-btn">
-                        <span class="btn-icon">🛒</span>
-                        <span class="btn-text">Buy Inventory</span>
-                    </button>
-                    <button class="decision-btn" id="start-day-btn" disabled>
-                        <span class="btn-icon">🚀</span>
-                        <span class="btn-text">Start Day</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Learning Moment -->
-            <div class="learning-moment hidden" id="learning-moment">
-                <div class="learning-content">
-                    <div class="learning-icon" id="learning-icon">💡</div>
-                    <h4 class="learning-title" id="learning-title">Great choice!</h4>
-                    <p class="learning-text" id="learning-text">You've set your price. Now customers will decide if it's worth buying at this price.</p>
-                    <button class="continue-btn" id="continue-btn">Continue</button>
-                </div>
-            </div>
-
-            <!-- Day Results -->
-            <div class="day-results hidden" id="day-results">
-                <div class="results-content">
-                    <h3>Day Results</h3>
-                    <div class="results-stats">
-                        <div class="result-item">
-                            <span class="result-label">Cups Sold:</span>
-                            <span class="result-value" id="cups-sold">0</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Revenue:</span>
-                            <span class="result-value" id="revenue">₹0</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Costs:</span>
-                            <span class="result-value" id="costs">₹0</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Profit:</span>
-                            <span class="result-value" id="profit">₹0</span>
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcome-screen">
+                <div class="welcome-content">
+                    <h2>Welcome to Business Academy!</h2>
+                    <p>Learn business skills through interactive simulations</p>
+                    
+                    <div class="difficulty-selection">
+                        <h3>Choose your learning path:</h3>
+                        <div class="difficulty-options">
+                            <div class="difficulty-card" data-difficulty="beginner">
+                                <div class="difficulty-icon">🌱</div>
+                                <h4>Beginner</h4>
+                                <p>Lemonade Stand</p>
+                                <div class="difficulty-features">
+                                    <span>• Basic metrics</span>
+                                    <span>• Simple decisions</span>
+                                    <span>• Guided learning</span>
+                                </div>
+                            </div>
+                            
+                            <div class="difficulty-card" data-difficulty="intermediate">
+                                <div class="difficulty-icon">🌿</div>
+                                <h4>Intermediate</h4>
+                                <p>Coffee Shop</p>
+                                <div class="difficulty-features">
+                                    <span>• Advanced metrics</span>
+                                    <span>• Market analysis</span>
+                                    <span>• Competition</span>
+                                </div>
+                            </div>
+                            
+                            <div class="difficulty-card" data-difficulty="advanced">
+                                <div class="difficulty-icon">🌳</div>
+                                <h4>Advanced</h4>
+                                <p>Tech Startup</p>
+                                <div class="difficulty-features">
+                                    <span>• Financial modeling</span>
+                                    <span>• Strategic planning</span>
+                                    <span>• Growth metrics</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="learning-insight" id="learning-insight">
-                        <p id="insight-text">Every sale teaches you about pricing and customer behavior!</p>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div class="game-screen hidden" id="game-screen">
+                
+                <!-- Business Overview -->
+                <div class="business-overview">
+                    <div class="business-header">
+                        <h2 id="business-title">Lemonade Stand</h2>
+                        <div class="business-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Cash</span>
+                                <span class="stat-value" id="cash-amount">₹100</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Day</span>
+                                <span class="stat-value" id="current-day">1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Level</span>
+                                <span class="stat-value" id="current-level">1</span>
+                            </div>
+                        </div>
                     </div>
-                    <button class="next-day-btn" id="next-day-btn">Next Day</button>
+                </div>
+
+                <!-- Scenario Card -->
+                <div class="scenario-card" id="scenario-card">
+                    <div class="scenario-header">
+                        <h3 id="scenario-title">Day 1: Starting Your Business</h3>
+                        <div class="scenario-context" id="scenario-context">
+                            You have ₹100 to start your lemonade stand. You need to decide on pricing and inventory.
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-content" id="scenario-content">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Decision Panel -->
+                <div class="decision-panel" id="decision-panel">
+                    <h4>What would you like to do?</h4>
+                    <div class="decision-options" id="decision-options">
+                        <!-- Dynamic decision buttons will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Learning Moment -->
+                <div class="learning-moment hidden" id="learning-moment">
+                    <div class="learning-content">
+                        <div class="learning-icon" id="learning-icon">💡</div>
+                        <h4 class="learning-title" id="learning-title">Great choice!</h4>
+                        <p class="learning-text" id="learning-text">You've made a strategic decision.</p>
+                        <div class="learning-metrics" id="learning-metrics">
+                            <!-- Dynamic metrics will be inserted here -->
+                        </div>
+                        <button class="continue-btn" id="continue-btn">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Results Screen -->
+                <div class="results-screen hidden" id="results-screen">
+                    <div class="results-content">
+                        <h3>Day Results</h3>
+                        <div class="results-grid" id="results-grid">
+                            <!-- Dynamic results will be inserted here -->
+                        </div>
+                        <div class="learning-insight" id="learning-insight">
+                            <p id="insight-text">Every decision teaches you about business!</p>
+                        </div>
+                        <button class="next-day-btn" id="next-day-btn">Next Day</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Leaderboard Screen -->
+            <div class="leaderboard-screen hidden" id="leaderboard-screen">
+                <div class="leaderboard-content">
+                    <h3>🏆 Leaderboard</h3>
+                    <div class="leaderboard-list" id="leaderboard-list">
+                        <!-- Dynamic leaderboard will be inserted here -->
+                    </div>
                 </div>
             </div>
 
         </main>
 
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-section="learn">
+                <div class="nav-icon">📚</div>
+                <span>Learn</span>
+            </div>
+            <div class="nav-item" data-section="practice">
+                <div class="nav-icon">💪</div>
+                <span>Practice</span>
+            </div>
+            <div class="nav-item" data-section="leaderboard">
+                <div class="nav-icon">🏆</div>
+                <span>Leaderboard</span>
+            </div>
+            <div class="nav-item" data-section="profile">
+                <div class="nav-icon">👤</div>
+                <span>Profile</span>
+            </div>
+        </nav>
+
         <!-- Input Modal -->
         <div class="input-modal hidden" id="input-modal">
             <div class="modal-content">
                 <h3 id="modal-title">Set Your Price</h3>
-                <p id="modal-description">How much will you charge per cup of lemonade?</p>
+                <p id="modal-description">How much will you charge?</p>
                 <div class="input-group">
                     <span class="currency">₹</span>
-                    <input type="number" id="price-input" placeholder="5" min="1" max="20">
+                    <input type="number" id="price-input" placeholder="5" min="1" max="50">
                 </div>
                 <div class="modal-actions">
                     <button class="cancel-btn" id="cancel-btn">Cancel</button>

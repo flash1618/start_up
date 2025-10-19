@@ -3,213 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Academy - Learn Business Skills</title>
+    <title>Cosmic Explorer - Space Adventure Game</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
+    <div class="game-container">
         
-        <!-- Header -->
-        <header class="app-header">
+        <!-- Game Header -->
+        <header class="game-header">
             <div class="header-left">
-                <div class="logo">💼</div>
-                <h1>Business Academy</h1>
+                <div class="logo">🚀</div>
+                <h1>Cosmic Explorer</h1>
             </div>
             <div class="header-right">
-                <div class="streak-display">
-                    <span class="streak-icon">🔥</span>
-                    <span class="streak-count" id="streak-count">0</span>
-                </div>
-                <div class="xp-display">
-                    <span class="xp-icon">💎</span>
-                    <span class="xp-count" id="xp-count">0</span>
+                <div class="score-display">
+                    <span class="score-icon">⭐</span>
+                    <span class="score-count" id="score-count">0</span>
                 </div>
                 <div class="level-display">
-                    <span class="level-icon">⭐</span>
+                    <span class="level-icon">🌌</span>
                     <span class="level-count" id="level-count">1</span>
+                </div>
+                <div class="energy-display">
+                    <span class="energy-icon">⚡</span>
+                    <span class="energy-count" id="energy-count">100</span>
                 </div>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
+        <!-- Main Game Area -->
+        <main class="game-main">
             
-            <!-- Welcome Screen -->
-            <div class="welcome-screen" id="welcome-screen">
-                <div class="welcome-content">
-                    <h2>Welcome to Business Academy!</h2>
-                    <p>Learn business skills through interactive simulations</p>
-                    
-                    <div class="difficulty-selection">
-                        <h3>Choose your learning path:</h3>
-                        <div class="difficulty-options">
-                            <div class="difficulty-card" data-difficulty="beginner">
-                                <div class="difficulty-icon">🌱</div>
-                                <h4>Beginner</h4>
-                                <p>Lemonade Stand</p>
-                                <div class="difficulty-features">
-                                    <span>• Basic metrics</span>
-                                    <span>• Simple decisions</span>
-                                    <span>• Guided learning</span>
-                                </div>
-                            </div>
-                            
-                            <div class="difficulty-card" data-difficulty="intermediate">
-                                <div class="difficulty-icon">🌿</div>
-                                <h4>Intermediate</h4>
-                                <p>Coffee Shop</p>
-                                <div class="difficulty-features">
-                                    <span>• Advanced metrics</span>
-                                    <span>• Market analysis</span>
-                                    <span>• Competition</span>
-                                </div>
-                            </div>
-                            
-                            <div class="difficulty-card" data-difficulty="advanced">
-                                <div class="difficulty-icon">🌳</div>
-                                <h4>Advanced</h4>
-                                <p>Tech Startup</p>
-                                <div class="difficulty-features">
-                                    <span>• Financial modeling</span>
-                                    <span>• Strategic planning</span>
-                                    <span>• Growth metrics</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Game Screen -->
-            <div class="game-screen hidden" id="game-screen">
+            <div class="game-screen" id="game-screen">
                 
-                <!-- Business Overview -->
-                <div class="business-overview">
-                    <div class="business-header">
-                        <h2 id="business-title">Lemonade Stand</h2>
-                        <div class="business-stats">
+                <!-- Space Background -->
+                <div class="space-background" id="space-background">
+                    <div class="stars"></div>
+                    <div class="planets"></div>
+                    <div class="nebula"></div>
+                </div>
+
+                <!-- Player Ship -->
+                <div class="player-ship" id="player-ship">
+                    <div class="ship-body"></div>
+                    <div class="ship-thrust"></div>
+                </div>
+
+                <!-- Enemies Container -->
+                <div class="enemies-container" id="enemies-container">
+                    <!-- Enemies will be dynamically generated -->
+                </div>
+
+                <!-- Projectiles Container -->
+                <div class="projectiles-container" id="projectiles-container">
+                    <!-- Projectiles will be dynamically generated -->
+                </div>
+
+                <!-- Power-ups Container -->
+                <div class="powerups-container" id="powerups-container">
+                    <!-- Power-ups will be dynamically generated -->
+                </div>
+
+                <!-- Explosions Container -->
+                <div class="explosions-container" id="explosions-container">
+                    <!-- Explosions will be dynamically generated -->
+                </div>
+
+                <!-- UI Overlay -->
+                <div class="ui-overlay">
+                    <div class="health-bar">
+                        <div class="health-fill" id="health-fill"></div>
+                        <span class="health-text" id="health-text">100</span>
+                    </div>
+                    <div class="wave-info">
+                        <span class="wave-text">Wave <span id="wave-number">1</span></span>
+                    </div>
+                    <div class="combo-display">
+                        <span class="combo-text" id="combo-text">Combo: 0x</span>
+                    </div>
+                </div>
+
+                <!-- Game Over Screen -->
+                <div class="game-over-screen hidden" id="game-over-screen">
+                    <div class="game-over-content">
+                        <h2>Mission Failed</h2>
+                        <div class="final-stats">
                             <div class="stat-item">
-                                <span class="stat-label">Cash</span>
-                                <span class="stat-value" id="cash-amount">₹100</span>
+                                <span class="stat-label">Score</span>
+                                <span class="stat-value" id="final-score">0</span>
                             </div>
                             <div class="stat-item">
-                                <span class="stat-label">Day</span>
-                                <span class="stat-value" id="current-day">1</span>
+                                <span class="stat-label">Wave</span>
+                                <span class="stat-value" id="final-wave">1</span>
                             </div>
                             <div class="stat-item">
-                                <span class="stat-label">Level</span>
-                                <span class="stat-value" id="current-level">1</span>
+                                <span class="stat-label">Enemies Destroyed</span>
+                                <span class="stat-value" id="final-enemies">0</span>
                             </div>
                         </div>
+                        <button class="restart-btn" id="restart-btn">Try Again</button>
                     </div>
                 </div>
 
-                <!-- Scenario Card -->
-                <div class="scenario-card" id="scenario-card">
-                    <div class="scenario-header">
-                        <h3 id="scenario-title">Day 1: Starting Your Business</h3>
-                        <div class="scenario-context" id="scenario-context">
-                            You have ₹100 to start your lemonade stand. You need to decide on pricing and inventory.
-                        </div>
-                    </div>
-                    
-                    <div class="scenario-content" id="scenario-content">
-                        <!-- Dynamic content will be inserted here -->
-                    </div>
-                </div>
-
-                <!-- Decision Panel -->
-                <div class="decision-panel" id="decision-panel">
-                    <h4>What would you like to do?</h4>
-                    <div class="decision-options" id="decision-options">
-                        <!-- Dynamic decision buttons will be inserted here -->
-                    </div>
-                </div>
-
-                <!-- Learning Moment -->
-                <div class="learning-moment hidden" id="learning-moment">
-                    <div class="learning-content">
-                        <div class="learning-icon" id="learning-icon">💡</div>
-                        <h4 class="learning-title" id="learning-title">Great choice!</h4>
-                        <p class="learning-text" id="learning-text">You've made a strategic decision.</p>
-                        <div class="learning-metrics" id="learning-metrics">
-                            <!-- Dynamic metrics will be inserted here -->
-                        </div>
-                        <button class="continue-btn" id="continue-btn">Continue</button>
-                    </div>
-                </div>
-
-                <!-- Results Screen -->
-                <div class="results-screen hidden" id="results-screen">
-                    <div class="results-content">
-                        <h3>Day Results</h3>
-                        <div class="results-grid" id="results-grid">
-                            <!-- Dynamic results will be inserted here -->
-                        </div>
-                        <div class="learning-insight" id="learning-insight">
-                            <p id="insight-text">Every decision teaches you about business!</p>
-                        </div>
-                        <button class="next-day-btn" id="next-day-btn">Next Day</button>
+                <!-- Pause Screen -->
+                <div class="pause-screen hidden" id="pause-screen">
+                    <div class="pause-content">
+                        <h2>Game Paused</h2>
+                        <button class="resume-btn" id="resume-btn">Resume</button>
+                        <button class="restart-btn" id="restart-btn-pause">Restart</button>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Leaderboard Screen -->
-            <div class="leaderboard-screen hidden" id="leaderboard-screen">
-                <div class="leaderboard-content">
-                    <h3>🏆 Leaderboard</h3>
-                    <div class="leaderboard-list" id="leaderboard-list">
-                        <!-- Dynamic leaderboard will be inserted here -->
+            <!-- Start Screen -->
+            <div class="start-screen" id="start-screen">
+                <div class="start-content">
+                    <h1 class="game-title">Cosmic Explorer</h1>
+                    <p class="game-subtitle">Defend the galaxy from alien invaders</p>
+                    <div class="start-buttons">
+                        <button class="start-btn" id="start-btn">Start Mission</button>
+                        <button class="instructions-btn" id="instructions-btn">How to Play</button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Instructions Screen -->
+            <div class="instructions-screen hidden" id="instructions-screen">
+                <div class="instructions-content">
+                    <h2>How to Play</h2>
+                    <div class="instructions-list">
+                        <div class="instruction-item">
+                            <span class="instruction-icon">🎮</span>
+                            <span class="instruction-text">Use WASD or Arrow Keys to move your ship</span>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-icon">🔫</span>
+                            <span class="instruction-text">Click or press SPACE to shoot</span>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-icon">💥</span>
+                            <span class="instruction-text">Destroy enemies to earn points and power-ups</span>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-icon">⚡</span>
+                            <span class="instruction-text">Collect power-ups to enhance your ship</span>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-icon">🌊</span>
+                            <span class="instruction-text">Survive waves of increasingly difficult enemies</span>
+                        </div>
+                    </div>
+                    <button class="back-btn" id="back-btn">Back to Menu</button>
                 </div>
             </div>
 
         </main>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <div class="nav-item active" data-section="learn">
-                <div class="nav-icon">📚</div>
-                <span>Learn</span>
-            </div>
-            <div class="nav-item" data-section="practice">
-                <div class="nav-icon">💪</div>
-                <span>Practice</span>
-            </div>
-            <div class="nav-item" data-section="leaderboard">
-                <div class="nav-icon">🏆</div>
-                <span>Leaderboard</span>
-            </div>
-            <div class="nav-item" data-section="profile">
-                <div class="nav-icon">👤</div>
-                <span>Profile</span>
-            </div>
-        </nav>
-
-        <!-- Input Modal -->
-        <div class="input-modal hidden" id="input-modal">
-            <div class="modal-content">
-                <h3 id="modal-title">Set Your Price</h3>
-                <p id="modal-description">How much will you charge?</p>
-                <div class="input-group">
-                    <span class="currency">₹</span>
-                    <input type="number" id="price-input" placeholder="5" min="1" max="50">
-                </div>
-                <div class="modal-actions">
-                    <button class="cancel-btn" id="cancel-btn">Cancel</button>
-                    <button class="confirm-btn" id="confirm-btn">Confirm</button>
-                </div>
-            </div>
-        </div>
 
         <!-- Achievement Popup -->
         <div class="achievement-popup hidden" id="achievement-popup">
             <div class="achievement-content">
                 <div class="achievement-icon">🏆</div>
                 <h4 class="achievement-title">Achievement Unlocked!</h4>
-                <p class="achievement-text" id="achievement-text">First Sale</p>
+                <p class="achievement-text" id="achievement-text">First Kill</p>
+            </div>
+        </div>
+
+        <!-- Combo Popup -->
+        <div class="combo-popup hidden" id="combo-popup">
+            <div class="combo-content">
+                <span class="combo-text" id="combo-popup-text">COMBO!</span>
             </div>
         </div>
 

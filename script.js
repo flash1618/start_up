@@ -1,148 +1,48 @@
-// Business Academy - Real Business Simulation with Adaptive Learning
-class BusinessAcademy {
+// Cosmic Explorer - Space Adventure Game
+class CosmicExplorer {
     constructor() {
-        this.currentDifficulty = null;
         this.gameState = {
-            day: 1,
-            cash: 100,
+            isRunning: false,
+            isPaused: false,
+            score: 0,
             level: 1,
-            xp: 0,
-            streak: 0,
-            totalProfit: 0,
-            totalSales: 0,
-            price: 0,
-            inventory: 0,
-            costPerCup: 3,
-            weather: 'sunny',
-            marketConditions: 'normal',
-            competition: 'low'
+            wave: 1,
+            energy: 100,
+            health: 100,
+            enemiesDestroyed: 0,
+            combo: 0,
+            maxCombo: 0
         };
         
-        this.learningState = {
-            concepts: {
-                revenue: { mastery: 0, lastPracticed: 0, difficulty: 1 },
-                costs: { mastery: 0, lastPracticed: 0, difficulty: 1 },
-                profit: { mastery: 0, lastPracticed: 0, difficulty: 1 },
-                pricing: { mastery: 0, lastPracticed: 0, difficulty: 1 },
-                demand: { mastery: 0, lastPracticed: 0, difficulty: 1 }
-            },
-            spacedRepetition: {
-                intervals: [1, 3, 7, 14, 30], // days
-                currentInterval: 0
-            }
+        this.player = {
+            x: 400,
+            y: 500,
+            width: 60,
+            height: 80,
+            speed: 5,
+            lastShot: 0,
+            shootCooldown: 200
         };
         
-        this.scenarios = {
-            beginner: {
-                title: "Lemonade Stand",
-                scenarios: [
-                    {
-                        title: "Day 1: Starting Your Business",
-                        context: "You have ₹100 to start your lemonade stand. You need to decide on pricing and inventory.",
-                        decisions: [
-                            {
-                                id: "set-price",
-                                text: "Set Price per Cup",
-                                icon: "💰",
-                                action: "showPriceModal",
-                                learning: "pricing"
-                            },
-                            {
-                                id: "buy-inventory",
-                                text: "Buy Inventory",
-                                icon: "🛒",
-                                action: "buyInventory",
-                                learning: "costs"
-                            }
-                        ],
-                        metrics: ["Revenue", "Costs", "Profit"],
-                        learning: "Basic business concepts: Revenue = Price × Quantity, Profit = Revenue - Costs"
-                    },
-                    {
-                        title: "Day 2: Understanding Customers",
-                        context: "Yesterday you learned about pricing. Today, let's understand customer behavior.",
-                        decisions: [
-                            {
-                                id: "analyze-demand",
-                                text: "Analyze Customer Demand",
-                                icon: "📊",
-                                action: "analyzeDemand",
-                                learning: "demand"
-                            },
-                            {
-                                id: "adjust-price",
-                                text: "Adjust Price Strategy",
-                                icon: "⚖️",
-                                action: "adjustPrice",
-                                learning: "pricing"
-                            }
-                        ],
-                        metrics: ["Customer Count", "Conversion Rate", "Average Order Value"],
-                        learning: "Customer behavior affects sales. Higher prices = fewer customers, lower prices = more customers"
-                    }
-                ]
-            },
-            intermediate: {
-                title: "Coffee Shop",
-                scenarios: [
-                    {
-                        title: "Day 1: Market Analysis",
-                        context: "You're opening a coffee shop. Analyze the market and set your strategy.",
-                        decisions: [
-                            {
-                                id: "market-research",
-                                text: "Conduct Market Research",
-                                icon: "🔍",
-                                action: "marketResearch",
-                                learning: "market"
-                            },
-                            {
-                                id: "set-pricing",
-                                text: "Set Pricing Strategy",
-                                icon: "💎",
-                                action: "setPricing",
-                                learning: "pricing"
-                            }
-                        ],
-                        metrics: ["Market Share", "Customer Acquisition Cost", "Lifetime Value"],
-                        learning: "Market analysis helps you understand competition and customer needs"
-                    }
-                ]
-            },
-            advanced: {
-                title: "Tech Startup",
-                scenarios: [
-                    {
-                        title: "Day 1: Financial Modeling",
-                        context: "You're launching a tech startup. Build your financial model and growth strategy.",
-                        decisions: [
-                            {
-                                id: "build-model",
-                                text: "Build Financial Model",
-                                icon: "📈",
-                                action: "buildModel",
-                                learning: "finance"
-                            },
-                            {
-                                id: "growth-strategy",
-                                text: "Plan Growth Strategy",
-                                icon: "🚀",
-                                action: "growthStrategy",
-                                learning: "strategy"
-                            }
-                        ],
-                        metrics: ["Burn Rate", "Runway", "ROI", "Growth Rate"],
-                        learning: "Financial modeling helps predict cash flow and plan for growth"
-                    }
-                ]
-            }
+        this.enemies = [];
+        this.projectiles = [];
+        this.powerups = [];
+        this.explosions = [];
+        
+        this.keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            space: false
         };
         
         this.achievements = {
-            firstSale: false,
-            profitableDay: false,
-            marketLeader: false,
-            growthExpert: false
+            firstKill: false,
+            combo5: false,
+            combo10: false,
+            wave5: false,
+            wave10: false
         };
         
         this.init();
@@ -150,464 +50,505 @@ class BusinessAcademy {
     
     init() {
         this.setupEventListeners();
-        this.loadUserData();
-        this.showWelcomeScreen();
+        this.createSpaceBackground();
+        this.gameLoop();
     }
     
     setupEventListeners() {
-        // Difficulty selection
-        document.querySelectorAll('.difficulty-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const difficulty = e.currentTarget.dataset.difficulty;
-                this.selectDifficulty(difficulty);
-            });
-        });
+        // Start screen
+        document.getElementById('start-btn').addEventListener('click', () => this.startGame());
+        document.getElementById('instructions-btn').addEventListener('click', () => this.showInstructions());
+        document.getElementById('back-btn').addEventListener('click', () => this.showStartScreen());
         
-        // Navigation
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const section = e.currentTarget.dataset.section;
-                this.navigateToSection(section);
-            });
-        });
+        // Game controls
+        document.getElementById('restart-btn').addEventListener('click', () => this.restartGame());
+        document.getElementById('restart-btn-pause').addEventListener('click', () => this.restartGame());
+        document.getElementById('resume-btn').addEventListener('click', () => this.resumeGame());
         
-        // Modal buttons
-        document.getElementById('confirm-btn').addEventListener('click', () => this.confirmPrice());
-        document.getElementById('cancel-btn').addEventListener('click', () => this.hideModal());
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+        document.addEventListener('keyup', (e) => this.handleKeyUp(e));
         
-        // Continue buttons
-        document.getElementById('continue-btn').addEventListener('click', () => this.hideLearningMoment());
-        document.getElementById('next-day-btn').addEventListener('click', () => this.nextDay());
+        // Mouse controls
+        document.addEventListener('click', (e) => this.handleClick(e));
         
-        // Input handling
-        document.getElementById('price-input').addEventListener('input', (e) => {
-            const value = parseInt(e.target.value);
-            if (value < 1) e.target.value = 1;
-            if (value > 50) e.target.value = 50;
-        });
-        
-        document.getElementById('price-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.confirmPrice();
+        // Pause on space when not shooting
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape' && this.gameState.isRunning) {
+                this.togglePause();
             }
         });
     }
     
-    loadUserData() {
-        const savedData = localStorage.getItem('businessAcademyData');
-        if (savedData) {
-            const data = JSON.parse(savedData);
-            this.gameState = { ...this.gameState, ...data.gameState };
-            this.learningState = { ...this.learningState, ...data.learningState };
-            this.achievements = { ...this.achievements, ...data.achievements };
-            this.currentDifficulty = data.difficulty;
+    createSpaceBackground() {
+        const spaceBackground = document.getElementById('space-background');
+        
+        // Create stars
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            spaceBackground.appendChild(star);
         }
-        this.updateUI();
+        
+        // Create planets
+        for (let i = 0; i < 5; i++) {
+            const planet = document.createElement('div');
+            planet.className = 'planet';
+            planet.style.left = Math.random() * 100 + '%';
+            planet.style.top = Math.random() * 100 + '%';
+            planet.style.animationDelay = Math.random() * 5 + 's';
+            spaceBackground.appendChild(planet);
+        }
     }
     
-    saveUserData() {
-        const data = {
-            gameState: this.gameState,
-            learningState: this.learningState,
-            achievements: this.achievements,
-            difficulty: this.currentDifficulty
-        };
-        localStorage.setItem('businessAcademyData', JSON.stringify(data));
-    }
-    
-    updateUI() {
-        document.getElementById('streak-count').textContent = this.gameState.streak;
-        document.getElementById('xp-count').textContent = this.gameState.xp;
-        document.getElementById('level-count').textContent = this.gameState.level;
-        document.getElementById('cash-amount').textContent = `₹${this.gameState.cash}`;
-        document.getElementById('current-day').textContent = this.gameState.day;
-        document.getElementById('current-level').textContent = this.gameState.level;
-    }
-    
-    showWelcomeScreen() {
-        document.getElementById('welcome-screen').classList.remove('hidden');
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('leaderboard-screen').classList.add('hidden');
-    }
-    
-    selectDifficulty(difficulty) {
-        this.currentDifficulty = difficulty;
-        this.gameState.day = 1;
-        this.showGameScreen();
-        this.saveUserData();
-    }
-    
-    showGameScreen() {
-        document.getElementById('welcome-screen').classList.add('hidden');
+    startGame() {
+        this.gameState.isRunning = true;
+        this.gameState.isPaused = false;
+        this.gameState.score = 0;
+        this.gameState.level = 1;
+        this.gameState.wave = 1;
+        this.gameState.energy = 100;
+        this.gameState.health = 100;
+        this.gameState.enemiesDestroyed = 0;
+        this.gameState.combo = 0;
+        this.gameState.maxCombo = 0;
+        
+        this.enemies = [];
+        this.projectiles = [];
+        this.powerups = [];
+        this.explosions = [];
+        
+        document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
-        document.getElementById('leaderboard-screen').classList.add('hidden');
         
-        this.renderCurrentScenario();
-    }
-    
-    renderCurrentScenario() {
-        const difficulty = this.scenarios[this.currentDifficulty];
-        const scenario = difficulty.scenarios[this.gameState.day - 1];
-        
-        if (!scenario) {
-            this.showCompletionScreen();
-            return;
-        }
-        
-        // Update business title
-        document.getElementById('business-title').textContent = difficulty.title;
-        
-        // Update scenario
-        document.getElementById('scenario-title').textContent = scenario.title;
-        document.getElementById('scenario-context').textContent = scenario.context;
-        
-        // Render decisions
-        this.renderDecisions(scenario.decisions);
-        
-        // Hide other screens
-        document.getElementById('learning-moment').classList.add('hidden');
-        document.getElementById('results-screen').classList.add('hidden');
-    }
-    
-    renderDecisions(decisions) {
-        const decisionOptions = document.getElementById('decision-options');
-        decisionOptions.innerHTML = '';
-        
-        decisions.forEach(decision => {
-            const button = document.createElement('button');
-            button.className = 'decision-btn';
-            button.innerHTML = `
-                <span class="btn-icon">${decision.icon}</span>
-                <span class="btn-text">${decision.text}</span>
-            `;
-            button.addEventListener('click', () => this.handleDecision(decision));
-            decisionOptions.appendChild(button);
-        });
-    }
-    
-    handleDecision(decision) {
-        switch (decision.action) {
-            case 'showPriceModal':
-                this.showPriceModal();
-                break;
-            case 'buyInventory':
-                this.buyInventory();
-                break;
-            case 'analyzeDemand':
-                this.analyzeDemand();
-                break;
-            case 'adjustPrice':
-                this.adjustPrice();
-                break;
-            case 'marketResearch':
-                this.marketResearch();
-                break;
-            case 'setPricing':
-                this.setPricing();
-                break;
-            case 'buildModel':
-                this.buildModel();
-                break;
-            case 'growthStrategy':
-                this.growthStrategy();
-                break;
-        }
-    }
-    
-    showPriceModal() {
-        document.getElementById('modal-title').textContent = 'Set Your Price';
-        document.getElementById('modal-description').textContent = 'How much will you charge per cup?';
-        document.getElementById('price-input').value = this.gameState.price || 5;
-        document.getElementById('input-modal').classList.remove('hidden');
-        document.getElementById('price-input').focus();
-    }
-    
-    confirmPrice() {
-        const price = parseInt(document.getElementById('price-input').value);
-        if (price >= 1 && price <= 50) {
-            this.gameState.price = price;
-            this.hideModal();
-            this.updateLearningState('pricing', true);
-            this.showLearningMoment(
-                'Price Set!',
-                `You're charging ₹${price} per cup. This affects how many customers will buy.`,
-                '💰',
-                `Price: ₹${price} per cup`
-            );
-        }
-    }
-    
-    hideModal() {
-        document.getElementById('input-modal').classList.add('hidden');
-    }
-    
-    buyInventory() {
-        if (this.gameState.cash < 30) {
-            this.showLearningMoment(
-                'Not Enough Cash!',
-                'You need at least ₹30 to buy inventory.',
-                '💸'
-            );
-            return;
-        }
-        
-        const cost = 30;
-        this.gameState.cash -= cost;
-        this.gameState.inventory = 10;
-        
-        this.updateLearningState('costs', true);
         this.updateUI();
-        this.showLearningMoment(
-            'Inventory Purchased!',
-            'You bought 10 cups for ₹30. Each cup costs ₹3 to make.',
-            '🛒',
-            `Cost: ₹${cost}, Inventory: 10 cups`
-        );
+        this.spawnWave();
     }
     
-    analyzeDemand() {
-        const price = this.gameState.price || 5;
-        const demand = this.calculateDemand(price);
+    showInstructions() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('instructions-screen').classList.remove('hidden');
+    }
+    
+    showStartScreen() {
+        document.getElementById('instructions-screen').classList.add('hidden');
+        document.getElementById('start-screen').classList.remove('hidden');
+    }
+    
+    restartGame() {
+        this.gameState.isRunning = false;
+        this.gameState.isPaused = false;
+        document.getElementById('game-over-screen').classList.add('hidden');
+        document.getElementById('pause-screen').classList.add('hidden');
+        this.startGame();
+    }
+    
+    togglePause() {
+        if (this.gameState.isRunning) {
+            this.gameState.isPaused = !this.gameState.isPaused;
+            if (this.gameState.isPaused) {
+                document.getElementById('pause-screen').classList.remove('hidden');
+            } else {
+                document.getElementById('pause-screen').classList.add('hidden');
+            }
+        }
+    }
+    
+    resumeGame() {
+        this.gameState.isPaused = false;
+        document.getElementById('pause-screen').classList.add('hidden');
+    }
+    
+    handleKeyDown(e) {
+        if (!this.gameState.isRunning || this.gameState.isPaused) return;
         
-        this.updateLearningState('demand', true);
-        this.showLearningMoment(
-            'Demand Analysis',
-            `At ₹${price} per cup, you can expect ${demand} customers. Higher prices = fewer customers.`,
-            '📊',
-            `Price: ₹${price}, Expected Customers: ${demand}`
-        );
+        switch(e.code) {
+            case 'KeyW':
+            case 'ArrowUp':
+                this.keys.w = true;
+                break;
+            case 'KeyA':
+            case 'ArrowLeft':
+                this.keys.a = true;
+                break;
+            case 'KeyS':
+            case 'ArrowDown':
+                this.keys.s = true;
+                break;
+            case 'KeyD':
+            case 'ArrowRight':
+                this.keys.d = true;
+                break;
+            case 'Space':
+                this.keys.space = true;
+                e.preventDefault();
+                break;
+        }
     }
     
-    adjustPrice() {
-        this.showPriceModal();
+    handleKeyUp(e) {
+        switch(e.code) {
+            case 'KeyW':
+            case 'ArrowUp':
+                this.keys.w = false;
+                break;
+            case 'KeyA':
+            case 'ArrowLeft':
+                this.keys.a = false;
+                break;
+            case 'KeyS':
+            case 'ArrowDown':
+                this.keys.s = false;
+                break;
+            case 'KeyD':
+            case 'ArrowRight':
+                this.keys.d = false;
+                break;
+            case 'Space':
+                this.keys.space = false;
+                break;
+        }
     }
     
-    marketResearch() {
-        this.updateLearningState('market', true);
-        this.showLearningMoment(
-            'Market Research Complete',
-            'You found that the average coffee price is ₹80. Your target market prefers quality over price.',
-            '🔍',
-            'Market Average: ₹80, Target: Quality-focused customers'
-        );
+    handleClick(e) {
+        if (!this.gameState.isRunning || this.gameState.isPaused) return;
+        this.shoot();
     }
     
-    setPricing() {
-        this.showPriceModal();
-    }
-    
-    buildModel() {
-        this.updateLearningState('finance', true);
-        this.showLearningMoment(
-            'Financial Model Built',
-            'Your startup needs ₹50,000 monthly. With current revenue, you have 6 months runway.',
-            '📈',
-            'Monthly Burn: ₹50,000, Runway: 6 months'
-        );
-    }
-    
-    growthStrategy() {
-        this.updateLearningState('strategy', true);
-        this.showLearningMoment(
-            'Growth Strategy Planned',
-            'Focus on customer acquisition. Target 20% monthly growth rate.',
-            '🚀',
-            'Target Growth: 20% monthly'
-        );
-    }
-    
-    calculateDemand(price) {
-        // Simple demand curve with weather and competition effects
-        let baseDemand = 20;
+    updatePlayer() {
+        if (this.keys.w && this.player.y > 0) {
+            this.player.y -= this.player.speed;
+        }
+        if (this.keys.s && this.player.y < 600 - this.player.height) {
+            this.player.y += this.player.speed;
+        }
+        if (this.keys.a && this.player.x > 0) {
+            this.player.x -= this.player.speed;
+        }
+        if (this.keys.d && this.player.x < 800 - this.player.width) {
+            this.player.x += this.player.speed;
+        }
         
-        // Price sensitivity
-        if (price <= 3) baseDemand = 25;
-        else if (price <= 5) baseDemand = 20;
-        else if (price <= 8) baseDemand = 15;
-        else if (price <= 12) baseDemand = 10;
-        else baseDemand = 5;
+        if (this.keys.space) {
+            this.shoot();
+        }
         
-        // Weather effects
-        if (this.gameState.weather === 'sunny') baseDemand *= 1.2;
-        else if (this.gameState.weather === 'rainy') baseDemand *= 0.6;
-        
-        // Competition effects
-        if (this.gameState.competition === 'high') baseDemand *= 0.7;
-        
-        return Math.floor(baseDemand);
+        // Update player position
+        const playerShip = document.getElementById('player-ship');
+        playerShip.style.left = this.player.x + 'px';
+        playerShip.style.top = this.player.y + 'px';
     }
     
-    updateLearningState(concept, correct) {
-        if (this.learningState.concepts[concept]) {
-            const conceptState = this.learningState.concepts[concept];
+    shoot() {
+        const now = Date.now();
+        if (now - this.player.lastShot < this.player.shootCooldown) return;
+        
+        this.player.lastShot = now;
+        
+        const projectile = {
+            x: this.player.x + this.player.width / 2 - 2,
+            y: this.player.y,
+            width: 4,
+            height: 10,
+            speed: 8,
+            type: 'player'
+        };
+        
+        this.projectiles.push(projectile);
+        this.createProjectile(projectile);
+    }
+    
+    createProjectile(projectile) {
+        const projectileElement = document.createElement('div');
+        projectileElement.className = 'projectile player-projectile';
+        projectileElement.style.left = projectile.x + 'px';
+        projectileElement.style.top = projectile.y + 'px';
+        document.getElementById('projectiles-container').appendChild(projectileElement);
+    }
+    
+    updateProjectiles() {
+        for (let i = this.projectiles.length - 1; i >= 0; i--) {
+            const projectile = this.projectiles[i];
             
-            if (correct) {
-                conceptState.mastery += 1;
-                conceptState.lastPracticed = Date.now();
+            if (projectile.type === 'player') {
+                projectile.y -= projectile.speed;
+            } else {
+                projectile.y += projectile.speed;
+            }
+            
+            // Remove projectiles that are off screen
+            if (projectile.y < -10 || projectile.y > 610) {
+                this.projectiles.splice(i, 1);
+                const projectileElement = document.querySelector('.projectile');
+                if (projectileElement) {
+                    projectileElement.remove();
+                }
+                continue;
+            }
+            
+            // Update projectile position
+            const projectileElements = document.querySelectorAll('.projectile');
+            if (projectileElements[i]) {
+                projectileElements[i].style.left = projectile.x + 'px';
+                projectileElements[i].style.top = projectile.y + 'px';
+            }
+        }
+    }
+    
+    spawnWave() {
+        const enemyCount = 5 + this.gameState.wave * 2;
+        
+        for (let i = 0; i < enemyCount; i++) {
+            setTimeout(() => {
+                this.spawnEnemy();
+            }, i * 500);
+        }
+    }
+    
+    spawnEnemy() {
+        const enemy = {
+            x: Math.random() * (800 - 40),
+            y: -40,
+            width: 40,
+            height: 40,
+            speed: 1 + this.gameState.wave * 0.2,
+            health: 1 + Math.floor(this.gameState.wave / 3),
+            type: Math.random() < 0.3 ? 'fast' : 'normal'
+        };
+        
+        this.enemies.push(enemy);
+        this.createEnemy(enemy);
+    }
+    
+    createEnemy(enemy) {
+        const enemyElement = document.createElement('div');
+        enemyElement.className = `enemy ${enemy.type}`;
+        enemyElement.style.left = enemy.x + 'px';
+        enemyElement.style.top = enemy.y + 'px';
+        document.getElementById('enemies-container').appendChild(enemyElement);
+    }
+    
+    updateEnemies() {
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+            const enemy = this.enemies[i];
+            enemy.y += enemy.speed;
+            
+            // Remove enemies that are off screen
+            if (enemy.y > 650) {
+                this.enemies.splice(i, 1);
+                const enemyElement = document.querySelector('.enemy');
+                if (enemyElement) {
+                    enemyElement.remove();
+                }
+                continue;
+            }
+            
+            // Update enemy position
+            const enemyElements = document.querySelectorAll('.enemy');
+            if (enemyElements[i]) {
+                enemyElements[i].style.left = enemy.x + 'px';
+                enemyElements[i].style.top = enemy.y + 'px';
+            }
+        }
+    }
+    
+    checkCollisions() {
+        // Projectile vs Enemy collisions
+        for (let i = this.projectiles.length - 1; i >= 0; i--) {
+            const projectile = this.projectiles[i];
+            if (projectile.type !== 'player') continue;
+            
+            for (let j = this.enemies.length - 1; j >= 0; j--) {
+                const enemy = this.enemies[j];
                 
-                // Increase difficulty if mastery is high
-                if (conceptState.mastery > 3) {
-                    conceptState.difficulty = Math.min(conceptState.difficulty + 0.1, 3);
+                if (this.isColliding(projectile, enemy)) {
+                    // Hit!
+                    this.projectiles.splice(i, 1);
+                    this.enemies.splice(j, 1);
+                    
+                    // Remove elements
+                    const projectileElements = document.querySelectorAll('.projectile');
+                    const enemyElements = document.querySelectorAll('.enemy');
+                    if (projectileElements[i]) projectileElements[i].remove();
+                    if (enemyElements[j]) enemyElements[j].remove();
+                    
+                    // Create explosion
+                    this.createExplosion(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                    
+                    // Update score
+                    this.gameState.score += 100;
+                    this.gameState.enemiesDestroyed++;
+                    this.gameState.combo++;
+                    
+                    // Check achievements
+                    this.checkAchievements();
+                    
+                    // Spawn power-up occasionally
+                    if (Math.random() < 0.3) {
+                        this.spawnPowerup(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                    }
+                    
+                    break;
+                }
+            }
+        }
+        
+        // Enemy vs Player collisions
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+            const enemy = this.enemies[i];
+            
+            if (this.isColliding(this.player, enemy)) {
+                // Hit player!
+                this.enemies.splice(i, 1);
+                const enemyElements = document.querySelectorAll('.enemy');
+                if (enemyElements[i]) enemyElements[i].remove();
+                
+                this.gameState.health -= 20;
+                this.gameState.combo = 0;
+                
+                if (this.gameState.health <= 0) {
+                    this.gameOver();
+                }
+            }
+        }
+        
+        // Power-up vs Player collisions
+        for (let i = this.powerups.length - 1; i >= 0; i--) {
+            const powerup = this.powerups[i];
+            
+            if (this.isColliding(this.player, powerup)) {
+                this.powerups.splice(i, 1);
+                const powerupElements = document.querySelectorAll('.powerup');
+                if (powerupElements[i]) powerupElements[i].remove();
+                
+                this.collectPowerup(powerup);
+            }
+        }
+    }
+    
+    isColliding(rect1, rect2) {
+        return rect1.x < rect2.x + rect2.width &&
+               rect1.x + rect1.width > rect2.x &&
+               rect1.y < rect2.y + rect2.height &&
+               rect1.y + rect1.height > rect2.y;
+    }
+    
+    createExplosion(x, y) {
+        const explosion = {
+            x: x - 20,
+            y: y - 20,
+            width: 40,
+            height: 40,
+            frame: 0,
+            maxFrames: 8
+        };
+        
+        this.explosions.push(explosion);
+        this.createExplosionElement(explosion);
+    }
+    
+    createExplosionElement(explosion) {
+        const explosionElement = document.createElement('div');
+        explosionElement.className = 'explosion';
+        explosionElement.style.left = explosion.x + 'px';
+        explosionElement.style.top = explosion.y + 'px';
+        document.getElementById('explosions-container').appendChild(explosionElement);
+    }
+    
+    updateExplosions() {
+        for (let i = this.explosions.length - 1; i >= 0; i--) {
+            const explosion = this.explosions[i];
+            explosion.frame++;
+            
+            if (explosion.frame >= explosion.maxFrames) {
+                this.explosions.splice(i, 1);
+                const explosionElements = document.querySelectorAll('.explosion');
+                if (explosionElements[i]) {
+                    explosionElements[i].remove();
+                }
+            }
+        }
+    }
+    
+    spawnPowerup(x, y) {
+        const powerup = {
+            x: x - 15,
+            y: y - 15,
+            width: 30,
+            height: 30,
+            type: Math.random() < 0.5 ? 'health' : 'energy',
+            speed: 2
+        };
+        
+        this.powerups.push(powerup);
+        this.createPowerupElement(powerup);
+    }
+    
+    createPowerupElement(powerup) {
+        const powerupElement = document.createElement('div');
+        powerupElement.className = `powerup ${powerup.type}`;
+        powerupElement.style.left = powerup.x + 'px';
+        powerupElement.style.top = powerup.y + 'px';
+        document.getElementById('powerups-container').appendChild(powerupElement);
+    }
+    
+    updatePowerups() {
+        for (let i = this.powerups.length - 1; i >= 0; i--) {
+            const powerup = this.powerups[i];
+            powerup.y += powerup.speed;
+            
+            if (powerup.y > 650) {
+                this.powerups.splice(i, 1);
+                const powerupElements = document.querySelectorAll('.powerup');
+                if (powerupElements[i]) {
+                    powerupElements[i].remove();
                 }
             } else {
-                conceptState.mastery = Math.max(conceptState.mastery - 0.5, 0);
-                conceptState.difficulty = Math.max(conceptState.difficulty - 0.1, 0.5);
+                const powerupElements = document.querySelectorAll('.powerup');
+                if (powerupElements[i]) {
+                    powerupElements[i].style.left = powerup.x + 'px';
+                    powerupElements[i].style.top = powerup.y + 'px';
+                }
             }
         }
-        
-        this.saveUserData();
     }
     
-    showLearningMoment(title, text, icon, metrics = '') {
-        document.getElementById('learning-title').textContent = title;
-        document.getElementById('learning-text').textContent = text;
-        document.getElementById('learning-icon').textContent = icon;
-        
-        const metricsElement = document.getElementById('learning-metrics');
-        if (metrics) {
-            metricsElement.innerHTML = `<p><strong>${metrics}</strong></p>`;
-        } else {
-            metricsElement.innerHTML = '';
-        }
-        
-        document.getElementById('learning-moment').classList.remove('hidden');
-        
-        // Award XP based on learning state
-        const xpGain = this.calculateXPGain();
-        this.gameState.xp += xpGain;
-        this.gameState.streak++;
-        
-        // Level up check
-        if (this.gameState.xp >= this.gameState.level * 100) {
-            this.gameState.level++;
-            this.showAchievement('Level Up!', `You've reached level ${this.gameState.level}!`);
-        }
-        
-        this.updateUI();
-        this.saveUserData();
-    }
-    
-    calculateXPGain() {
-        // Base XP + bonus for mastery
-        let baseXP = 10;
-        let masteryBonus = 0;
-        
-        Object.values(this.learningState.concepts).forEach(concept => {
-            masteryBonus += concept.mastery * 2;
-        });
-        
-        return Math.floor(baseXP + masteryBonus);
-    }
-    
-    hideLearningMoment() {
-        document.getElementById('learning-moment').classList.add('hidden');
-        
-        // Check if all decisions are made
-        if (this.allDecisionsMade()) {
-            this.showResults();
+    collectPowerup(powerup) {
+        if (powerup.type === 'health') {
+            this.gameState.health = Math.min(100, this.gameState.health + 25);
+        } else if (powerup.type === 'energy') {
+            this.gameState.energy = Math.min(100, this.gameState.energy + 25);
         }
     }
     
-    allDecisionsMade() {
-        // Simple check - in real implementation, track which decisions were made
-        return this.gameState.price > 0 && this.gameState.inventory > 0;
-    }
-    
-    showResults() {
-        const results = this.calculateResults();
-        
-        const resultsGrid = document.getElementById('results-grid');
-        resultsGrid.innerHTML = '';
-        
-        Object.entries(results).forEach(([key, value]) => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'result-item';
-            resultItem.innerHTML = `
-                <span class="result-label">${key}</span>
-                <span class="result-value">${value}</span>
-            `;
-            resultsGrid.appendChild(resultItem);
-        });
-        
-        // Generate insight based on learning state
-        const insight = this.generateInsight(results);
-        document.getElementById('insight-text').textContent = insight;
-        
-        document.getElementById('results-screen').classList.remove('hidden');
-    }
-    
-    calculateResults() {
-        const price = this.gameState.price || 5;
-        const demand = this.calculateDemand(price);
-        const sales = Math.min(demand, this.gameState.inventory || 0);
-        const revenue = sales * price;
-        const costs = sales * this.gameState.costPerCup;
-        const profit = revenue - costs;
-        
-        // Update game state
-        this.gameState.cash += revenue;
-        this.gameState.totalProfit += profit;
-        this.gameState.totalSales += sales;
-        
-        return {
-            'Cups Sold': sales,
-            'Revenue': `₹${revenue}`,
-            'Costs': `₹${costs}`,
-            'Profit': `₹${profit}`
-        };
-    }
-    
-    generateInsight(results) {
-        const profit = parseInt(results.Profit.replace('₹', ''));
-        
-        // Use learning state to personalize insights
-        const pricingMastery = this.learningState.concepts.pricing.mastery;
-        const demandMastery = this.learningState.concepts.demand.mastery;
-        
-        if (pricingMastery > 3 && demandMastery > 3) {
-            return `Excellent! Your pricing strategy is working perfectly. You understand both pricing and demand.`;
-        } else if (profit > 0) {
-            return `Great job! You made a profit of ₹${profit}. Keep learning about pricing and demand.`;
-        } else if (profit < 0) {
-            return `You lost ₹${Math.abs(profit)} today. Consider adjusting your price or reducing costs.`;
-        } else {
-            return `You broke even today. Try to optimize your pricing for better profits.`;
+    checkAchievements() {
+        if (!this.achievements.firstKill && this.gameState.enemiesDestroyed >= 1) {
+            this.achievements.firstKill = true;
+            this.showAchievement('First Kill!', 'You destroyed your first enemy!');
         }
-    }
-    
-    nextDay() {
-        this.gameState.day++;
         
-        // Random weather and market conditions
-        this.gameState.weather = ['sunny', 'cloudy', 'rainy'][Math.floor(Math.random() * 3)];
-        this.gameState.marketConditions = ['normal', 'boom', 'recession'][Math.floor(Math.random() * 3)];
-        this.gameState.competition = ['low', 'medium', 'high'][Math.floor(Math.random() * 3)];
+        if (!this.achievements.combo5 && this.gameState.combo >= 5) {
+            this.achievements.combo5 = true;
+            this.showAchievement('Combo Master!', '5x Combo achieved!');
+        }
         
-        // Reset for new day
-        this.gameState.price = 0;
-        this.gameState.inventory = 0;
+        if (!this.achievements.combo10 && this.gameState.combo >= 10) {
+            this.achievements.combo10 = true;
+            this.showAchievement('Combo Legend!', '10x Combo achieved!');
+        }
         
-        // Hide results
-        document.getElementById('results-screen').classList.add('hidden');
+        if (!this.achievements.wave5 && this.gameState.wave >= 5) {
+            this.achievements.wave5 = true;
+            this.showAchievement('Wave Warrior!', 'Survived 5 waves!');
+        }
         
-        this.updateUI();
-        this.renderCurrentScenario();
-    }
-    
-    showCompletionScreen() {
-        const scenarioContent = document.getElementById('scenario-content');
-        scenarioContent.innerHTML = `
-            <div class="completion-content">
-                <h3>🎉 Congratulations!</h3>
-                <p>You've completed all scenarios in ${this.currentDifficulty} mode!</p>
-                <div class="completion-stats">
-                    <p><strong>Total XP:</strong> ${this.gameState.xp}</p>
-                    <p><strong>Current Streak:</strong> ${this.gameState.streak} days</p>
-                    <p><strong>Level:</strong> ${this.gameState.level}</p>
-                </div>
-                <button class="continue-btn" onclick="location.reload()">Start Over</button>
-            </div>
-        `;
+        if (!this.achievements.wave10 && this.gameState.wave >= 10) {
+            this.achievements.wave10 = true;
+            this.showAchievement('Wave Master!', 'Survived 10 waves!');
+        }
     }
     
     showAchievement(title, text) {
@@ -619,61 +560,68 @@ class BusinessAcademy {
         }, 3000);
     }
     
-    navigateToSection(section) {
-        // Update active nav item
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        document.querySelector(`[data-section="${section}"]`).classList.add('active');
+    updateUI() {
+        document.getElementById('score-count').textContent = this.gameState.score;
+        document.getElementById('level-count').textContent = this.gameState.level;
+        document.getElementById('energy-count').textContent = this.gameState.energy;
+        document.getElementById('health-text').textContent = this.gameState.health;
+        document.getElementById('health-fill').style.width = this.gameState.health + '%';
+        document.getElementById('wave-number').textContent = this.gameState.wave;
+        document.getElementById('combo-text').textContent = `Combo: ${this.gameState.combo}x`;
         
-        // Handle different sections
-        switch(section) {
-            case 'learn':
-                this.showWelcomeScreen();
-                break;
-            case 'practice':
-                // Show practice mode
-                break;
-            case 'leaderboard':
-                this.showLeaderboard();
-                break;
-            case 'profile':
-                // Show profile
-                break;
+        // Update health bar color
+        const healthFill = document.getElementById('health-fill');
+        if (this.gameState.health > 60) {
+            healthFill.style.background = '#4CAF50';
+        } else if (this.gameState.health > 30) {
+            healthFill.style.background = '#FF9800';
+        } else {
+            healthFill.style.background = '#F44336';
         }
     }
     
-    showLeaderboard() {
-        document.getElementById('welcome-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('leaderboard-screen').classList.remove('hidden');
+    checkWaveComplete() {
+        if (this.enemies.length === 0) {
+            this.gameState.wave++;
+            this.gameState.level = Math.floor(this.gameState.wave / 3) + 1;
+            this.gameState.combo = 0;
+            
+            // Increase difficulty
+            this.player.shootCooldown = Math.max(100, this.player.shootCooldown - 10);
+            
+            setTimeout(() => {
+                this.spawnWave();
+            }, 2000);
+        }
+    }
+    
+    gameOver() {
+        this.gameState.isRunning = false;
         
-        // Generate mock leaderboard
-        const leaderboardList = document.getElementById('leaderboard-list');
-        leaderboardList.innerHTML = '';
+        document.getElementById('final-score').textContent = this.gameState.score;
+        document.getElementById('final-wave').textContent = this.gameState.wave;
+        document.getElementById('final-enemies').textContent = this.gameState.enemiesDestroyed;
         
-        const mockData = [
-            { name: 'Business Pro', score: 1250 },
-            { name: 'Startup Master', score: 1100 },
-            { name: 'You', score: this.gameState.xp },
-            { name: 'Coffee Expert', score: 950 },
-            { name: 'Lemonade King', score: 800 }
-        ];
+        document.getElementById('game-over-screen').classList.remove('hidden');
+    }
+    
+    gameLoop() {
+        if (this.gameState.isRunning && !this.gameState.isPaused) {
+            this.updatePlayer();
+            this.updateProjectiles();
+            this.updateEnemies();
+            this.updateExplosions();
+            this.updatePowerups();
+            this.checkCollisions();
+            this.checkWaveComplete();
+            this.updateUI();
+        }
         
-        mockData.forEach((player, index) => {
-            const item = document.createElement('div');
-            item.className = 'leaderboard-item';
-            item.innerHTML = `
-                <span class="leaderboard-rank">${index + 1}</span>
-                <span class="leaderboard-name">${player.name}</span>
-                <span class="leaderboard-score">${player.score} XP</span>
-            `;
-            leaderboardList.appendChild(item);
-        });
+        requestAnimationFrame(() => this.gameLoop());
     }
 }
 
-// Initialize the app when DOM is loaded
+// Initialize the game when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new BusinessAcademy();
+    new CosmicExplorer();
 });

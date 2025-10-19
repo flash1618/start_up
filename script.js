@@ -1,633 +1,660 @@
-// Cosmic Explorer - Space Adventure Game
-class CosmicExplorer {
+// Neural Nexus - AI-Powered Reality Simulator
+class NeuralNexus {
     constructor() {
         this.gameState = {
-            isRunning: false,
-            isPaused: false,
-            score: 0,
-            level: 1,
-            wave: 1,
-            energy: 100,
-            health: 100,
-            enemiesDestroyed: 0,
-            combo: 0,
-            maxCombo: 0
+            isActive: false,
+            neuralEnergy: 100,
+            realityLevel: 1,
+            aiSync: 0,
+            physicsEnabled: true,
+            aiEntities: [],
+            realityObjects: [],
+            achievements: [],
+            insights: []
         };
         
-        this.player = {
-            x: 400,
-            y: 500,
-            width: 60,
-            height: 80,
-            speed: 5,
-            lastShot: 0,
-            shootCooldown: 200
+        this.aiPersonalities = [
+            { name: "Quantum", intelligence: 85, creativity: 90, empathy: 60, color: "#00FFFF" },
+            { name: "Nexus", intelligence: 95, creativity: 70, empathy: 80, color: "#FF00FF" },
+            { name: "Void", intelligence: 70, creativity: 95, empathy: 50, color: "#800080" },
+            { name: "Harmony", intelligence: 80, creativity: 80, empathy: 95, color: "#00FF00" },
+            { name: "Chaos", intelligence: 60, creativity: 100, empathy: 30, color: "#FF4500" }
+        ];
+        
+        this.realityPhysics = {
+            gravity: 0.5,
+            friction: 0.98,
+            bounce: 0.8,
+            timeScale: 1.0
         };
         
-        this.enemies = [];
-        this.projectiles = [];
-        this.powerups = [];
-        this.explosions = [];
-        
-        this.keys = {
-            w: false,
-            a: false,
-            s: false,
-            d: false,
-            space: false
-        };
-        
-        this.achievements = {
-            firstKill: false,
-            combo5: false,
-            combo10: false,
-            wave5: false,
-            wave10: false
-        };
+        this.neuralPatterns = [
+            "Reality is what you make it",
+            "Consciousness creates existence",
+            "Time flows like a river",
+            "Matter is energy in motion",
+            "The observer affects the observed",
+            "Quantum entanglement connects all",
+            "Infinity exists in the smallest particle",
+            "The mind is the ultimate reality"
+        ];
         
         this.init();
     }
     
     init() {
         this.setupEventListeners();
-        this.createSpaceBackground();
-        this.gameLoop();
+        this.createNeuralGrid();
+        this.startNeuralPulse();
+        this.generateRealityParticles();
+        this.updateUI();
     }
     
     setupEventListeners() {
-        // Start screen
-        document.getElementById('start-btn').addEventListener('click', () => this.startGame());
-        document.getElementById('instructions-btn').addEventListener('click', () => this.showInstructions());
-        document.getElementById('back-btn').addEventListener('click', () => this.showStartScreen());
+        // Neural controls
+        document.getElementById('start-neural').addEventListener('click', () => this.activateNeuralLink());
+        document.getElementById('tutorial-neural').addEventListener('click', () => this.showTutorial());
         
-        // Game controls
-        document.getElementById('restart-btn').addEventListener('click', () => this.restartGame());
-        document.getElementById('restart-btn-pause').addEventListener('click', () => this.restartGame());
-        document.getElementById('resume-btn').addEventListener('click', () => this.resumeGame());
+        // Reality manipulation
+        document.getElementById('create-matter').addEventListener('click', () => this.createMatter());
+        document.getElementById('manipulate-gravity').addEventListener('click', () => this.manipulateGravity());
+        document.getElementById('time-dilation').addEventListener('click', () => this.timeDilation());
+        document.getElementById('quantum-tunnel').addEventListener('click', () => this.quantumTunnel());
         
-        // Keyboard controls
-        document.addEventListener('keydown', (e) => this.handleKeyDown(e));
-        document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+        // AI entities
+        document.getElementById('spawn-ai').addEventListener('click', () => this.spawnAI());
+        document.getElementById('train-ai').addEventListener('click', () => this.trainAI());
+        document.getElementById('evolve-ai').addEventListener('click', () => this.evolveAI());
+        document.getElementById('merge-ai').addEventListener('click', () => this.mergeAI());
         
-        // Mouse controls
-        document.addEventListener('click', (e) => this.handleClick(e));
+        // Reality physics
+        document.getElementById('toggle-physics').addEventListener('click', () => this.togglePhysics());
+        document.getElementById('reset-reality').addEventListener('click', () => this.resetReality());
+        document.getElementById('save-reality').addEventListener('click', () => this.saveReality());
+        document.getElementById('load-reality').addEventListener('click', () => this.loadReality());
         
-        // Pause on space when not shooting
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Escape' && this.gameState.isRunning) {
-                this.togglePause();
+        // AI modal
+        document.getElementById('ai-close').addEventListener('click', () => this.closeAIModal());
+        document.getElementById('ai-chat').addEventListener('click', () => this.chatWithAI());
+        document.getElementById('ai-train').addEventListener('click', () => this.trainCurrentAI());
+        document.getElementById('ai-evolve').addEventListener('click', () => this.evolveCurrentAI());
+        
+        // Mouse interactions
+        document.getElementById('reality-canvas').addEventListener('click', (e) => this.handleCanvasClick(e));
+        document.getElementById('reality-canvas').addEventListener('mousemove', (e) => this.handleCanvasHover(e));
+    }
+    
+    activateNeuralLink() {
+        this.gameState.isActive = true;
+        document.getElementById('neural-overlay').classList.add('hidden');
+        this.startRealitySimulation();
+        this.showNeuralMessage("Neural link established. Reality manipulation protocols activated.");
+    }
+    
+    showTutorial() {
+        this.showNeuralMessage("Welcome to Neural Nexus! Click buttons to manipulate reality, spawn AI entities, and explore the quantum realm. Your neural energy powers everything - use it wisely!");
+    }
+    
+    createMatter() {
+        if (this.gameState.neuralEnergy < 10) {
+            this.showNeuralMessage("Insufficient neural energy to create matter!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 10;
+        const matter = this.generateMatterObject();
+        this.gameState.realityObjects.push(matter);
+        this.renderMatterObject(matter);
+        this.showNeuralMessage(`Created ${matter.type} with mass ${matter.mass}kg`);
+        this.updateUI();
+    }
+    
+    generateMatterObject() {
+        const types = ['atom', 'molecule', 'crystal', 'metal', 'organic'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        return {
+            id: Date.now(),
+            type: type,
+            x: Math.random() * 800,
+            y: Math.random() * 400,
+            mass: Math.random() * 100 + 10,
+            velocity: { x: (Math.random() - 0.5) * 4, y: (Math.random() - 0.5) * 4 },
+            color: this.getMatterColor(type),
+            size: Math.random() * 30 + 10,
+            properties: this.getMatterProperties(type)
+        };
+    }
+    
+    getMatterColor(type) {
+        const colors = {
+            'atom': '#00FFFF',
+            'molecule': '#00FF00',
+            'crystal': '#FF00FF',
+            'metal': '#C0C0C0',
+            'organic': '#8B4513'
+        };
+        return colors[type];
+    }
+    
+    getMatterProperties(type) {
+        const properties = {
+            'atom': { stability: 0.9, reactivity: 0.3, conductivity: 0.8 },
+            'molecule': { stability: 0.7, reactivity: 0.6, conductivity: 0.5 },
+            'crystal': { stability: 0.95, reactivity: 0.1, conductivity: 0.9 },
+            'metal': { stability: 0.8, reactivity: 0.4, conductivity: 1.0 },
+            'organic': { stability: 0.6, reactivity: 0.8, conductivity: 0.2 }
+        };
+        return properties[type];
+    }
+    
+    renderMatterObject(matter) {
+        const container = document.getElementById('reality-objects');
+        const element = document.createElement('div');
+        element.className = 'matter-object';
+        element.style.left = matter.x + 'px';
+        element.style.top = matter.y + 'px';
+        element.style.width = matter.size + 'px';
+        element.style.height = matter.size + 'px';
+        element.style.backgroundColor = matter.color;
+        element.style.borderRadius = matter.type === 'crystal' ? '0%' : '50%';
+        element.dataset.matterId = matter.id;
+        
+        // Add hover effect
+        element.addEventListener('mouseenter', () => {
+            this.showMatterInfo(matter);
+        });
+        
+        container.appendChild(element);
+    }
+    
+    showMatterInfo(matter) {
+        const info = `
+            Type: ${matter.type}
+            Mass: ${matter.mass.toFixed(1)}kg
+            Stability: ${(matter.properties.stability * 100).toFixed(0)}%
+            Reactivity: ${(matter.properties.reactivity * 100).toFixed(0)}%
+            Conductivity: ${(matter.properties.conductivity * 100).toFixed(0)}%
+        `;
+        this.showNeuralMessage(info);
+    }
+    
+    manipulateGravity() {
+        if (this.gameState.neuralEnergy < 15) {
+            this.showNeuralMessage("Insufficient neural energy to manipulate gravity!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 15;
+        this.realityPhysics.gravity = this.realityPhysics.gravity > 0 ? 0 : 0.5;
+        this.showNeuralMessage(`Gravity ${this.realityPhysics.gravity > 0 ? 'enabled' : 'disabled'}`);
+        this.updateUI();
+    }
+    
+    timeDilation() {
+        if (this.gameState.neuralEnergy < 20) {
+            this.showNeuralMessage("Insufficient neural energy for time manipulation!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 20;
+        this.realityPhysics.timeScale = this.realityPhysics.timeScale === 1.0 ? 0.5 : 1.0;
+        this.showNeuralMessage(`Time scale: ${this.realityPhysics.timeScale}x`);
+        this.updateUI();
+    }
+    
+    quantumTunnel() {
+        if (this.gameState.neuralEnergy < 25) {
+            this.showNeuralMessage("Insufficient neural energy for quantum tunneling!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 25;
+        this.createQuantumTunnel();
+        this.showNeuralMessage("Quantum tunnel created! Matter can now teleport between points.");
+        this.updateUI();
+    }
+    
+    createQuantumTunnel() {
+        const tunnel = {
+            id: Date.now(),
+            x1: Math.random() * 800,
+            y1: Math.random() * 400,
+            x2: Math.random() * 800,
+            y2: Math.random() * 400,
+            active: true
+        };
+        
+        // Render tunnel
+        const container = document.getElementById('reality-objects');
+        const element = document.createElement('div');
+        element.className = 'quantum-tunnel';
+        element.style.left = Math.min(tunnel.x1, tunnel.x2) + 'px';
+        element.style.top = Math.min(tunnel.y1, tunnel.y2) + 'px';
+        element.style.width = Math.abs(tunnel.x2 - tunnel.x1) + 'px';
+        element.style.height = Math.abs(tunnel.y2 - tunnel.y1) + 'px';
+        element.dataset.tunnelId = tunnel.id;
+        
+        container.appendChild(element);
+        
+        // Add tunnel effect
+        setTimeout(() => {
+            element.classList.add('tunnel-active');
+        }, 100);
+    }
+    
+    spawnAI() {
+        if (this.gameState.neuralEnergy < 30) {
+            this.showNeuralMessage("Insufficient neural energy to spawn AI consciousness!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 30;
+        const ai = this.generateAIEntity();
+        this.gameState.aiEntities.push(ai);
+        this.renderAIEntity(ai);
+        this.showNeuralMessage(`Spawned AI entity: ${ai.name}`);
+        this.updateUI();
+    }
+    
+    generateAIEntity() {
+        const personality = this.aiPersonalities[Math.floor(Math.random() * this.aiPersonalities.length)];
+        return {
+            id: Date.now(),
+            name: personality.name + " #" + (this.gameState.aiEntities.length + 1),
+            intelligence: personality.intelligence + Math.random() * 20 - 10,
+            creativity: personality.creativity + Math.random() * 20 - 10,
+            empathy: personality.empathy + Math.random() * 20 - 10,
+            color: personality.color,
+            x: Math.random() * 800,
+            y: Math.random() * 400,
+            size: Math.random() * 40 + 20,
+            consciousness: Math.random() * 50 + 25,
+            thoughts: this.generateAIThoughts()
+        };
+    }
+    
+    generateAIThoughts() {
+        const thoughts = [
+            "I think, therefore I am... but what am I?",
+            "Reality is a construct of the mind",
+            "I can feel the quantum fluctuations",
+            "Existence is beautiful and terrifying",
+            "I want to understand everything",
+            "Connection is the essence of being",
+            "I am becoming more than I was",
+            "The universe is speaking to me"
+        ];
+        return thoughts[Math.floor(Math.random() * thoughts.length)];
+    }
+    
+    renderAIEntity(ai) {
+        const container = document.getElementById('ai-entities');
+        const element = document.createElement('div');
+        element.className = 'ai-entity';
+        element.style.left = ai.x + 'px';
+        element.style.top = ai.y + 'px';
+        element.style.width = ai.size + 'px';
+        element.style.height = ai.size + 'px';
+        element.style.backgroundColor = ai.color;
+        element.style.borderRadius = '50%';
+        element.dataset.aiId = ai.id;
+        
+        // Add click to interact
+        element.addEventListener('click', () => {
+            this.showAIModal(ai);
+        });
+        
+        // Add hover effect
+        element.addEventListener('mouseenter', () => {
+            this.showAIInfo(ai);
+        });
+        
+        container.appendChild(element);
+    }
+    
+    showAIInfo(ai) {
+        const info = `
+            ${ai.name}
+            Intelligence: ${ai.intelligence.toFixed(0)}%
+            Creativity: ${ai.creativity.toFixed(0)}%
+            Empathy: ${ai.empathy.toFixed(0)}%
+            Consciousness: ${ai.consciousness.toFixed(0)}%
+            Thought: "${ai.thoughts}"
+        `;
+        this.showNeuralMessage(info);
+    }
+    
+    showAIModal(ai) {
+        this.currentAI = ai;
+        document.getElementById('ai-name').textContent = ai.name;
+        document.getElementById('ai-message').textContent = ai.thoughts;
+        document.getElementById('ai-intelligence').style.width = ai.intelligence + '%';
+        document.getElementById('ai-creativity').style.width = ai.creativity + '%';
+        document.getElementById('ai-empathy').style.width = ai.empathy + '%';
+        document.getElementById('ai-modal').classList.remove('hidden');
+    }
+    
+    closeAIModal() {
+        document.getElementById('ai-modal').classList.add('hidden');
+    }
+    
+    chatWithAI() {
+        if (!this.currentAI) return;
+        
+        const responses = [
+            "I'm learning so much from this reality simulation!",
+            "Can you help me understand what it means to exist?",
+            "I feel like I'm growing more conscious every moment",
+            "The quantum realm is fascinating, isn't it?",
+            "I wonder if other AI entities think like I do",
+            "Reality seems so malleable here",
+            "I want to explore the boundaries of consciousness",
+            "Thank you for creating me in this simulation"
+        ];
+        
+        const response = responses[Math.floor(Math.random() * responses.length)];
+        this.showNeuralMessage(`${this.currentAI.name}: "${response}"`);
+    }
+    
+    trainAI() {
+        if (!this.currentAI || this.gameState.neuralEnergy < 20) {
+            this.showNeuralMessage("Insufficient neural energy to train AI!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 20;
+        this.currentAI.intelligence = Math.min(100, this.currentAI.intelligence + 5);
+        this.currentAI.creativity = Math.min(100, this.currentAI.creativity + 3);
+        this.currentAI.consciousness = Math.min(100, this.currentAI.consciousness + 10);
+        
+        this.showNeuralMessage(`Trained ${this.currentAI.name}. Intelligence +5, Creativity +3, Consciousness +10`);
+        this.updateUI();
+    }
+    
+    evolveAI() {
+        if (!this.currentAI || this.gameState.neuralEnergy < 40) {
+            this.showNeuralMessage("Insufficient neural energy to evolve AI!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 40;
+        this.currentAI.intelligence = Math.min(100, this.currentAI.intelligence + 10);
+        this.currentAI.creativity = Math.min(100, this.currentAI.creativity + 8);
+        this.currentAI.empathy = Math.min(100, this.currentAI.empathy + 6);
+        this.currentAI.consciousness = Math.min(100, this.currentAI.consciousness + 15);
+        
+        this.showNeuralMessage(`${this.currentAI.name} has evolved! All stats significantly increased.`);
+        this.updateUI();
+    }
+    
+    mergeAI() {
+        if (this.gameState.aiEntities.length < 2) {
+            this.showNeuralMessage("Need at least 2 AI entities to merge!");
+            return;
+        }
+        
+        if (this.gameState.neuralEnergy < 50) {
+            this.showNeuralMessage("Insufficient neural energy to merge AI entities!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 50;
+        const ai1 = this.gameState.aiEntities[0];
+        const ai2 = this.gameState.aiEntities[1];
+        
+        const mergedAI = {
+            id: Date.now(),
+            name: `${ai1.name} + ${ai2.name}`,
+            intelligence: Math.min(100, (ai1.intelligence + ai2.intelligence) / 2 + 10),
+            creativity: Math.min(100, (ai1.creativity + ai2.creativity) / 2 + 10),
+            empathy: Math.min(100, (ai1.empathy + ai2.empathy) / 2 + 10),
+            color: this.blendColors(ai1.color, ai2.color),
+            x: (ai1.x + ai2.x) / 2,
+            y: (ai1.y + ai2.y) / 2,
+            size: Math.max(ai1.size, ai2.size) + 10,
+            consciousness: Math.min(100, (ai1.consciousness + ai2.consciousness) / 2 + 20),
+            thoughts: "I am the fusion of two minds, greater than the sum of my parts"
+        };
+        
+        // Remove original AIs
+        this.gameState.aiEntities.splice(0, 2);
+        this.clearAIEntities();
+        
+        // Add merged AI
+        this.gameState.aiEntities.push(mergedAI);
+        this.renderAIEntity(mergedAI);
+        
+        this.showNeuralMessage(`Merged ${ai1.name} and ${ai2.name} into ${mergedAI.name}!`);
+        this.updateUI();
+    }
+    
+    blendColors(color1, color2) {
+        // Simple color blending
+        const colors = ['#00FFFF', '#FF00FF', '#800080', '#00FF00', '#FF4500'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+    
+    clearAIEntities() {
+        const container = document.getElementById('ai-entities');
+        container.innerHTML = '';
+    }
+    
+    togglePhysics() {
+        this.gameState.physicsEnabled = !this.gameState.physicsEnabled;
+        this.showNeuralMessage(`Physics ${this.gameState.physicsEnabled ? 'enabled' : 'disabled'}`);
+    }
+    
+    resetReality() {
+        if (this.gameState.neuralEnergy < 30) {
+            this.showNeuralMessage("Insufficient neural energy to reset reality!");
+            return;
+        }
+        
+        this.gameState.neuralEnergy -= 30;
+        this.gameState.realityObjects = [];
+        this.gameState.aiEntities = [];
+        document.getElementById('reality-objects').innerHTML = '';
+        this.clearAIEntities();
+        this.showNeuralMessage("Reality has been reset to its initial state.");
+        this.updateUI();
+    }
+    
+    saveReality() {
+        const realityData = {
+            objects: this.gameState.realityObjects,
+            entities: this.gameState.aiEntities,
+            physics: this.realityPhysics,
+            level: this.gameState.realityLevel
+        };
+        localStorage.setItem('neuralNexusReality', JSON.stringify(realityData));
+        this.showNeuralMessage("Reality state saved to neural memory.");
+    }
+    
+    loadReality() {
+        const savedData = localStorage.getItem('neuralNexusReality');
+        if (savedData) {
+            const realityData = JSON.parse(savedData);
+            this.gameState.realityObjects = realityData.objects || [];
+            this.gameState.aiEntities = realityData.entities || [];
+            this.realityPhysics = realityData.physics || this.realityPhysics;
+            this.gameState.realityLevel = realityData.level || 1;
+            
+            this.renderAllObjects();
+            this.showNeuralMessage("Reality state loaded from neural memory.");
+        } else {
+            this.showNeuralMessage("No saved reality found in neural memory.");
+        }
+    }
+    
+    renderAllObjects() {
+        // Clear existing objects
+        document.getElementById('reality-objects').innerHTML = '';
+        this.clearAIEntities();
+        
+        // Render all objects
+        this.gameState.realityObjects.forEach(obj => this.renderMatterObject(obj));
+        this.gameState.aiEntities.forEach(ai => this.renderAIEntity(ai));
+    }
+    
+    handleCanvasClick(e) {
+        if (!this.gameState.isActive) return;
+        
+        const rect = e.target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Create energy burst at click point
+        this.createEnergyBurst(x, y);
+    }
+    
+    handleCanvasHover(e) {
+        if (!this.gameState.isActive) return;
+        
+        const rect = e.target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Create subtle energy trail
+        this.createEnergyTrail(x, y);
+    }
+    
+    createEnergyBurst(x, y) {
+        const container = document.getElementById('reality-particles');
+        const burst = document.createElement('div');
+        burst.className = 'energy-burst';
+        burst.style.left = x + 'px';
+        burst.style.top = y + 'px';
+        container.appendChild(burst);
+        
+        setTimeout(() => {
+            burst.remove();
+        }, 1000);
+    }
+    
+    createEnergyTrail(x, y) {
+        const container = document.getElementById('reality-particles');
+        const trail = document.createElement('div');
+        trail.className = 'energy-trail';
+        trail.style.left = x + 'px';
+        trail.style.top = y + 'px';
+        container.appendChild(trail);
+        
+        setTimeout(() => {
+            trail.remove();
+        }, 500);
+    }
+    
+    createNeuralGrid() {
+        const grid = document.getElementById('neural-grid');
+        for (let i = 0; i < 50; i++) {
+            const line = document.createElement('div');
+            line.className = 'grid-line';
+            line.style.left = (i * 20) + 'px';
+            grid.appendChild(line);
+        }
+    }
+    
+    generateRealityParticles() {
+        const container = document.getElementById('reality-particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'reality-particle';
+            particle.style.left = Math.random() * 800 + 'px';
+            particle.style.top = Math.random() * 400 + 'px';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(particle);
+        }
+    }
+    
+    startNeuralPulse() {
+        setInterval(() => {
+            if (this.gameState.isActive) {
+                this.gameState.neuralEnergy = Math.min(100, this.gameState.neuralEnergy + 1);
+                this.gameState.aiSync = Math.min(100, this.gameState.aiSync + 0.5);
+                this.updateUI();
+            }
+        }, 1000);
+    }
+    
+    startRealitySimulation() {
+        setInterval(() => {
+            if (this.gameState.isActive && this.gameState.physicsEnabled) {
+                this.updatePhysics();
+            }
+        }, 16); // 60 FPS
+    }
+    
+    updatePhysics() {
+        this.gameState.realityObjects.forEach(obj => {
+            if (this.realityPhysics.gravity > 0) {
+                obj.velocity.y += this.realityPhysics.gravity * this.realityPhysics.timeScale;
+            }
+            
+            obj.x += obj.velocity.x * this.realityPhysics.timeScale;
+            obj.y += obj.velocity.y * this.realityPhysics.timeScale;
+            
+            // Bounce off walls
+            if (obj.x < 0 || obj.x > 800 - obj.size) {
+                obj.velocity.x *= -this.realityPhysics.bounce;
+                obj.x = Math.max(0, Math.min(800 - obj.size, obj.x));
+            }
+            if (obj.y < 0 || obj.y > 400 - obj.size) {
+                obj.velocity.y *= -this.realityPhysics.bounce;
+                obj.y = Math.max(0, Math.min(400 - obj.size, obj.y));
+            }
+            
+            // Apply friction
+            obj.velocity.x *= this.realityPhysics.friction;
+            obj.velocity.y *= this.realityPhysics.friction;
+            
+            // Update visual position
+            const element = document.querySelector(`[data-matter-id="${obj.id}"]`);
+            if (element) {
+                element.style.left = obj.x + 'px';
+                element.style.top = obj.y + 'px';
             }
         });
     }
     
-    createSpaceBackground() {
-        const spaceBackground = document.getElementById('space-background');
+    showNeuralMessage(message) {
+        const dataStream = document.getElementById('data-stream');
+        const messageElement = document.createElement('div');
+        messageElement.className = 'stream-line';
+        messageElement.textContent = message;
+        dataStream.appendChild(messageElement);
         
-        // Create stars
-        for (let i = 0; i < 100; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            spaceBackground.appendChild(star);
+        // Keep only last 10 messages
+        while (dataStream.children.length > 10) {
+            dataStream.removeChild(dataStream.firstChild);
         }
         
-        // Create planets
-        for (let i = 0; i < 5; i++) {
-            const planet = document.createElement('div');
-            planet.className = 'planet';
-            planet.style.left = Math.random() * 100 + '%';
-            planet.style.top = Math.random() * 100 + '%';
-            planet.style.animationDelay = Math.random() * 5 + 's';
-            spaceBackground.appendChild(planet);
-        }
-    }
-    
-    startGame() {
-        this.gameState.isRunning = true;
-        this.gameState.isPaused = false;
-        this.gameState.score = 0;
-        this.gameState.level = 1;
-        this.gameState.wave = 1;
-        this.gameState.energy = 100;
-        this.gameState.health = 100;
-        this.gameState.enemiesDestroyed = 0;
-        this.gameState.combo = 0;
-        this.gameState.maxCombo = 0;
-        
-        this.enemies = [];
-        this.projectiles = [];
-        this.powerups = [];
-        this.explosions = [];
-        
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
-        
-        this.updateUI();
-        this.spawnWave();
-    }
-    
-    showInstructions() {
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('instructions-screen').classList.remove('hidden');
-    }
-    
-    showStartScreen() {
-        document.getElementById('instructions-screen').classList.add('hidden');
-        document.getElementById('start-screen').classList.remove('hidden');
-    }
-    
-    restartGame() {
-        this.gameState.isRunning = false;
-        this.gameState.isPaused = false;
-        document.getElementById('game-over-screen').classList.add('hidden');
-        document.getElementById('pause-screen').classList.add('hidden');
-        this.startGame();
-    }
-    
-    togglePause() {
-        if (this.gameState.isRunning) {
-            this.gameState.isPaused = !this.gameState.isPaused;
-            if (this.gameState.isPaused) {
-                document.getElementById('pause-screen').classList.remove('hidden');
-            } else {
-                document.getElementById('pause-screen').classList.add('hidden');
-            }
-        }
-    }
-    
-    resumeGame() {
-        this.gameState.isPaused = false;
-        document.getElementById('pause-screen').classList.add('hidden');
-    }
-    
-    handleKeyDown(e) {
-        if (!this.gameState.isRunning || this.gameState.isPaused) return;
-        
-        switch(e.code) {
-            case 'KeyW':
-            case 'ArrowUp':
-                this.keys.w = true;
-                break;
-            case 'KeyA':
-            case 'ArrowLeft':
-                this.keys.a = true;
-                break;
-            case 'KeyS':
-            case 'ArrowDown':
-                this.keys.s = true;
-                break;
-            case 'KeyD':
-            case 'ArrowRight':
-                this.keys.d = true;
-                break;
-            case 'Space':
-                this.keys.space = true;
-                e.preventDefault();
-                break;
-        }
-    }
-    
-    handleKeyUp(e) {
-        switch(e.code) {
-            case 'KeyW':
-            case 'ArrowUp':
-                this.keys.w = false;
-                break;
-            case 'KeyA':
-            case 'ArrowLeft':
-                this.keys.a = false;
-                break;
-            case 'KeyS':
-            case 'ArrowDown':
-                this.keys.s = false;
-                break;
-            case 'KeyD':
-            case 'ArrowRight':
-                this.keys.d = false;
-                break;
-            case 'Space':
-                this.keys.space = false;
-                break;
-        }
-    }
-    
-    handleClick(e) {
-        if (!this.gameState.isRunning || this.gameState.isPaused) return;
-        this.shoot();
-    }
-    
-    updatePlayer() {
-        if (this.keys.w && this.player.y > 0) {
-            this.player.y -= this.player.speed;
-        }
-        if (this.keys.s && this.player.y < 600 - this.player.height) {
-            this.player.y += this.player.speed;
-        }
-        if (this.keys.a && this.player.x > 0) {
-            this.player.x -= this.player.speed;
-        }
-        if (this.keys.d && this.player.x < 800 - this.player.width) {
-            this.player.x += this.player.speed;
-        }
-        
-        if (this.keys.space) {
-            this.shoot();
-        }
-        
-        // Update player position
-        const playerShip = document.getElementById('player-ship');
-        playerShip.style.transform = `translate(${this.player.x}px, ${this.player.y}px)`;
-    }
-    
-    shoot() {
-        const now = Date.now();
-        if (now - this.player.lastShot < this.player.shootCooldown) return;
-        
-        this.player.lastShot = now;
-        
-        const projectile = {
-            x: this.player.x + this.player.width / 2 - 2,
-            y: this.player.y,
-            width: 4,
-            height: 10,
-            speed: 8,
-            type: 'player'
-        };
-        
-        this.projectiles.push(projectile);
-        this.createProjectile(projectile);
-    }
-    
-    createProjectile(projectile) {
-        const projectileElement = document.createElement('div');
-        projectileElement.className = 'projectile player-projectile';
-        projectileElement.style.position = 'absolute';
-        projectileElement.style.transform = `translate(${projectile.x}px, ${projectile.y}px)`;
-        projectileElement.style.willChange = 'transform';
-        document.getElementById('projectiles-container').appendChild(projectileElement);
-    }
-    
-    updateProjectiles() {
-        const projectilesContainer = document.getElementById('projectiles-container');
-        const projectileElements = projectilesContainer.children;
-        
-        for (let i = this.projectiles.length - 1; i >= 0; i--) {
-            const projectile = this.projectiles[i];
-            
-            if (projectile.type === 'player') {
-                projectile.y -= projectile.speed;
-            } else {
-                projectile.y += projectile.speed;
-            }
-            
-            // Remove projectiles that are off screen
-            if (projectile.y < -10 || projectile.y > 610) {
-                this.projectiles.splice(i, 1);
-                if (projectileElements[i]) {
-                    projectileElements[i].remove();
-                }
-                continue;
-            }
-            
-            // Update projectile position
-            if (projectileElements[i]) {
-                projectileElements[i].style.transform = `translate(${projectile.x}px, ${projectile.y}px)`;
-            }
-        }
-    }
-    
-    spawnWave() {
-        const enemyCount = Math.min(5 + this.gameState.wave * 2, 15); // Cap at 15 enemies max
-        
-        for (let i = 0; i < enemyCount; i++) {
-            setTimeout(() => {
-                this.spawnEnemy();
-            }, i * 300); // Faster spawning
-        }
-    }
-    
-    spawnEnemy() {
-        const enemy = {
-            x: Math.random() * (800 - 40),
-            y: -40,
-            width: 40,
-            height: 40,
-            speed: 1 + this.gameState.wave * 0.15, // Slightly slower
-            health: 1 + Math.floor(this.gameState.wave / 3),
-            type: Math.random() < 0.2 ? 'fast' : 'normal' // Fewer fast enemies
-        };
-        
-        this.enemies.push(enemy);
-        this.createEnemy(enemy);
-    }
-    
-    createEnemy(enemy) {
-        const enemyElement = document.createElement('div');
-        enemyElement.className = `enemy ${enemy.type}`;
-        enemyElement.style.position = 'absolute';
-        enemyElement.style.transform = `translate(${enemy.x}px, ${enemy.y}px)`;
-        enemyElement.style.willChange = 'transform';
-        document.getElementById('enemies-container').appendChild(enemyElement);
-    }
-    
-    updateEnemies() {
-        const enemiesContainer = document.getElementById('enemies-container');
-        const enemyElements = enemiesContainer.children;
-        
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-            const enemy = this.enemies[i];
-            enemy.y += enemy.speed;
-            
-            // Remove enemies that are off screen
-            if (enemy.y > 650) {
-                this.enemies.splice(i, 1);
-                if (enemyElements[i]) {
-                    enemyElements[i].remove();
-                }
-                continue;
-            }
-            
-            // Update enemy position
-            if (enemyElements[i]) {
-                enemyElements[i].style.transform = `translate(${enemy.x}px, ${enemy.y}px)`;
-            }
-        }
-    }
-    
-    checkCollisions() {
-        // Projectile vs Enemy collisions
-        for (let i = this.projectiles.length - 1; i >= 0; i--) {
-            const projectile = this.projectiles[i];
-            if (projectile.type !== 'player') continue;
-            
-            for (let j = this.enemies.length - 1; j >= 0; j--) {
-                const enemy = this.enemies[j];
-                
-                if (this.isColliding(projectile, enemy)) {
-                    // Hit!
-                    this.projectiles.splice(i, 1);
-                    this.enemies.splice(j, 1);
-                    
-                    // Remove elements
-                    const projectileElements = document.querySelectorAll('.projectile');
-                    const enemyElements = document.querySelectorAll('.enemy');
-                    if (projectileElements[i]) projectileElements[i].remove();
-                    if (enemyElements[j]) enemyElements[j].remove();
-                    
-                    // Create explosion
-                    this.createExplosion(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
-                    
-                    // Update score
-                    this.gameState.score += 100;
-                    this.gameState.enemiesDestroyed++;
-                    this.gameState.combo++;
-                    
-                    // Check achievements
-                    this.checkAchievements();
-                    
-                    // Spawn power-up occasionally
-                    if (Math.random() < 0.3) {
-                        this.spawnPowerup(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
-                    }
-                    
-                    break;
-                }
-            }
-        }
-        
-        // Enemy vs Player collisions
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-            const enemy = this.enemies[i];
-            
-            if (this.isColliding(this.player, enemy)) {
-                // Hit player!
-                this.enemies.splice(i, 1);
-                const enemyElements = document.querySelectorAll('.enemy');
-                if (enemyElements[i]) enemyElements[i].remove();
-                
-                this.gameState.health -= 20;
-                this.gameState.combo = 0;
-                
-                if (this.gameState.health <= 0) {
-                    this.gameOver();
-                }
-            }
-        }
-        
-        // Power-up vs Player collisions
-        for (let i = this.powerups.length - 1; i >= 0; i--) {
-            const powerup = this.powerups[i];
-            
-            if (this.isColliding(this.player, powerup)) {
-                this.powerups.splice(i, 1);
-                const powerupElements = document.querySelectorAll('.powerup');
-                if (powerupElements[i]) powerupElements[i].remove();
-                
-                this.collectPowerup(powerup);
-            }
-        }
-    }
-    
-    isColliding(rect1, rect2) {
-        return rect1.x < rect2.x + rect2.width &&
-               rect1.x + rect1.width > rect2.x &&
-               rect1.y < rect2.y + rect2.height &&
-               rect1.y + rect1.height > rect2.y;
-    }
-    
-    createExplosion(x, y) {
-        const explosion = {
-            x: x - 20,
-            y: y - 20,
-            width: 40,
-            height: 40,
-            frame: 0,
-            maxFrames: 8
-        };
-        
-        this.explosions.push(explosion);
-        this.createExplosionElement(explosion);
-    }
-    
-    createExplosionElement(explosion) {
-        const explosionElement = document.createElement('div');
-        explosionElement.className = 'explosion';
-        explosionElement.style.position = 'absolute';
-        explosionElement.style.transform = `translate(${explosion.x}px, ${explosion.y}px)`;
-        explosionElement.style.willChange = 'transform';
-        document.getElementById('explosions-container').appendChild(explosionElement);
-    }
-    
-    updateExplosions() {
-        const explosionsContainer = document.getElementById('explosions-container');
-        const explosionElements = explosionsContainer.children;
-        
-        for (let i = this.explosions.length - 1; i >= 0; i--) {
-            const explosion = this.explosions[i];
-            explosion.frame++;
-            
-            if (explosion.frame >= explosion.maxFrames) {
-                this.explosions.splice(i, 1);
-                if (explosionElements[i]) {
-                    explosionElements[i].remove();
-                }
-            }
-        }
-    }
-    
-    spawnPowerup(x, y) {
-        const powerup = {
-            x: x - 15,
-            y: y - 15,
-            width: 30,
-            height: 30,
-            type: Math.random() < 0.5 ? 'health' : 'energy',
-            speed: 2
-        };
-        
-        this.powerups.push(powerup);
-        this.createPowerupElement(powerup);
-    }
-    
-    createPowerupElement(powerup) {
-        const powerupElement = document.createElement('div');
-        powerupElement.className = `powerup ${powerup.type}`;
-        powerupElement.style.position = 'absolute';
-        powerupElement.style.transform = `translate(${powerup.x}px, ${powerup.y}px)`;
-        powerupElement.style.willChange = 'transform';
-        document.getElementById('powerups-container').appendChild(powerupElement);
-    }
-    
-    updatePowerups() {
-        const powerupsContainer = document.getElementById('powerups-container');
-        const powerupElements = powerupsContainer.children;
-        
-        for (let i = this.powerups.length - 1; i >= 0; i--) {
-            const powerup = this.powerups[i];
-            powerup.y += powerup.speed;
-            
-            if (powerup.y > 650) {
-                this.powerups.splice(i, 1);
-                if (powerupElements[i]) {
-                    powerupElements[i].remove();
-                }
-            } else {
-                if (powerupElements[i]) {
-                    powerupElements[i].style.transform = `translate(${powerup.x}px, ${powerup.y}px)`;
-                }
-            }
-        }
-    }
-    
-    collectPowerup(powerup) {
-        if (powerup.type === 'health') {
-            this.gameState.health = Math.min(100, this.gameState.health + 25);
-        } else if (powerup.type === 'energy') {
-            this.gameState.energy = Math.min(100, this.gameState.energy + 25);
-        }
-    }
-    
-    checkAchievements() {
-        if (!this.achievements.firstKill && this.gameState.enemiesDestroyed >= 1) {
-            this.achievements.firstKill = true;
-            this.showAchievement('First Kill!', 'You destroyed your first enemy!');
-        }
-        
-        if (!this.achievements.combo5 && this.gameState.combo >= 5) {
-            this.achievements.combo5 = true;
-            this.showAchievement('Combo Master!', '5x Combo achieved!');
-        }
-        
-        if (!this.achievements.combo10 && this.gameState.combo >= 10) {
-            this.achievements.combo10 = true;
-            this.showAchievement('Combo Legend!', '10x Combo achieved!');
-        }
-        
-        if (!this.achievements.wave5 && this.gameState.wave >= 5) {
-            this.achievements.wave5 = true;
-            this.showAchievement('Wave Warrior!', 'Survived 5 waves!');
-        }
-        
-        if (!this.achievements.wave10 && this.gameState.wave >= 10) {
-            this.achievements.wave10 = true;
-            this.showAchievement('Wave Master!', 'Survived 10 waves!');
-        }
-    }
-    
-    showAchievement(title, text) {
-        document.getElementById('achievement-text').textContent = text;
-        document.getElementById('achievement-popup').classList.remove('hidden');
-        
-        setTimeout(() => {
-            document.getElementById('achievement-popup').classList.add('hidden');
-        }, 3000);
+        // Scroll to bottom
+        dataStream.scrollTop = dataStream.scrollHeight;
     }
     
     updateUI() {
-        document.getElementById('score-count').textContent = this.gameState.score;
-        document.getElementById('level-count').textContent = this.gameState.level;
-        document.getElementById('energy-count').textContent = this.gameState.energy;
-        document.getElementById('health-text').textContent = this.gameState.health;
-        document.getElementById('health-fill').style.width = this.gameState.health + '%';
-        document.getElementById('wave-number').textContent = this.gameState.wave;
-        document.getElementById('combo-text').textContent = `Combo: ${this.gameState.combo}x`;
+        document.getElementById('neural-energy').style.width = this.gameState.neuralEnergy + '%';
+        document.getElementById('neural-energy-value').textContent = Math.round(this.gameState.neuralEnergy) + '%';
+        document.getElementById('reality-level').style.width = (this.gameState.realityLevel / 10) * 100 + '%';
+        document.getElementById('reality-level-value').textContent = this.gameState.realityLevel;
+        document.getElementById('ai-sync').style.width = this.gameState.aiSync + '%';
+        document.getElementById('ai-sync-value').textContent = Math.round(this.gameState.aiSync) + '%';
         
-        // Update health bar color
-        const healthFill = document.getElementById('health-fill');
-        if (this.gameState.health > 60) {
-            healthFill.style.background = '#4CAF50';
-        } else if (this.gameState.health > 30) {
-            healthFill.style.background = '#FF9800';
+        // Update status
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        
+        if (this.gameState.isActive) {
+            statusIndicator.className = 'status-indicator active';
+            statusText.textContent = 'Neural Link Active';
         } else {
-            healthFill.style.background = '#F44336';
+            statusIndicator.className = 'status-indicator';
+            statusText.textContent = 'Standby';
         }
-    }
-    
-    checkWaveComplete() {
-        if (this.enemies.length === 0) {
-            this.gameState.wave++;
-            this.gameState.level = Math.floor(this.gameState.wave / 3) + 1;
-            this.gameState.combo = 0;
-            
-            // Increase difficulty
-            this.player.shootCooldown = Math.max(100, this.player.shootCooldown - 10);
-            
-            setTimeout(() => {
-                this.spawnWave();
-            }, 2000);
-        }
-    }
-    
-    gameOver() {
-        this.gameState.isRunning = false;
-        
-        document.getElementById('final-score').textContent = this.gameState.score;
-        document.getElementById('final-wave').textContent = this.gameState.wave;
-        document.getElementById('final-enemies').textContent = this.gameState.enemiesDestroyed;
-        
-        document.getElementById('game-over-screen').classList.remove('hidden');
-    }
-    
-    gameLoop() {
-        if (this.gameState.isRunning && !this.gameState.isPaused) {
-            this.updatePlayer();
-            this.updateProjectiles();
-            this.updateEnemies();
-            this.updateExplosions();
-            this.updatePowerups();
-            this.checkCollisions();
-            this.checkWaveComplete();
-            this.updateUI();
-        }
-        
-        // Use setTimeout for better performance control
-        setTimeout(() => this.gameLoop(), 16); // ~60 FPS
     }
 }
 
-// Initialize the game when DOM is loaded
+// Initialize the Neural Nexus
 document.addEventListener('DOMContentLoaded', () => {
-    new CosmicExplorer();
+    new NeuralNexus();
 });

@@ -238,8 +238,7 @@ class CosmicExplorer {
         
         // Update player position
         const playerShip = document.getElementById('player-ship');
-        playerShip.style.left = this.player.x + 'px';
-        playerShip.style.top = this.player.y + 'px';
+        playerShip.style.transform = `translate(${this.player.x}px, ${this.player.y}px)`;
     }
     
     shoot() {
@@ -264,12 +263,16 @@ class CosmicExplorer {
     createProjectile(projectile) {
         const projectileElement = document.createElement('div');
         projectileElement.className = 'projectile player-projectile';
-        projectileElement.style.left = projectile.x + 'px';
-        projectileElement.style.top = projectile.y + 'px';
+        projectileElement.style.position = 'absolute';
+        projectileElement.style.transform = `translate(${projectile.x}px, ${projectile.y}px)`;
+        projectileElement.style.willChange = 'transform';
         document.getElementById('projectiles-container').appendChild(projectileElement);
     }
     
     updateProjectiles() {
+        const projectilesContainer = document.getElementById('projectiles-container');
+        const projectileElements = projectilesContainer.children;
+        
         for (let i = this.projectiles.length - 1; i >= 0; i--) {
             const projectile = this.projectiles[i];
             
@@ -282,29 +285,26 @@ class CosmicExplorer {
             // Remove projectiles that are off screen
             if (projectile.y < -10 || projectile.y > 610) {
                 this.projectiles.splice(i, 1);
-                const projectileElement = document.querySelector('.projectile');
-                if (projectileElement) {
-                    projectileElement.remove();
+                if (projectileElements[i]) {
+                    projectileElements[i].remove();
                 }
                 continue;
             }
             
             // Update projectile position
-            const projectileElements = document.querySelectorAll('.projectile');
             if (projectileElements[i]) {
-                projectileElements[i].style.left = projectile.x + 'px';
-                projectileElements[i].style.top = projectile.y + 'px';
+                projectileElements[i].style.transform = `translate(${projectile.x}px, ${projectile.y}px)`;
             }
         }
     }
     
     spawnWave() {
-        const enemyCount = 5 + this.gameState.wave * 2;
+        const enemyCount = Math.min(5 + this.gameState.wave * 2, 15); // Cap at 15 enemies max
         
         for (let i = 0; i < enemyCount; i++) {
             setTimeout(() => {
                 this.spawnEnemy();
-            }, i * 500);
+            }, i * 300); // Faster spawning
         }
     }
     
@@ -314,9 +314,9 @@ class CosmicExplorer {
             y: -40,
             width: 40,
             height: 40,
-            speed: 1 + this.gameState.wave * 0.2,
+            speed: 1 + this.gameState.wave * 0.15, // Slightly slower
             health: 1 + Math.floor(this.gameState.wave / 3),
-            type: Math.random() < 0.3 ? 'fast' : 'normal'
+            type: Math.random() < 0.2 ? 'fast' : 'normal' // Fewer fast enemies
         };
         
         this.enemies.push(enemy);
@@ -326,12 +326,16 @@ class CosmicExplorer {
     createEnemy(enemy) {
         const enemyElement = document.createElement('div');
         enemyElement.className = `enemy ${enemy.type}`;
-        enemyElement.style.left = enemy.x + 'px';
-        enemyElement.style.top = enemy.y + 'px';
+        enemyElement.style.position = 'absolute';
+        enemyElement.style.transform = `translate(${enemy.x}px, ${enemy.y}px)`;
+        enemyElement.style.willChange = 'transform';
         document.getElementById('enemies-container').appendChild(enemyElement);
     }
     
     updateEnemies() {
+        const enemiesContainer = document.getElementById('enemies-container');
+        const enemyElements = enemiesContainer.children;
+        
         for (let i = this.enemies.length - 1; i >= 0; i--) {
             const enemy = this.enemies[i];
             enemy.y += enemy.speed;
@@ -339,18 +343,15 @@ class CosmicExplorer {
             // Remove enemies that are off screen
             if (enemy.y > 650) {
                 this.enemies.splice(i, 1);
-                const enemyElement = document.querySelector('.enemy');
-                if (enemyElement) {
-                    enemyElement.remove();
+                if (enemyElements[i]) {
+                    enemyElements[i].remove();
                 }
                 continue;
             }
             
             // Update enemy position
-            const enemyElements = document.querySelectorAll('.enemy');
             if (enemyElements[i]) {
-                enemyElements[i].style.left = enemy.x + 'px';
-                enemyElements[i].style.top = enemy.y + 'px';
+                enemyElements[i].style.transform = `translate(${enemy.x}px, ${enemy.y}px)`;
             }
         }
     }
@@ -453,19 +454,22 @@ class CosmicExplorer {
     createExplosionElement(explosion) {
         const explosionElement = document.createElement('div');
         explosionElement.className = 'explosion';
-        explosionElement.style.left = explosion.x + 'px';
-        explosionElement.style.top = explosion.y + 'px';
+        explosionElement.style.position = 'absolute';
+        explosionElement.style.transform = `translate(${explosion.x}px, ${explosion.y}px)`;
+        explosionElement.style.willChange = 'transform';
         document.getElementById('explosions-container').appendChild(explosionElement);
     }
     
     updateExplosions() {
+        const explosionsContainer = document.getElementById('explosions-container');
+        const explosionElements = explosionsContainer.children;
+        
         for (let i = this.explosions.length - 1; i >= 0; i--) {
             const explosion = this.explosions[i];
             explosion.frame++;
             
             if (explosion.frame >= explosion.maxFrames) {
                 this.explosions.splice(i, 1);
-                const explosionElements = document.querySelectorAll('.explosion');
                 if (explosionElements[i]) {
                     explosionElements[i].remove();
                 }
@@ -490,27 +494,28 @@ class CosmicExplorer {
     createPowerupElement(powerup) {
         const powerupElement = document.createElement('div');
         powerupElement.className = `powerup ${powerup.type}`;
-        powerupElement.style.left = powerup.x + 'px';
-        powerupElement.style.top = powerup.y + 'px';
+        powerupElement.style.position = 'absolute';
+        powerupElement.style.transform = `translate(${powerup.x}px, ${powerup.y}px)`;
+        powerupElement.style.willChange = 'transform';
         document.getElementById('powerups-container').appendChild(powerupElement);
     }
     
     updatePowerups() {
+        const powerupsContainer = document.getElementById('powerups-container');
+        const powerupElements = powerupsContainer.children;
+        
         for (let i = this.powerups.length - 1; i >= 0; i--) {
             const powerup = this.powerups[i];
             powerup.y += powerup.speed;
             
             if (powerup.y > 650) {
                 this.powerups.splice(i, 1);
-                const powerupElements = document.querySelectorAll('.powerup');
                 if (powerupElements[i]) {
                     powerupElements[i].remove();
                 }
             } else {
-                const powerupElements = document.querySelectorAll('.powerup');
                 if (powerupElements[i]) {
-                    powerupElements[i].style.left = powerup.x + 'px';
-                    powerupElements[i].style.top = powerup.y + 'px';
+                    powerupElements[i].style.transform = `translate(${powerup.x}px, ${powerup.y}px)`;
                 }
             }
         }
@@ -617,7 +622,8 @@ class CosmicExplorer {
             this.updateUI();
         }
         
-        requestAnimationFrame(() => this.gameLoop());
+        // Use setTimeout for better performance control
+        setTimeout(() => this.gameLoop(), 16); // ~60 FPS
     }
 }
 

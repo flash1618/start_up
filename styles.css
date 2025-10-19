@@ -193,6 +193,8 @@ body {
     height: 80px;
     z-index: 50;
     transition: all 0.1s ease;
+    will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .ship-body {
@@ -232,6 +234,8 @@ body {
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     box-shadow: 0 0 15px var(--primary-red);
     animation: enemyGlow 1s ease-in-out infinite alternate;
+    will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .enemy.fast {
@@ -253,6 +257,8 @@ body {
     width: 4px;
     height: 10px;
     border-radius: 2px;
+    will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .player-projectile {
@@ -275,6 +281,8 @@ body {
     height: 30px;
     border-radius: 50%;
     animation: powerupGlow 1s ease-in-out infinite alternate;
+    will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .powerup.health {
@@ -302,6 +310,8 @@ body {
     background: radial-gradient(circle, var(--primary-orange) 0%, var(--primary-red) 50%, transparent 100%);
     border-radius: 50%;
     animation: explode 0.5s ease-out forwards;
+    will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 /* UI Overlay */

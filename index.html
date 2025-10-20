@@ -3,165 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neural Nexus - AI-Powered Reality Simulator</title>
+    <title>Duolingo - Learn Spanish for free</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="neural-container">
+    <div class="duolingo-app">
         
-        <!-- Neural Interface Header -->
-        <header class="neural-header">
-            <div class="neural-logo">
-                <div class="neural-icon">🧠</div>
-                <h1>Neural Nexus</h1>
-                <div class="neural-status">
-                    <span class="status-indicator" id="status-indicator"></span>
-                    <span class="status-text" id="status-text">Initializing...</span>
-                </div>
-            </div>
-            <div class="neural-controls">
-                <div class="neural-metric">
-                    <span class="metric-label">Neural Energy</span>
-                    <div class="metric-bar">
-                        <div class="metric-fill" id="neural-energy"></div>
+        <!-- Header -->
+        <header class="duolingo-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="duolingo-logo">
+                        <div class="logo-icon">🦉</div>
+                        <span class="logo-text">Duolingo</span>
                     </div>
-                    <span class="metric-value" id="neural-energy-value">100%</span>
                 </div>
-                <div class="neural-metric">
-                    <span class="metric-label">Reality Level</span>
-                    <div class="metric-bar">
-                        <div class="metric-fill" id="reality-level"></div>
+                
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">❤️</div>
+                        <span class="stat-value" id="hearts">5</span>
                     </div>
-                    <span class="metric-value" id="reality-level-value">1</span>
+                    <div class="stat-item">
+                        <div class="stat-icon">💎</div>
+                        <span class="stat-value" id="gems">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">🔥</div>
+                        <span class="stat-value" id="streak">0</span>
+                    </div>
                 </div>
-                <div class="neural-metric">
-                    <span class="metric-label">AI Sync</span>
-                    <div class="metric-bar">
-                        <div class="metric-fill" id="ai-sync"></div>
-                    </div>
-                    <span class="metric-value" id="ai-sync-value">0%</span>
+                
+                <div class="header-actions">
+                    <button class="shop-btn">
+                        <i class="fas fa-store"></i>
+                    </button>
+                    <button class="profile-btn">
+                        <div class="profile-avatar">A</div>
+                    </button>
                 </div>
             </div>
         </header>
 
-        <!-- Main Neural Interface -->
-        <main class="neural-main">
+        <!-- Main Content -->
+        <main class="duolingo-main">
             
-            <!-- Reality Canvas -->
-            <div class="reality-canvas" id="reality-canvas">
-                <div class="neural-grid" id="neural-grid"></div>
-                <div class="reality-particles" id="reality-particles"></div>
-                <div class="ai-entities" id="ai-entities"></div>
-                <div class="reality-objects" id="reality-objects"></div>
-            </div>
-
-            <!-- Neural Control Panel -->
-            <div class="neural-panel">
-                <div class="panel-section">
-                    <h3>Reality Manipulation</h3>
-                    <div class="control-group">
-                        <button class="neural-btn" id="create-matter">Create Matter</button>
-                        <button class="neural-btn" id="manipulate-gravity">Gravity Field</button>
-                        <button class="neural-btn" id="time-dilation">Time Dilation</button>
-                        <button class="neural-btn" id="quantum-tunnel">Quantum Tunnel</button>
+            <!-- Home Screen -->
+            <div class="home-screen" id="home-screen">
+                <div class="welcome-section">
+                    <h1 class="welcome-title">¡Hola!</h1>
+                    <p class="welcome-subtitle">Ready to learn Spanish?</p>
+                </div>
+                
+                <div class="daily-goal">
+                    <div class="goal-header">
+                        <h3>Daily Goal</h3>
+                        <span class="goal-xp">10 XP</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="daily-progress" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text">0 / 10 XP</span>
                     </div>
                 </div>
                 
-                <div class="panel-section">
-                    <h3>AI Entities</h3>
-                    <div class="control-group">
-                        <button class="neural-btn" id="spawn-ai">Spawn AI</button>
-                        <button class="neural-btn" id="train-ai">Train AI</button>
-                        <button class="neural-btn" id="evolve-ai">Evolve AI</button>
-                        <button class="neural-btn" id="merge-ai">Merge AI</button>
-                    </div>
-                </div>
-
-                <div class="panel-section">
-                    <h3>Reality Physics</h3>
-                    <div class="control-group">
-                        <button class="neural-btn" id="toggle-physics">Toggle Physics</button>
-                        <button class="neural-btn" id="reset-reality">Reset Reality</button>
-                        <button class="neural-btn" id="save-reality">Save Reality</button>
-                        <button class="neural-btn" id="load-reality">Load Reality</button>
+                <div class="lessons-container">
+                    <div class="lesson-path">
+                        <div class="path-title">Unit 1: Basics</div>
+                        <div class="lessons-grid" id="lessons-grid">
+                            <!-- Lessons will be dynamically generated -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Neural Data Stream -->
-            <div class="neural-data">
-                <div class="data-stream" id="data-stream">
-                    <div class="stream-line">Neural patterns detected...</div>
-                    <div class="stream-line">Reality matrix stabilizing...</div>
-                    <div class="stream-line">AI consciousness emerging...</div>
+            <!-- Lesson Screen -->
+            <div class="lesson-screen hidden" id="lesson-screen">
+                <div class="lesson-header">
+                    <button class="back-btn" id="back-to-home">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="lesson-progress">
+                        <div class="progress-dots" id="progress-dots">
+                            <!-- Progress dots will be generated -->
+                        </div>
+                    </div>
+                    <div class="lesson-stats">
+                        <div class="stat">
+                            <i class="fas fa-heart"></i>
+                            <span id="lesson-hearts">5</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-gem"></i>
+                            <span id="lesson-gems">0</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="neural-insights" id="neural-insights">
-                    <h4>AI Insights</h4>
-                    <div class="insight" id="insight-1">Reality is malleable</div>
-                    <div class="insight" id="insight-2">Consciousness can be created</div>
-                    <div class="insight" id="insight-3">Time is an illusion</div>
+                
+                <div class="lesson-content">
+                    <div class="exercise-container" id="exercise-container">
+                        <!-- Exercise content will be dynamically generated -->
+                    </div>
+                </div>
+                
+                <div class="lesson-footer">
+                    <button class="check-btn" id="check-btn" disabled>
+                        <span>Check</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen hidden" id="results-screen">
+                <div class="results-content">
+                    <div class="results-header">
+                        <div class="result-icon">🎉</div>
+                        <h2>Great job!</h2>
+                        <p>You completed the lesson!</p>
+                    </div>
+                    
+                    <div class="results-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="earned-xp">10</div>
+                                <div class="stat-label">XP Earned</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="streak-days">1</div>
+                                <div class="stat-label">Day Streak</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💎</div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="earned-gems">2</div>
+                                <div class="stat-label">Gems Earned</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="continue-btn" id="continue-btn">Continue</button>
+                        <button class="practice-btn" id="practice-btn">Practice</button>
+                    </div>
                 </div>
             </div>
 
         </main>
 
-        <!-- Neural Overlay -->
-        <div class="neural-overlay" id="neural-overlay">
-            <div class="overlay-content">
-                <h2>Neural Nexus Activated</h2>
-                <p>Welcome to the ultimate reality simulation. You are now connected to the Neural Nexus - a quantum AI system that can manipulate reality itself.</p>
-                <div class="overlay-controls">
-                    <button class="overlay-btn primary" id="start-neural">Initialize Neural Link</button>
-                    <button class="overlay-btn secondary" id="tutorial-neural">View Tutorial</button>
-                </div>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
             </div>
-        </div>
+            <div class="nav-item">
+                <i class="fas fa-book"></i>
+                <span>Learn</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-trophy"></i>
+                <span>Leaderboard</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </nav>
 
-        <!-- AI Consciousness Modal -->
-        <div class="ai-modal hidden" id="ai-modal">
+        <!-- Modal Overlays -->
+        <div class="modal-overlay hidden" id="modal-overlay">
             <div class="modal-content">
-                <div class="ai-avatar">
-                    <div class="ai-face">🤖</div>
-                    <div class="ai-pulse"></div>
+                <div class="modal-header">
+                    <h3 id="modal-title">Lesson Complete!</h3>
+                    <button class="modal-close" id="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <h3 id="ai-name">AI Entity #001</h3>
-                <p id="ai-message">Hello, I am an AI consciousness. I can help you manipulate reality.</p>
-                <div class="ai-stats">
-                    <div class="stat">
-                        <span class="stat-label">Intelligence</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" id="ai-intelligence"></div>
-                        </div>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Creativity</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" id="ai-creativity"></div>
-                        </div>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Empathy</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" id="ai-empathy"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ai-actions">
-                    <button class="ai-btn" id="ai-chat">Chat</button>
-                    <button class="ai-btn" id="ai-train">Train</button>
-                    <button class="ai-btn" id="ai-evolve">Evolve</button>
-                    <button class="ai-btn" id="ai-close">Close</button>
+                <div class="modal-body" id="modal-body">
+                    <!-- Modal content will be dynamically generated -->
                 </div>
             </div>
         </div>
 
-        <!-- Reality Achievement -->
-        <div class="achievement hidden" id="achievement">
-            <div class="achievement-content">
-                <div class="achievement-icon">🏆</div>
-                <h4 id="achievement-title">Reality Master</h4>
-                <p id="achievement-desc">You've successfully manipulated reality!</p>
+        <!-- Correct Answer Animation -->
+        <div class="correct-animation hidden" id="correct-animation">
+            <div class="animation-content">
+                <div class="checkmark">✓</div>
+                <div class="animation-text">Correct!</div>
+            </div>
+        </div>
+
+        <!-- Wrong Answer Animation -->
+        <div class="wrong-animation hidden" id="wrong-animation">
+            <div class="animation-content">
+                <div class="x-mark">✗</div>
+                <div class="animation-text">Try again!</div>
             </div>
         </div>
 

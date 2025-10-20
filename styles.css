@@ -1,39 +1,72 @@
-/* Neural Nexus - AI-Powered Reality Simulator */
+/* Duolingo Clone - Pixel Perfect Recreation */
 
 :root {
-    --neural-blue: #00FFFF;
-    --neural-purple: #FF00FF;
-    --neural-pink: #FF69B4;
-    --neural-green: #00FF00;
-    --neural-orange: #FF4500;
-    --neural-cyan: #00FFFF;
-    --neural-magenta: #FF00FF;
-    --neural-yellow: #FFFF00;
+    /* Duolingo Brand Colors */
+    --duolingo-green: #58cc02;
+    --duolingo-dark-green: #479900;
+    --duolingo-blue: #1cb0f6;
+    --duolingo-dark-blue: #1899d6;
+    --duolingo-orange: #ff9600;
+    --duolingo-red: #ea2b2b;
+    --duolingo-purple: #8b5cf6;
+    --duolingo-pink: #ff69b4;
     
-    --dark-bg: #0A0A0F;
-    --darker-bg: #050508;
-    --neural-bg: #1A1A2E;
-    --panel-bg: rgba(26, 26, 46, 0.9);
-    --glass-bg: rgba(255, 255, 255, 0.1);
+    /* Neutral Colors */
+    --white: #ffffff;
+    --black: #000000;
+    --gray-50: #f8f9fa;
+    --gray-100: #e9ecef;
+    --gray-200: #dee2e6;
+    --gray-300: #ced4da;
+    --gray-400: #adb5bd;
+    --gray-500: #6c757d;
+    --gray-600: #495057;
+    --gray-700: #343a40;
+    --gray-800: #212529;
+    --gray-900: #0d1117;
     
-    --text-primary: #FFFFFF;
-    --text-secondary: #B0B0B0;
-    --text-accent: #00FFFF;
+    /* Text Colors */
+    --text-primary: #3c3c3c;
+    --text-secondary: #777777;
+    --text-light: #999999;
     
-    --border-neural: #00FFFF;
-    --border-glow: rgba(0, 255, 255, 0.5);
-    --shadow-neural: 0 0 20px rgba(0, 255, 255, 0.3);
-    --shadow-glow: 0 0 30px rgba(0, 255, 255, 0.5);
+    /* Background Colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f7f7f7;
+    --bg-tertiary: #e5e5e5;
     
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-sans: 'Inter', sans-serif;
+    /* Border Colors */
+    --border-light: #e5e5e5;
+    --border-medium: #cccccc;
+    --border-dark: #999999;
     
-    --border-radius: 8px;
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
+    /* Shadow Colors */
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.2);
     
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Fonts */
+    --font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 50%;
+    
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
 }
 
 * {
@@ -43,657 +76,770 @@
 }
 
 body {
-    font-family: var(--font-sans);
-    background: var(--dark-bg);
+    font-family: var(--font-family);
+    background-color: var(--bg-secondary);
     color: var(--text-primary);
-    overflow: hidden;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-.neural-container {
-    width: 100vw;
-    height: 100vh;
+.duolingo-app {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    position: relative;
-    background: radial-gradient(ellipse at center, var(--neural-bg) 0%, var(--darker-bg) 100%);
+    background-color: var(--bg-secondary);
 }
 
-/* Neural Header */
-.neural-header {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.8));
-    backdrop-filter: blur(20px);
-    border-bottom: 2px solid var(--border-neural);
-    padding: 16px 24px;
+/* Header */
+.duolingo-header {
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border-light);
+    box-shadow: var(--shadow-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+}
+
+.duolingo-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--duolingo-green);
+}
+
+.logo-icon {
+    font-size: 28px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.header-stats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.stat-icon {
+    font-size: 16px;
+}
+
+.stat-value {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.shop-btn, .profile-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.shop-btn:hover, .profile-btn:hover {
+    background-color: var(--gray-200);
+    transform: scale(1.05);
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background-color: var(--duolingo-green);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* Main Content */
+.duolingo-main {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+    width: 100%;
+}
+
+/* Home Screen */
+.home-screen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.welcome-section {
+    text-align: center;
+    padding: var(--space-xl) 0;
+}
+
+.welcome-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.welcome-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.daily-goal {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-light);
+}
+
+.goal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
-    z-index: 100;
-    box-shadow: var(--shadow-neural);
+    margin-bottom: var(--space-md);
 }
 
-.neural-logo {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.goal-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
-.neural-icon {
-    font-size: 32px;
-    animation: neuralPulse 2s ease-in-out infinite;
-}
-
-.neural-logo h1 {
-    font-family: var(--font-mono);
-    font-size: 28px;
+.goal-xp {
+    font-size: 16px;
     font-weight: 700;
-    color: var(--neural-blue);
-    text-shadow: 0 0 10px var(--neural-blue);
-    margin: 0;
+    color: var(--duolingo-green);
 }
 
-.neural-status {
+.goal-progress {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-left: 20px;
+    gap: var(--space-md);
 }
 
-.status-indicator {
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--duolingo-green);
+    border-radius: var(--radius-sm);
+    transition: width var(--transition-normal);
+}
+
+.progress-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    min-width: 80px;
+    text-align: right;
+}
+
+.lessons-container {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-light);
+}
+
+.path-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+}
+
+.lesson-card {
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.lesson-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--duolingo-green);
+}
+
+.lesson-card.completed {
+    background-color: var(--duolingo-green);
+    border-color: var(--duolingo-green);
+    color: var(--white);
+}
+
+.lesson-card.locked {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-medium);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.lesson-card.current {
+    border-color: var(--duolingo-green);
+    box-shadow: 0 0 0 4px rgba(88, 204, 2, 0.1);
+}
+
+.lesson-number {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+
+.lesson-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+}
+
+.lesson-xp {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.lesson-card.completed .lesson-xp {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.lesson-icon {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    font-size: 20px;
+}
+
+/* Lesson Screen */
+.lesson-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 600px;
+}
+
+.lesson-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) 0;
+    margin-bottom: var(--space-lg);
+}
+
+.back-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.back-btn:hover {
+    background-color: var(--gray-200);
+    transform: scale(1.05);
+}
+
+.lesson-progress {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin: 0 var(--space-lg);
+}
+
+.progress-dots {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.progress-dot {
     width: 12px;
     height: 12px;
-    border-radius: 50%;
-    background: #666;
-    transition: var(--transition);
+    border-radius: var(--radius-full);
+    background-color: var(--bg-tertiary);
+    transition: var(--transition-fast);
 }
 
-.status-indicator.active {
-    background: var(--neural-green);
-    box-shadow: 0 0 10px var(--neural-green);
-    animation: statusPulse 1s ease-in-out infinite;
+.progress-dot.completed {
+    background-color: var(--duolingo-green);
 }
 
-.status-text {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
-}
-
-.neural-controls {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-.neural-metric {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    min-width: 120px;
-}
-
-.metric-label {
-    font-size: 12px;
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.metric-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-neural);
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-}
-
-.metric-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--neural-blue), var(--neural-purple));
-    transition: width 0.3s ease;
-    position: relative;
-}
-
-.metric-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: shimmer 2s ease-in-out infinite;
-}
-
-.metric-value {
-    font-size: 14px;
-    color: var(--neural-blue);
-    font-family: var(--font-mono);
-    font-weight: 600;
-}
-
-/* Main Neural Interface */
-.neural-main {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 300px 250px;
-    gap: 20px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Reality Canvas */
-.reality-canvas {
-    background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
-    border: 2px solid var(--border-neural);
-    border-radius: var(--border-radius-lg);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-neural);
-}
-
-.neural-grid {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.3;
-}
-
-.grid-line {
-    position: absolute;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(180deg, transparent, var(--neural-blue), transparent);
-    animation: gridPulse 3s ease-in-out infinite;
-}
-
-.reality-particles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.reality-particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--neural-blue);
-    border-radius: 50%;
-    animation: particleFloat 8s ease-in-out infinite;
-    box-shadow: 0 0 6px var(--neural-blue);
-}
-
-.energy-burst {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--neural-blue);
-    border-radius: 50%;
-    animation: energyBurst 1s ease-out forwards;
-    pointer-events: none;
-}
-
-.energy-trail {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: var(--neural-cyan);
-    border-radius: 50%;
-    animation: energyTrail 0.5s ease-out forwards;
-    pointer-events: none;
-}
-
-.ai-entities {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.ai-entity {
-    position: absolute;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: var(--transition);
-    pointer-events: all;
-    box-shadow: 0 0 15px currentColor;
-    animation: aiPulse 2s ease-in-out infinite;
-}
-
-.ai-entity:hover {
+.progress-dot.current {
+    background-color: var(--duolingo-blue);
     transform: scale(1.2);
-    box-shadow: 0 0 25px currentColor;
 }
 
-.reality-objects {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
+.lesson-stats {
+    display: flex;
+    gap: var(--space-md);
 }
 
-.matter-object {
-    position: absolute;
-    cursor: pointer;
-    transition: var(--transition);
-    pointer-events: all;
-    box-shadow: 0 0 10px currentColor;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+.lesson-stats .stat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: 600;
+    font-size: 14px;
 }
 
-.matter-object:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px currentColor;
-}
-
-.quantum-tunnel {
-    position: absolute;
-    border: 2px dashed var(--neural-purple);
-    border-radius: var(--border-radius);
-    background: rgba(255, 0, 255, 0.1);
-    pointer-events: none;
-    animation: tunnelPulse 2s ease-in-out infinite;
-}
-
-.tunnel-active {
-    background: rgba(255, 0, 255, 0.3);
-    box-shadow: 0 0 20px var(--neural-purple);
-}
-
-/* Neural Control Panel */
-.neural-panel {
-    background: var(--panel-bg);
-    border: 2px solid var(--border-neural);
-    border-radius: var(--border-radius-lg);
-    padding: 20px;
-    backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-neural);
-    overflow-y: auto;
-}
-
-.panel-section {
-    margin-bottom: 24px;
-}
-
-.panel-section h3 {
-    font-family: var(--font-mono);
-    font-size: 16px;
-    color: var(--neural-blue);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px var(--neural-blue);
-}
-
-.control-group {
+.lesson-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-xl) 0;
 }
 
-.neural-btn {
-    padding: 12px 16px;
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
-    border: 1px solid var(--border-neural);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-}
-
-.neural-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
+.exercise-container {
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
+    max-width: 600px;
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-light);
+    text-align: center;
 }
 
-.neural-btn:hover::before {
-    left: 100%;
+.exercise-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
 }
 
-.neural-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
-    border-color: var(--neural-cyan);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+.exercise-question {
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+}
+
+.exercise-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.option-btn {
+    padding: var(--space-md) var(--space-lg);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    background-color: var(--white);
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    text-align: center;
+}
+
+.option-btn:hover {
+    border-color: var(--duolingo-green);
+    background-color: rgba(88, 204, 2, 0.05);
     transform: translateY(-2px);
 }
 
-.neural-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+.option-btn.selected {
+    border-color: var(--duolingo-green);
+    background-color: var(--duolingo-green);
+    color: var(--white);
 }
 
-/* Neural Data Stream */
-.neural-data {
-    background: var(--panel-bg);
-    border: 2px solid var(--border-neural);
-    border-radius: var(--border-radius-lg);
-    padding: 20px;
-    backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-neural);
+.option-btn.correct {
+    border-color: var(--duolingo-green);
+    background-color: var(--duolingo-green);
+    color: var(--white);
+}
+
+.option-btn.incorrect {
+    border-color: var(--duolingo-red);
+    background-color: var(--duolingo-red);
+    color: var(--white);
+}
+
+.exercise-input {
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    transition: var(--transition-fast);
+}
+
+.exercise-input:focus {
+    outline: none;
+    border-color: var(--duolingo-green);
+    box-shadow: 0 0 0 4px rgba(88, 204, 2, 0.1);
+}
+
+.exercise-input.correct {
+    border-color: var(--duolingo-green);
+    background-color: rgba(88, 204, 2, 0.05);
+}
+
+.exercise-input.incorrect {
+    border-color: var(--duolingo-red);
+    background-color: rgba(234, 43, 43, 0.05);
+}
+
+.lesson-footer {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-lg) 0;
+}
+
+.check-btn {
+    padding: var(--space-md) var(--space-2xl);
+    border: none;
+    border-radius: var(--radius-lg);
+    background-color: var(--duolingo-green);
+    color: var(--white);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    min-width: 120px;
+}
+
+.check-btn:hover:not(:disabled) {
+    background-color: var(--duolingo-dark-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.check-btn:disabled {
+    background-color: var(--gray-300);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Results Screen */
+.results-screen {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    text-align: center;
 }
 
-.data-stream {
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-neural);
-    border-radius: var(--border-radius);
-    padding: 12px;
-    height: 200px;
-    overflow-y: auto;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    line-height: 1.4;
+.results-content {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-light);
+    max-width: 500px;
+    width: 100%;
 }
 
-.stream-line {
-    color: var(--neural-cyan);
-    margin-bottom: 4px;
-    animation: textGlow 2s ease-in-out infinite;
+.results-header {
+    margin-bottom: var(--space-xl);
 }
 
-.neural-insights {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--neural-purple);
-    border-radius: var(--border-radius);
-    padding: 16px;
+.result-icon {
+    font-size: 48px;
+    margin-bottom: var(--space-md);
 }
 
-.neural-insights h4 {
-    font-family: var(--font-mono);
-    color: var(--neural-purple);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.results-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
 }
 
-.insight {
+.results-header p {
+    font-size: 16px;
     color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 8px;
-    padding-left: 16px;
-    position: relative;
 }
 
-.insight::before {
-    content: '•';
-    color: var(--neural-purple);
-    position: absolute;
-    left: 0;
+.results-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
 }
 
-/* Neural Overlay */
-.neural-overlay {
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-lg);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.stat-card .stat-icon {
+    font-size: 24px;
+    margin-bottom: var(--space-sm);
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.results-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+}
+
+.continue-btn, .practice-btn {
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    min-width: 120px;
+}
+
+.continue-btn {
+    background-color: var(--duolingo-green);
+    color: var(--white);
+}
+
+.continue-btn:hover {
+    background-color: var(--duolingo-dark-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.practice-btn {
+    background-color: var(--white);
+    color: var(--duolingo-green);
+    border: 2px solid var(--duolingo-green);
+}
+
+.practice-btn:hover {
+    background-color: var(--duolingo-green);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    background-color: var(--white);
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-around;
+    padding: var(--space-sm) 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border-radius: var(--radius-md);
+    min-width: 60px;
+}
+
+.nav-item:hover {
+    background-color: var(--bg-secondary);
+}
+
+.nav-item.active {
+    color: var(--duolingo-green);
+}
+
+.nav-item i {
+    font-size: 20px;
+}
+
+.nav-item span {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Modal */
+.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    backdrop-filter: blur(20px);
-}
-
-.overlay-content {
-    text-align: center;
-    max-width: 600px;
-    padding: 40px;
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
-    border: 2px solid var(--border-neural);
-    border-radius: var(--border-radius-xl);
-    box-shadow: var(--shadow-glow);
-}
-
-.overlay-content h2 {
-    font-family: var(--font-mono);
-    font-size: 2.5rem;
-    color: var(--neural-blue);
-    margin-bottom: 20px;
-    text-shadow: 0 0 20px var(--neural-blue);
-    animation: titleGlow 2s ease-in-out infinite alternate;
-}
-
-.overlay-content p {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    margin-bottom: 30px;
-    line-height: 1.6;
-}
-
-.overlay-controls {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-}
-
-.overlay-btn {
-    padding: 16px 32px;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: var(--border-radius-lg);
-    cursor: pointer;
-    transition: var(--transition);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.overlay-btn.primary {
-    background: linear-gradient(135deg, var(--neural-blue), var(--neural-purple));
-    color: var(--text-primary);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-}
-
-.overlay-btn.primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-}
-
-.overlay-btn.secondary {
-    background: transparent;
-    color: var(--neural-blue);
-    border: 2px solid var(--neural-blue);
-}
-
-.overlay-btn.secondary:hover {
-    background: var(--neural-blue);
-    color: var(--text-primary);
-    transform: translateY(-2px);
-}
-
-/* AI Modal */
-.ai-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    backdrop-filter: blur(20px);
 }
 
 .modal-content {
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
-    border: 2px solid var(--border-neural);
-    border-radius: var(--border-radius-xl);
-    padding: 30px;
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
     max-width: 500px;
     width: 90%;
-    text-align: center;
-    box-shadow: var(--shadow-glow);
-    animation: modalSlideIn 0.3s ease-out;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-heavy);
 }
 
-.ai-avatar {
-    position: relative;
-    margin-bottom: 20px;
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
 }
 
-.ai-face {
-    font-size: 4rem;
-    animation: aiBounce 2s ease-in-out infinite;
+.modal-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
-.ai-pulse {
-    position: absolute;
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+    background-color: var(--gray-200);
+}
+
+/* Animations */
+.correct-animation, .wrong-animation {
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100px;
-    height: 100px;
-    border: 2px solid var(--neural-blue);
-    border-radius: 50%;
-    animation: aiPulse 2s ease-in-out infinite;
+    z-index: 2000;
+    pointer-events: none;
 }
 
-.modal-content h3 {
-    font-family: var(--font-mono);
-    font-size: 1.5rem;
-    color: var(--neural-blue);
-    margin-bottom: 16px;
-    text-shadow: 0 0 10px var(--neural-blue);
+.animation-content {
+    text-align: center;
+    padding: var(--space-xl);
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-heavy);
+    animation: bounceIn 0.5s ease;
 }
 
-.modal-content p {
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-    line-height: 1.6;
+.checkmark, .x-mark {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: var(--space-md);
 }
 
-.ai-stats {
-    margin-bottom: 24px;
+.checkmark {
+    color: var(--duolingo-green);
 }
 
-.stat {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+.x-mark {
+    color: var(--duolingo-red);
 }
 
-.stat-label {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: var(--text-secondary);
-    min-width: 80px;
-    text-align: left;
-}
-
-.stat-bar {
-    flex: 1;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-neural);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.stat-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--neural-blue), var(--neural-purple));
-    transition: width 0.5s ease;
-}
-
-.ai-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.ai-btn {
-    padding: 10px 20px;
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
-    border: 1px solid var(--border-neural);
-    border-radius: var(--border-radius);
+.animation-text {
+    font-size: 18px;
+    font-weight: 700;
     color: var(--text-primary);
-    font-family: var(--font-mono);
-    font-size: 14px;
-    cursor: pointer;
-    transition: var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.ai-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    transform: translateY(-2px);
-}
-
-/* Achievement */
-.achievement {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
-    border: 2px solid #FFD700;
-    border-radius: var(--border-radius-lg);
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    z-index: 3000;
-    animation: achievementSlideIn 0.5s ease-out;
-}
-
-.achievement-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.achievement-icon {
-    font-size: 2rem;
-    animation: achievementBounce 1s ease-in-out infinite;
-}
-
-.achievement h4 {
-    color: #FFD700;
-    font-family: var(--font-mono);
-    margin: 0;
-    text-shadow: 0 0 10px #FFD700;
-}
-
-.achievement p {
-    color: var(--text-secondary);
-    margin: 4px 0 0 0;
-    font-size: 14px;
 }
 
 /* Utility Classes */
@@ -702,123 +848,25 @@ body {
 }
 
 /* Animations */
-@keyframes neuralPulse {
-    0%, 100% {
-        transform: scale(1);
-        filter: hue-rotate(0deg);
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
     }
     50% {
+        opacity: 1;
         transform: scale(1.1);
-        filter: hue-rotate(180deg);
-    }
-}
-
-@keyframes statusPulse {
-    0%, 100% {
-        opacity: 1;
-        box-shadow: 0 0 10px var(--neural-green);
-    }
-    50% {
-        opacity: 0.7;
-        box-shadow: 0 0 20px var(--neural-green);
-    }
-}
-
-@keyframes shimmer {
-    0% {
-        transform: translateX(-100%);
     }
     100% {
-        transform: translateX(100%);
-    }
-}
-
-@keyframes gridPulse {
-    0%, 100% {
-        opacity: 0.3;
-    }
-    50% {
-        opacity: 0.6;
-    }
-}
-
-@keyframes particleFloat {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.7;
-    }
-    50% {
-        transform: translateY(-20px) rotate(180deg);
         opacity: 1;
-    }
-}
-
-@keyframes energyBurst {
-    0% {
-        transform: scale(0);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(3);
-        opacity: 0;
-    }
-}
-
-@keyframes energyTrail {
-    0% {
         transform: scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(0);
-        opacity: 0;
     }
 }
 
-@keyframes aiPulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 0 15px currentColor;
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 25px currentColor;
-    }
-}
-
-@keyframes tunnelPulse {
-    0%, 100% {
-        opacity: 0.5;
-        box-shadow: 0 0 10px var(--neural-purple);
-    }
-    50% {
-        opacity: 1;
-        box-shadow: 0 0 20px var(--neural-purple);
-    }
-}
-
-@keyframes textGlow {
-    0%, 100% {
-        text-shadow: 0 0 5px var(--neural-cyan);
-    }
-    50% {
-        text-shadow: 0 0 15px var(--neural-cyan);
-    }
-}
-
-@keyframes titleGlow {
-    0%, 100% {
-        text-shadow: 0 0 20px var(--neural-blue);
-    }
-    50% {
-        text-shadow: 0 0 30px var(--neural-blue), 0 0 40px var(--neural-purple);
-    }
-}
-
-@keyframes modalSlideIn {
+@keyframes slideInUp {
     from {
         opacity: 0;
-        transform: translateY(-50px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -826,68 +874,73 @@ body {
     }
 }
 
-@keyframes aiBounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes achievementSlideIn {
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateX(100%);
     }
     to {
         opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes achievementBounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    60% {
-        transform: translateY(-5px);
     }
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-    .neural-main {
-        grid-template-columns: 1fr 250px 200px;
-        gap: 15px;
-        padding: 15px;
+@media (max-width: 768px) {
+    .header-content {
+        padding: var(--space-sm) var(--space-md);
+    }
+    
+    .header-stats {
+        gap: var(--space-md);
+    }
+    
+    .stat-item {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 12px;
+    }
+    
+    .duolingo-main {
+        padding: var(--space-md);
+    }
+    
+    .welcome-title {
+        font-size: 36px;
+    }
+    
+    .lessons-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .exercise-container {
+        padding: var(--space-lg);
+    }
+    
+    .exercise-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-actions {
+        flex-direction: column;
     }
 }
 
-@media (max-width: 768px) {
-    .neural-main {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr auto auto;
+@media (max-width: 480px) {
+    .welcome-title {
+        font-size: 28px;
     }
     
-    .neural-controls {
-        flex-direction: column;
-        gap: 12px;
+    .exercise-container {
+        padding: var(--space-md);
     }
     
-    .neural-metric {
-        min-width: 100px;
+    .exercise-title {
+        font-size: 20px;
     }
     
-    .overlay-controls {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .ai-actions {
-        flex-wrap: wrap;
+    .exercise-question {
+        font-size: 16px;
     }
 }

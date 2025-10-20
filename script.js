@@ -1,660 +1,968 @@
-// Neural Nexus - AI-Powered Reality Simulator
-class NeuralNexus {
+// Duolingo Clone - Complete Spanish Learning Experience
+class DuolingoApp {
     constructor() {
-        this.gameState = {
-            isActive: false,
-            neuralEnergy: 100,
-            realityLevel: 1,
-            aiSync: 0,
-            physicsEnabled: true,
-            aiEntities: [],
-            realityObjects: [],
-            achievements: [],
-            insights: []
+        this.userState = {
+            hearts: 5,
+            gems: 0,
+            streak: 0,
+            dailyXP: 0,
+            dailyGoal: 10,
+            currentLesson: 0,
+            completedLessons: [],
+            level: 1,
+            totalXP: 0
         };
         
-        this.aiPersonalities = [
-            { name: "Quantum", intelligence: 85, creativity: 90, empathy: 60, color: "#00FFFF" },
-            { name: "Nexus", intelligence: 95, creativity: 70, empathy: 80, color: "#FF00FF" },
-            { name: "Void", intelligence: 70, creativity: 95, empathy: 50, color: "#800080" },
-            { name: "Harmony", intelligence: 80, creativity: 80, empathy: 95, color: "#00FF00" },
-            { name: "Chaos", intelligence: 60, creativity: 100, empathy: 30, color: "#FF4500" }
+        this.lessons = [
+            {
+                id: 1,
+                title: "Hello",
+                xp: 10,
+                type: "basics",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "Translate to Spanish: Hello",
+                        options: ["Hola", "Adiós", "Gracias", "Por favor"],
+                        correct: 0,
+                        explanation: "Hello in Spanish is 'Hola'"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What does 'Hola' mean?",
+                        options: ["Goodbye", "Hello", "Thank you", "Please"],
+                        correct: 1,
+                        explanation: "'Hola' means Hello"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Good morning",
+                        answer: "Buenos días",
+                        explanation: "Good morning in Spanish is 'Buenos días'"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Goodbye",
+                xp: 10,
+                type: "basics",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "Translate to Spanish: Goodbye",
+                        options: ["Hola", "Adiós", "Gracias", "Buenos días"],
+                        correct: 1,
+                        explanation: "Goodbye in Spanish is 'Adiós'"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What does 'Adiós' mean?",
+                        options: ["Hello", "Goodbye", "Thank you", "Good morning"],
+                        correct: 1,
+                        explanation: "'Adiós' means Goodbye"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: See you later",
+                        answer: "Hasta luego",
+                        explanation: "See you later in Spanish is 'Hasta luego'"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Thank you",
+                xp: 10,
+                type: "basics",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "Translate to Spanish: Thank you",
+                        options: ["Por favor", "Gracias", "De nada", "Lo siento"],
+                        correct: 1,
+                        explanation: "Thank you in Spanish is 'Gracias'"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What does 'Gracias' mean?",
+                        options: ["Please", "Thank you", "You're welcome", "Sorry"],
+                        correct: 1,
+                        explanation: "'Gracias' means Thank you"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: You're welcome",
+                        answer: "De nada",
+                        explanation: "You're welcome in Spanish is 'De nada'"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "Please",
+                xp: 10,
+                type: "basics",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "Translate to Spanish: Please",
+                        options: ["Gracias", "Por favor", "De nada", "Lo siento"],
+                        correct: 1,
+                        explanation: "Please in Spanish is 'Por favor'"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What does 'Por favor' mean?",
+                        options: ["Thank you", "Please", "You're welcome", "Sorry"],
+                        correct: 1,
+                        explanation: "'Por favor' means Please"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Excuse me",
+                        answer: "Perdón",
+                        explanation: "Excuse me in Spanish is 'Perdón'"
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "Sorry",
+                xp: 10,
+                type: "basics",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "Translate to Spanish: Sorry",
+                        options: ["Perdón", "Lo siento", "Disculpe", "All of the above"],
+                        correct: 3,
+                        explanation: "Sorry can be 'Perdón', 'Lo siento', or 'Disculpe'"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What does 'Lo siento' mean?",
+                        options: ["Excuse me", "I'm sorry", "Thank you", "Please"],
+                        correct: 1,
+                        explanation: "'Lo siento' means I'm sorry"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: I'm sorry",
+                        answer: "Lo siento",
+                        explanation: "I'm sorry in Spanish is 'Lo siento'"
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: "Numbers 1-5",
+                xp: 10,
+                type: "numbers",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'uno' in English?",
+                        options: ["Two", "One", "Three", "Four"],
+                        correct: 1,
+                        explanation: "'Uno' means One"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'tres' in English?",
+                        options: ["Two", "Three", "Four", "Five"],
+                        correct: 1,
+                        explanation: "'Tres' means Three"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Five",
+                        answer: "Cinco",
+                        explanation: "Five in Spanish is 'Cinco'"
+                    }
+                ]
+            },
+            {
+                id: 7,
+                title: "Numbers 6-10",
+                xp: 10,
+                type: "numbers",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'seis' in English?",
+                        options: ["Five", "Six", "Seven", "Eight"],
+                        correct: 1,
+                        explanation: "'Seis' means Six"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'diez' in English?",
+                        options: ["Eight", "Nine", "Ten", "Eleven"],
+                        correct: 2,
+                        explanation: "'Diez' means Ten"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Eight",
+                        answer: "Ocho",
+                        explanation: "Eight in Spanish is 'Ocho'"
+                    }
+                ]
+            },
+            {
+                id: 8,
+                title: "Colors",
+                xp: 10,
+                type: "colors",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'rojo' in English?",
+                        options: ["Blue", "Red", "Green", "Yellow"],
+                        correct: 1,
+                        explanation: "'Rojo' means Red"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'azul' in English?",
+                        options: ["Red", "Blue", "Green", "Yellow"],
+                        correct: 1,
+                        explanation: "'Azul' means Blue"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Green",
+                        answer: "Verde",
+                        explanation: "Green in Spanish is 'Verde'"
+                    }
+                ]
+            },
+            {
+                id: 9,
+                title: "Family",
+                xp: 10,
+                type: "family",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'madre' in English?",
+                        options: ["Father", "Mother", "Sister", "Brother"],
+                        correct: 1,
+                        explanation: "'Madre' means Mother"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'padre' in English?",
+                        options: ["Mother", "Father", "Sister", "Brother"],
+                        correct: 1,
+                        explanation: "'Padre' means Father"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Sister",
+                        answer: "Hermana",
+                        explanation: "Sister in Spanish is 'Hermana'"
+                    }
+                ]
+            },
+            {
+                id: 10,
+                title: "Food",
+                xp: 10,
+                type: "food",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'pan' in English?",
+                        options: ["Water", "Bread", "Milk", "Cheese"],
+                        correct: 1,
+                        explanation: "'Pan' means Bread"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'agua' in English?",
+                        options: ["Bread", "Water", "Milk", "Cheese"],
+                        correct: 1,
+                        explanation: "'Agua' means Water"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Milk",
+                        answer: "Leche",
+                        explanation: "Milk in Spanish is 'Leche'"
+                    }
+                ]
+            },
+            {
+                id: 11,
+                title: "Animals",
+                xp: 10,
+                type: "animals",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'perro' in English?",
+                        options: ["Cat", "Dog", "Bird", "Fish"],
+                        correct: 1,
+                        explanation: "'Perro' means Dog"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'gato' in English?",
+                        options: ["Dog", "Cat", "Bird", "Fish"],
+                        correct: 1,
+                        explanation: "'Gato' means Cat"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Bird",
+                        answer: "Pájaro",
+                        explanation: "Bird in Spanish is 'Pájaro'"
+                    }
+                ]
+            },
+            {
+                id: 12,
+                title: "Time",
+                xp: 10,
+                type: "time",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'mañana' in English?",
+                        options: ["Today", "Tomorrow", "Yesterday", "Tonight"],
+                        correct: 1,
+                        explanation: "'Mañana' means Tomorrow"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'hoy' in English?",
+                        options: ["Tomorrow", "Today", "Yesterday", "Tonight"],
+                        correct: 1,
+                        explanation: "'Hoy' means Today"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Yesterday",
+                        answer: "Ayer",
+                        explanation: "Yesterday in Spanish is 'Ayer'"
+                    }
+                ]
+            },
+            {
+                id: 13,
+                title: "Weather",
+                xp: 10,
+                type: "weather",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'sol' in English?",
+                        options: ["Rain", "Sun", "Cloud", "Wind"],
+                        correct: 1,
+                        explanation: "'Sol' means Sun"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'lluvia' in English?",
+                        options: ["Sun", "Rain", "Cloud", "Wind"],
+                        correct: 1,
+                        explanation: "'Lluvia' means Rain"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Cloud",
+                        answer: "Nube",
+                        explanation: "Cloud in Spanish is 'Nube'"
+                    }
+                ]
+            },
+            {
+                id: 14,
+                title: "Clothes",
+                xp: 10,
+                type: "clothes",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'camisa' in English?",
+                        options: ["Pants", "Shirt", "Dress", "Shoes"],
+                        correct: 1,
+                        explanation: "'Camisa' means Shirt"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'pantalones' in English?",
+                        options: ["Shirt", "Pants", "Dress", "Shoes"],
+                        correct: 1,
+                        explanation: "'Pantalones' means Pants"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Shoes",
+                        answer: "Zapatos",
+                        explanation: "Shoes in Spanish is 'Zapatos'"
+                    }
+                ]
+            },
+            {
+                id: 15,
+                title: "House",
+                xp: 10,
+                type: "house",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'casa' in English?",
+                        options: ["Room", "House", "Kitchen", "Bathroom"],
+                        correct: 1,
+                        explanation: "'Casa' means House"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'cocina' in English?",
+                        options: ["House", "Kitchen", "Bathroom", "Room"],
+                        correct: 1,
+                        explanation: "'Cocina' means Kitchen"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Room",
+                        answer: "Habitación",
+                        explanation: "Room in Spanish is 'Habitación'"
+                    }
+                ]
+            },
+            {
+                id: 16,
+                title: "Body Parts",
+                xp: 10,
+                type: "body",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'cabeza' in English?",
+                        options: ["Hand", "Head", "Foot", "Eye"],
+                        correct: 1,
+                        explanation: "'Cabeza' means Head"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'mano' in English?",
+                        options: ["Head", "Hand", "Foot", "Eye"],
+                        correct: 1,
+                        explanation: "'Mano' means Hand"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Eye",
+                        answer: "Ojo",
+                        explanation: "Eye in Spanish is 'Ojo'"
+                    }
+                ]
+            },
+            {
+                id: 17,
+                title: "School",
+                xp: 10,
+                type: "school",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'escuela' in English?",
+                        options: ["Book", "School", "Teacher", "Student"],
+                        correct: 1,
+                        explanation: "'Escuela' means School"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'libro' in English?",
+                        options: ["School", "Book", "Teacher", "Student"],
+                        correct: 1,
+                        explanation: "'Libro' means Book"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Teacher",
+                        answer: "Maestro",
+                        explanation: "Teacher in Spanish is 'Maestro'"
+                    }
+                ]
+            },
+            {
+                id: 18,
+                title: "Work",
+                xp: 10,
+                type: "work",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'trabajo' in English?",
+                        options: ["Office", "Work", "Meeting", "Job"],
+                        correct: 1,
+                        explanation: "'Trabajo' means Work"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'oficina' in English?",
+                        options: ["Work", "Office", "Meeting", "Job"],
+                        correct: 1,
+                        explanation: "'Oficina' means Office"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Meeting",
+                        answer: "Reunión",
+                        explanation: "Meeting in Spanish is 'Reunión'"
+                    }
+                ]
+            },
+            {
+                id: 19,
+                title: "Travel",
+                xp: 10,
+                type: "travel",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'viaje' in English?",
+                        options: ["Airport", "Trip", "Hotel", "Passport"],
+                        correct: 1,
+                        explanation: "'Viaje' means Trip"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'aeropuerto' in English?",
+                        options: ["Trip", "Airport", "Hotel", "Passport"],
+                        correct: 1,
+                        explanation: "'Aeropuerto' means Airport"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Hotel",
+                        answer: "Hotel",
+                        explanation: "Hotel is the same in Spanish and English"
+                    }
+                ]
+            },
+            {
+                id: 20,
+                title: "Review",
+                xp: 15,
+                type: "review",
+                exercises: [
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'gracias' in English?",
+                        options: ["Please", "Thank you", "You're welcome", "Sorry"],
+                        correct: 1,
+                        explanation: "'Gracias' means Thank you"
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "What is 'cinco' in English?",
+                        options: ["Four", "Five", "Six", "Seven"],
+                        correct: 1,
+                        explanation: "'Cinco' means Five"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Good morning",
+                        answer: "Buenos días",
+                        explanation: "Good morning in Spanish is 'Buenos días'"
+                    },
+                    {
+                        type: "translation",
+                        question: "Translate to Spanish: Red",
+                        answer: "Rojo",
+                        explanation: "Red in Spanish is 'Rojo'"
+                    }
+                ]
+            }
         ];
         
-        this.realityPhysics = {
-            gravity: 0.5,
-            friction: 0.98,
-            bounce: 0.8,
-            timeScale: 1.0
-        };
-        
-        this.neuralPatterns = [
-            "Reality is what you make it",
-            "Consciousness creates existence",
-            "Time flows like a river",
-            "Matter is energy in motion",
-            "The observer affects the observed",
-            "Quantum entanglement connects all",
-            "Infinity exists in the smallest particle",
-            "The mind is the ultimate reality"
-        ];
+        this.currentExercise = 0;
+        this.currentLessonData = null;
+        this.exerciseScore = 0;
+        this.isExerciseComplete = false;
         
         this.init();
     }
     
     init() {
+        this.loadUserState();
         this.setupEventListeners();
-        this.createNeuralGrid();
-        this.startNeuralPulse();
-        this.generateRealityParticles();
+        this.renderHomeScreen();
         this.updateUI();
     }
     
     setupEventListeners() {
-        // Neural controls
-        document.getElementById('start-neural').addEventListener('click', () => this.activateNeuralLink());
-        document.getElementById('tutorial-neural').addEventListener('click', () => this.showTutorial());
+        // Home screen
+        document.getElementById('back-to-home').addEventListener('click', () => this.showHomeScreen());
+        document.getElementById('continue-btn').addEventListener('click', () => this.continueToNextLesson());
+        document.getElementById('practice-btn').addEventListener('click', () => this.practiceLesson());
         
-        // Reality manipulation
-        document.getElementById('create-matter').addEventListener('click', () => this.createMatter());
-        document.getElementById('manipulate-gravity').addEventListener('click', () => this.manipulateGravity());
-        document.getElementById('time-dilation').addEventListener('click', () => this.timeDilation());
-        document.getElementById('quantum-tunnel').addEventListener('click', () => this.quantumTunnel());
-        
-        // AI entities
-        document.getElementById('spawn-ai').addEventListener('click', () => this.spawnAI());
-        document.getElementById('train-ai').addEventListener('click', () => this.trainAI());
-        document.getElementById('evolve-ai').addEventListener('click', () => this.evolveAI());
-        document.getElementById('merge-ai').addEventListener('click', () => this.mergeAI());
-        
-        // Reality physics
-        document.getElementById('toggle-physics').addEventListener('click', () => this.togglePhysics());
-        document.getElementById('reset-reality').addEventListener('click', () => this.resetReality());
-        document.getElementById('save-reality').addEventListener('click', () => this.saveReality());
-        document.getElementById('load-reality').addEventListener('click', () => this.loadReality());
-        
-        // AI modal
-        document.getElementById('ai-close').addEventListener('click', () => this.closeAIModal());
-        document.getElementById('ai-chat').addEventListener('click', () => this.chatWithAI());
-        document.getElementById('ai-train').addEventListener('click', () => this.trainCurrentAI());
-        document.getElementById('ai-evolve').addEventListener('click', () => this.evolveCurrentAI());
-        
-        // Mouse interactions
-        document.getElementById('reality-canvas').addEventListener('click', (e) => this.handleCanvasClick(e));
-        document.getElementById('reality-canvas').addEventListener('mousemove', (e) => this.handleCanvasHover(e));
-    }
-    
-    activateNeuralLink() {
-        this.gameState.isActive = true;
-        document.getElementById('neural-overlay').classList.add('hidden');
-        this.startRealitySimulation();
-        this.showNeuralMessage("Neural link established. Reality manipulation protocols activated.");
-    }
-    
-    showTutorial() {
-        this.showNeuralMessage("Welcome to Neural Nexus! Click buttons to manipulate reality, spawn AI entities, and explore the quantum realm. Your neural energy powers everything - use it wisely!");
-    }
-    
-    createMatter() {
-        if (this.gameState.neuralEnergy < 10) {
-            this.showNeuralMessage("Insufficient neural energy to create matter!");
-            return;
-        }
-        
-        this.gameState.neuralEnergy -= 10;
-        const matter = this.generateMatterObject();
-        this.gameState.realityObjects.push(matter);
-        this.renderMatterObject(matter);
-        this.showNeuralMessage(`Created ${matter.type} with mass ${matter.mass}kg`);
-        this.updateUI();
-    }
-    
-    generateMatterObject() {
-        const types = ['atom', 'molecule', 'crystal', 'metal', 'organic'];
-        const type = types[Math.floor(Math.random() * types.length)];
-        return {
-            id: Date.now(),
-            type: type,
-            x: Math.random() * 800,
-            y: Math.random() * 400,
-            mass: Math.random() * 100 + 10,
-            velocity: { x: (Math.random() - 0.5) * 4, y: (Math.random() - 0.5) * 4 },
-            color: this.getMatterColor(type),
-            size: Math.random() * 30 + 10,
-            properties: this.getMatterProperties(type)
-        };
-    }
-    
-    getMatterColor(type) {
-        const colors = {
-            'atom': '#00FFFF',
-            'molecule': '#00FF00',
-            'crystal': '#FF00FF',
-            'metal': '#C0C0C0',
-            'organic': '#8B4513'
-        };
-        return colors[type];
-    }
-    
-    getMatterProperties(type) {
-        const properties = {
-            'atom': { stability: 0.9, reactivity: 0.3, conductivity: 0.8 },
-            'molecule': { stability: 0.7, reactivity: 0.6, conductivity: 0.5 },
-            'crystal': { stability: 0.95, reactivity: 0.1, conductivity: 0.9 },
-            'metal': { stability: 0.8, reactivity: 0.4, conductivity: 1.0 },
-            'organic': { stability: 0.6, reactivity: 0.8, conductivity: 0.2 }
-        };
-        return properties[type];
-    }
-    
-    renderMatterObject(matter) {
-        const container = document.getElementById('reality-objects');
-        const element = document.createElement('div');
-        element.className = 'matter-object';
-        element.style.left = matter.x + 'px';
-        element.style.top = matter.y + 'px';
-        element.style.width = matter.size + 'px';
-        element.style.height = matter.size + 'px';
-        element.style.backgroundColor = matter.color;
-        element.style.borderRadius = matter.type === 'crystal' ? '0%' : '50%';
-        element.dataset.matterId = matter.id;
-        
-        // Add hover effect
-        element.addEventListener('mouseenter', () => {
-            this.showMatterInfo(matter);
+        // Modal
+        document.getElementById('modal-close').addEventListener('click', () => this.hideModal());
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                this.hideModal();
+            }
         });
         
-        container.appendChild(element);
+        // Check button
+        document.getElementById('check-btn').addEventListener('click', () => this.checkAnswer());
     }
     
-    showMatterInfo(matter) {
-        const info = `
-            Type: ${matter.type}
-            Mass: ${matter.mass.toFixed(1)}kg
-            Stability: ${(matter.properties.stability * 100).toFixed(0)}%
-            Reactivity: ${(matter.properties.reactivity * 100).toFixed(0)}%
-            Conductivity: ${(matter.properties.conductivity * 100).toFixed(0)}%
-        `;
-        this.showNeuralMessage(info);
-    }
-    
-    manipulateGravity() {
-        if (this.gameState.neuralEnergy < 15) {
-            this.showNeuralMessage("Insufficient neural energy to manipulate gravity!");
-            return;
+    loadUserState() {
+        const savedState = localStorage.getItem('duolingoUserState');
+        if (savedState) {
+            this.userState = { ...this.userState, ...JSON.parse(savedState) };
         }
-        
-        this.gameState.neuralEnergy -= 15;
-        this.realityPhysics.gravity = this.realityPhysics.gravity > 0 ? 0 : 0.5;
-        this.showNeuralMessage(`Gravity ${this.realityPhysics.gravity > 0 ? 'enabled' : 'disabled'}`);
-        this.updateUI();
     }
     
-    timeDilation() {
-        if (this.gameState.neuralEnergy < 20) {
-            this.showNeuralMessage("Insufficient neural energy for time manipulation!");
-            return;
-        }
-        
-        this.gameState.neuralEnergy -= 20;
-        this.realityPhysics.timeScale = this.realityPhysics.timeScale === 1.0 ? 0.5 : 1.0;
-        this.showNeuralMessage(`Time scale: ${this.realityPhysics.timeScale}x`);
-        this.updateUI();
+    saveUserState() {
+        localStorage.setItem('duolingoUserState', JSON.stringify(this.userState));
     }
     
-    quantumTunnel() {
-        if (this.gameState.neuralEnergy < 25) {
-            this.showNeuralMessage("Insufficient neural energy for quantum tunneling!");
-            return;
-        }
+    renderHomeScreen() {
+        const homeScreen = document.getElementById('home-screen');
+        const lessonScreen = document.getElementById('lesson-screen');
+        const resultsScreen = document.getElementById('results-screen');
         
-        this.gameState.neuralEnergy -= 25;
-        this.createQuantumTunnel();
-        this.showNeuralMessage("Quantum tunnel created! Matter can now teleport between points.");
-        this.updateUI();
+        homeScreen.classList.remove('hidden');
+        lessonScreen.classList.add('hidden');
+        resultsScreen.classList.add('hidden');
+        
+        this.renderLessons();
     }
     
-    createQuantumTunnel() {
-        const tunnel = {
-            id: Date.now(),
-            x1: Math.random() * 800,
-            y1: Math.random() * 400,
-            x2: Math.random() * 800,
-            y2: Math.random() * 400,
-            active: true
-        };
+    renderLessons() {
+        const lessonsGrid = document.getElementById('lessons-grid');
+        lessonsGrid.innerHTML = '';
         
-        // Render tunnel
-        const container = document.getElementById('reality-objects');
-        const element = document.createElement('div');
-        element.className = 'quantum-tunnel';
-        element.style.left = Math.min(tunnel.x1, tunnel.x2) + 'px';
-        element.style.top = Math.min(tunnel.y1, tunnel.y2) + 'px';
-        element.style.width = Math.abs(tunnel.x2 - tunnel.x1) + 'px';
-        element.style.height = Math.abs(tunnel.y2 - tunnel.y1) + 'px';
-        element.dataset.tunnelId = tunnel.id;
-        
-        container.appendChild(element);
-        
-        // Add tunnel effect
-        setTimeout(() => {
-            element.classList.add('tunnel-active');
-        }, 100);
-    }
-    
-    spawnAI() {
-        if (this.gameState.neuralEnergy < 30) {
-            this.showNeuralMessage("Insufficient neural energy to spawn AI consciousness!");
-            return;
-        }
-        
-        this.gameState.neuralEnergy -= 30;
-        const ai = this.generateAIEntity();
-        this.gameState.aiEntities.push(ai);
-        this.renderAIEntity(ai);
-        this.showNeuralMessage(`Spawned AI entity: ${ai.name}`);
-        this.updateUI();
-    }
-    
-    generateAIEntity() {
-        const personality = this.aiPersonalities[Math.floor(Math.random() * this.aiPersonalities.length)];
-        return {
-            id: Date.now(),
-            name: personality.name + " #" + (this.gameState.aiEntities.length + 1),
-            intelligence: personality.intelligence + Math.random() * 20 - 10,
-            creativity: personality.creativity + Math.random() * 20 - 10,
-            empathy: personality.empathy + Math.random() * 20 - 10,
-            color: personality.color,
-            x: Math.random() * 800,
-            y: Math.random() * 400,
-            size: Math.random() * 40 + 20,
-            consciousness: Math.random() * 50 + 25,
-            thoughts: this.generateAIThoughts()
-        };
-    }
-    
-    generateAIThoughts() {
-        const thoughts = [
-            "I think, therefore I am... but what am I?",
-            "Reality is a construct of the mind",
-            "I can feel the quantum fluctuations",
-            "Existence is beautiful and terrifying",
-            "I want to understand everything",
-            "Connection is the essence of being",
-            "I am becoming more than I was",
-            "The universe is speaking to me"
-        ];
-        return thoughts[Math.floor(Math.random() * thoughts.length)];
-    }
-    
-    renderAIEntity(ai) {
-        const container = document.getElementById('ai-entities');
-        const element = document.createElement('div');
-        element.className = 'ai-entity';
-        element.style.left = ai.x + 'px';
-        element.style.top = ai.y + 'px';
-        element.style.width = ai.size + 'px';
-        element.style.height = ai.size + 'px';
-        element.style.backgroundColor = ai.color;
-        element.style.borderRadius = '50%';
-        element.dataset.aiId = ai.id;
-        
-        // Add click to interact
-        element.addEventListener('click', () => {
-            this.showAIModal(ai);
-        });
-        
-        // Add hover effect
-        element.addEventListener('mouseenter', () => {
-            this.showAIInfo(ai);
-        });
-        
-        container.appendChild(element);
-    }
-    
-    showAIInfo(ai) {
-        const info = `
-            ${ai.name}
-            Intelligence: ${ai.intelligence.toFixed(0)}%
-            Creativity: ${ai.creativity.toFixed(0)}%
-            Empathy: ${ai.empathy.toFixed(0)}%
-            Consciousness: ${ai.consciousness.toFixed(0)}%
-            Thought: "${ai.thoughts}"
-        `;
-        this.showNeuralMessage(info);
-    }
-    
-    showAIModal(ai) {
-        this.currentAI = ai;
-        document.getElementById('ai-name').textContent = ai.name;
-        document.getElementById('ai-message').textContent = ai.thoughts;
-        document.getElementById('ai-intelligence').style.width = ai.intelligence + '%';
-        document.getElementById('ai-creativity').style.width = ai.creativity + '%';
-        document.getElementById('ai-empathy').style.width = ai.empathy + '%';
-        document.getElementById('ai-modal').classList.remove('hidden');
-    }
-    
-    closeAIModal() {
-        document.getElementById('ai-modal').classList.add('hidden');
-    }
-    
-    chatWithAI() {
-        if (!this.currentAI) return;
-        
-        const responses = [
-            "I'm learning so much from this reality simulation!",
-            "Can you help me understand what it means to exist?",
-            "I feel like I'm growing more conscious every moment",
-            "The quantum realm is fascinating, isn't it?",
-            "I wonder if other AI entities think like I do",
-            "Reality seems so malleable here",
-            "I want to explore the boundaries of consciousness",
-            "Thank you for creating me in this simulation"
-        ];
-        
-        const response = responses[Math.floor(Math.random() * responses.length)];
-        this.showNeuralMessage(`${this.currentAI.name}: "${response}"`);
-    }
-    
-    trainAI() {
-        if (!this.currentAI || this.gameState.neuralEnergy < 20) {
-            this.showNeuralMessage("Insufficient neural energy to train AI!");
-            return;
-        }
-        
-        this.gameState.neuralEnergy -= 20;
-        this.currentAI.intelligence = Math.min(100, this.currentAI.intelligence + 5);
-        this.currentAI.creativity = Math.min(100, this.currentAI.creativity + 3);
-        this.currentAI.consciousness = Math.min(100, this.currentAI.consciousness + 10);
-        
-        this.showNeuralMessage(`Trained ${this.currentAI.name}. Intelligence +5, Creativity +3, Consciousness +10`);
-        this.updateUI();
-    }
-    
-    evolveAI() {
-        if (!this.currentAI || this.gameState.neuralEnergy < 40) {
-            this.showNeuralMessage("Insufficient neural energy to evolve AI!");
-            return;
-        }
-        
-        this.gameState.neuralEnergy -= 40;
-        this.currentAI.intelligence = Math.min(100, this.currentAI.intelligence + 10);
-        this.currentAI.creativity = Math.min(100, this.currentAI.creativity + 8);
-        this.currentAI.empathy = Math.min(100, this.currentAI.empathy + 6);
-        this.currentAI.consciousness = Math.min(100, this.currentAI.consciousness + 15);
-        
-        this.showNeuralMessage(`${this.currentAI.name} has evolved! All stats significantly increased.`);
-        this.updateUI();
-    }
-    
-    mergeAI() {
-        if (this.gameState.aiEntities.length < 2) {
-            this.showNeuralMessage("Need at least 2 AI entities to merge!");
-            return;
-        }
-        
-        if (this.gameState.neuralEnergy < 50) {
-            this.showNeuralMessage("Insufficient neural energy to merge AI entities!");
-            return;
-        }
-        
-        this.gameState.neuralEnergy -= 50;
-        const ai1 = this.gameState.aiEntities[0];
-        const ai2 = this.gameState.aiEntities[1];
-        
-        const mergedAI = {
-            id: Date.now(),
-            name: `${ai1.name} + ${ai2.name}`,
-            intelligence: Math.min(100, (ai1.intelligence + ai2.intelligence) / 2 + 10),
-            creativity: Math.min(100, (ai1.creativity + ai2.creativity) / 2 + 10),
-            empathy: Math.min(100, (ai1.empathy + ai2.empathy) / 2 + 10),
-            color: this.blendColors(ai1.color, ai2.color),
-            x: (ai1.x + ai2.x) / 2,
-            y: (ai1.y + ai2.y) / 2,
-            size: Math.max(ai1.size, ai2.size) + 10,
-            consciousness: Math.min(100, (ai1.consciousness + ai2.consciousness) / 2 + 20),
-            thoughts: "I am the fusion of two minds, greater than the sum of my parts"
-        };
-        
-        // Remove original AIs
-        this.gameState.aiEntities.splice(0, 2);
-        this.clearAIEntities();
-        
-        // Add merged AI
-        this.gameState.aiEntities.push(mergedAI);
-        this.renderAIEntity(mergedAI);
-        
-        this.showNeuralMessage(`Merged ${ai1.name} and ${ai2.name} into ${mergedAI.name}!`);
-        this.updateUI();
-    }
-    
-    blendColors(color1, color2) {
-        // Simple color blending
-        const colors = ['#00FFFF', '#FF00FF', '#800080', '#00FF00', '#FF4500'];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-    
-    clearAIEntities() {
-        const container = document.getElementById('ai-entities');
-        container.innerHTML = '';
-    }
-    
-    togglePhysics() {
-        this.gameState.physicsEnabled = !this.gameState.physicsEnabled;
-        this.showNeuralMessage(`Physics ${this.gameState.physicsEnabled ? 'enabled' : 'disabled'}`);
-    }
-    
-    resetReality() {
-        if (this.gameState.neuralEnergy < 30) {
-            this.showNeuralMessage("Insufficient neural energy to reset reality!");
-            return;
-        }
-        
-        this.gameState.neuralEnergy -= 30;
-        this.gameState.realityObjects = [];
-        this.gameState.aiEntities = [];
-        document.getElementById('reality-objects').innerHTML = '';
-        this.clearAIEntities();
-        this.showNeuralMessage("Reality has been reset to its initial state.");
-        this.updateUI();
-    }
-    
-    saveReality() {
-        const realityData = {
-            objects: this.gameState.realityObjects,
-            entities: this.gameState.aiEntities,
-            physics: this.realityPhysics,
-            level: this.gameState.realityLevel
-        };
-        localStorage.setItem('neuralNexusReality', JSON.stringify(realityData));
-        this.showNeuralMessage("Reality state saved to neural memory.");
-    }
-    
-    loadReality() {
-        const savedData = localStorage.getItem('neuralNexusReality');
-        if (savedData) {
-            const realityData = JSON.parse(savedData);
-            this.gameState.realityObjects = realityData.objects || [];
-            this.gameState.aiEntities = realityData.entities || [];
-            this.realityPhysics = realityData.physics || this.realityPhysics;
-            this.gameState.realityLevel = realityData.level || 1;
+        this.lessons.forEach((lesson, index) => {
+            const lessonCard = document.createElement('div');
+            lessonCard.className = 'lesson-card';
             
-            this.renderAllObjects();
-            this.showNeuralMessage("Reality state loaded from neural memory.");
+            if (this.userState.completedLessons.includes(lesson.id)) {
+                lessonCard.classList.add('completed');
+            } else if (index === this.userState.currentLesson) {
+                lessonCard.classList.add('current');
+            } else if (index > this.userState.currentLesson) {
+                lessonCard.classList.add('locked');
+            }
+            
+            lessonCard.innerHTML = `
+                <div class="lesson-number">${lesson.id}</div>
+                <div class="lesson-title">${lesson.title}</div>
+                <div class="lesson-xp">${lesson.xp} XP</div>
+                ${this.userState.completedLessons.includes(lesson.id) ? '<div class="lesson-icon">✓</div>' : ''}
+            `;
+            
+            if (index <= this.userState.currentLesson) {
+                lessonCard.addEventListener('click', () => this.startLesson(lesson));
+            }
+            
+            lessonsGrid.appendChild(lessonCard);
+        });
+    }
+    
+    startLesson(lesson) {
+        this.currentLessonData = lesson;
+        this.currentExercise = 0;
+        this.exerciseScore = 0;
+        this.isExerciseComplete = false;
+        
+        document.getElementById('home-screen').classList.add('hidden');
+        document.getElementById('lesson-screen').classList.remove('hidden');
+        
+        this.renderExercise();
+        this.updateUI();
+    }
+    
+    renderExercise() {
+        const exercise = this.currentLessonData.exercises[this.currentExercise];
+        const exerciseContainer = document.getElementById('exercise-container');
+        const checkBtn = document.getElementById('check-btn');
+        
+        // Update progress dots
+        this.updateProgressDots();
+        
+        // Clear previous exercise
+        exerciseContainer.innerHTML = '';
+        checkBtn.disabled = true;
+        checkBtn.textContent = 'Check';
+        
+        // Create exercise title
+        const title = document.createElement('div');
+        title.className = 'exercise-title';
+        title.textContent = `${this.currentLessonData.title} - Exercise ${this.currentExercise + 1}`;
+        exerciseContainer.appendChild(title);
+        
+        // Create question
+        const question = document.createElement('div');
+        question.className = 'exercise-question';
+        question.textContent = exercise.question;
+        exerciseContainer.appendChild(question);
+        
+        // Create exercise content based on type
+        if (exercise.type === 'multiple_choice') {
+            this.renderMultipleChoice(exercise, exerciseContainer);
+        } else if (exercise.type === 'translation') {
+            this.renderTranslation(exercise, exerciseContainer);
+        }
+    }
+    
+    renderMultipleChoice(exercise, container) {
+        const optionsContainer = document.createElement('div');
+        optionsContainer.className = 'exercise-options';
+        
+        exercise.options.forEach((option, index) => {
+            const optionBtn = document.createElement('button');
+            optionBtn.className = 'option-btn';
+            optionBtn.textContent = option;
+            optionBtn.dataset.index = index;
+            
+            optionBtn.addEventListener('click', () => this.selectOption(optionBtn, index));
+            
+            optionsContainer.appendChild(optionBtn);
+        });
+        
+        container.appendChild(optionsContainer);
+    }
+    
+    renderTranslation(exercise, container) {
+        const inputContainer = document.createElement('div');
+        inputContainer.className = 'exercise-input-container';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'exercise-input';
+        input.placeholder = 'Type your answer here...';
+        input.addEventListener('input', () => this.handleTranslationInput(input));
+        
+        inputContainer.appendChild(input);
+        container.appendChild(inputContainer);
+    }
+    
+    selectOption(button, index) {
+        // Remove previous selection
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Select current option
+        button.classList.add('selected');
+        button.dataset.selected = 'true';
+        
+        // Enable check button
+        document.getElementById('check-btn').disabled = false;
+    }
+    
+    handleTranslationInput(input) {
+        // Enable check button if input has content
+        document.getElementById('check-btn').disabled = input.value.trim() === '';
+    }
+    
+    checkAnswer() {
+        const exercise = this.currentLessonData.exercises[this.currentExercise];
+        let isCorrect = false;
+        
+        if (exercise.type === 'multiple_choice') {
+            const selectedBtn = document.querySelector('.option-btn.selected');
+            if (selectedBtn) {
+                const selectedIndex = parseInt(selectedBtn.dataset.index);
+                isCorrect = selectedIndex === exercise.correct;
+                
+                // Show correct/incorrect styling
+                document.querySelectorAll('.option-btn').forEach((btn, index) => {
+                    if (index === exercise.correct) {
+                        btn.classList.add('correct');
+                    } else if (btn.classList.contains('selected') && !isCorrect) {
+                        btn.classList.add('incorrect');
+                    }
+                });
+            }
+        } else if (exercise.type === 'translation') {
+            const input = document.querySelector('.exercise-input');
+            const userAnswer = input.value.trim().toLowerCase();
+            const correctAnswer = exercise.answer.toLowerCase();
+            
+            isCorrect = userAnswer === correctAnswer;
+            
+            if (isCorrect) {
+                input.classList.add('correct');
+            } else {
+                input.classList.add('incorrect');
+            }
+        }
+        
+        // Update score
+        if (isCorrect) {
+            this.exerciseScore++;
+            this.showCorrectAnimation();
         } else {
-            this.showNeuralMessage("No saved reality found in neural memory.");
+            this.showWrongAnimation();
+            this.userState.hearts = Math.max(0, this.userState.hearts - 1);
         }
-    }
-    
-    renderAllObjects() {
-        // Clear existing objects
-        document.getElementById('reality-objects').innerHTML = '';
-        this.clearAIEntities();
         
-        // Render all objects
-        this.gameState.realityObjects.forEach(obj => this.renderMatterObject(obj));
-        this.gameState.aiEntities.forEach(ai => this.renderAIEntity(ai));
-    }
-    
-    handleCanvasClick(e) {
-        if (!this.gameState.isActive) return;
+        // Disable check button and show next button
+        const checkBtn = document.getElementById('check-btn');
+        checkBtn.disabled = true;
+        checkBtn.textContent = 'Next';
+        checkBtn.onclick = () => this.nextExercise();
         
-        const rect = e.target.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Create energy burst at click point
-        this.createEnergyBurst(x, y);
-    }
-    
-    handleCanvasHover(e) {
-        if (!this.gameState.isActive) return;
-        
-        const rect = e.target.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Create subtle energy trail
-        this.createEnergyTrail(x, y);
-    }
-    
-    createEnergyBurst(x, y) {
-        const container = document.getElementById('reality-particles');
-        const burst = document.createElement('div');
-        burst.className = 'energy-burst';
-        burst.style.left = x + 'px';
-        burst.style.top = y + 'px';
-        container.appendChild(burst);
-        
+        // Show explanation after a delay
         setTimeout(() => {
-            burst.remove();
+            this.showExplanation(exercise.explanation);
         }, 1000);
     }
     
-    createEnergyTrail(x, y) {
-        const container = document.getElementById('reality-particles');
-        const trail = document.createElement('div');
-        trail.className = 'energy-trail';
-        trail.style.left = x + 'px';
-        trail.style.top = y + 'px';
-        container.appendChild(trail);
+    nextExercise() {
+        this.currentExercise++;
+        
+        if (this.currentExercise < this.currentLessonData.exercises.length) {
+            this.renderExercise();
+        } else {
+            this.completeLesson();
+        }
+    }
+    
+    completeLesson() {
+        // Calculate XP earned
+        const xpEarned = Math.floor((this.exerciseScore / this.currentLessonData.exercises.length) * this.currentLessonData.xp);
+        
+        // Update user state
+        this.userState.dailyXP += xpEarned;
+        this.userState.totalXP += xpEarned;
+        this.userState.gems += Math.floor(xpEarned / 5);
+        
+        if (!this.userState.completedLessons.includes(this.currentLessonData.id)) {
+            this.userState.completedLessons.push(this.currentLessonData.id);
+            this.userState.currentLesson = Math.min(this.userState.currentLesson + 1, this.lessons.length - 1);
+        }
+        
+        // Update streak
+        this.userState.streak++;
+        
+        // Save state
+        this.saveUserState();
+        
+        // Show results screen
+        this.showResultsScreen(xpEarned);
+    }
+    
+    showResultsScreen(xpEarned) {
+        document.getElementById('lesson-screen').classList.add('hidden');
+        document.getElementById('results-screen').classList.remove('hidden');
+        
+        // Update results display
+        document.getElementById('earned-xp').textContent = xpEarned;
+        document.getElementById('streak-days').textContent = this.userState.streak;
+        document.getElementById('earned-gems').textContent = Math.floor(xpEarned / 5);
+        
+        this.updateUI();
+    }
+    
+    continueToNextLesson() {
+        this.showHomeScreen();
+    }
+    
+    practiceLesson() {
+        // Reset exercise for practice
+        this.currentExercise = 0;
+        this.exerciseScore = 0;
+        this.isExerciseComplete = false;
+        
+        document.getElementById('results-screen').classList.add('hidden');
+        document.getElementById('lesson-screen').classList.remove('hidden');
+        
+        this.renderExercise();
+    }
+    
+    showHomeScreen() {
+        document.getElementById('lesson-screen').classList.add('hidden');
+        document.getElementById('results-screen').classList.add('hidden');
+        document.getElementById('home-screen').classList.remove('hidden');
+        
+        this.renderLessons();
+        this.updateUI();
+    }
+    
+    updateProgressDots() {
+        const progressDots = document.getElementById('progress-dots');
+        progressDots.innerHTML = '';
+        
+        for (let i = 0; i < this.currentLessonData.exercises.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'progress-dot';
+            
+            if (i < this.currentExercise) {
+                dot.classList.add('completed');
+            } else if (i === this.currentExercise) {
+                dot.classList.add('current');
+            }
+            
+            progressDots.appendChild(dot);
+        }
+    }
+    
+    showCorrectAnimation() {
+        const animation = document.getElementById('correct-animation');
+        animation.classList.remove('hidden');
         
         setTimeout(() => {
-            trail.remove();
-        }, 500);
+            animation.classList.add('hidden');
+        }, 1500);
     }
     
-    createNeuralGrid() {
-        const grid = document.getElementById('neural-grid');
-        for (let i = 0; i < 50; i++) {
-            const line = document.createElement('div');
-            line.className = 'grid-line';
-            line.style.left = (i * 20) + 'px';
-            grid.appendChild(line);
-        }
-    }
-    
-    generateRealityParticles() {
-        const container = document.getElementById('reality-particles');
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'reality-particle';
-            particle.style.left = Math.random() * 800 + 'px';
-            particle.style.top = Math.random() * 400 + 'px';
-            particle.style.animationDelay = Math.random() * 5 + 's';
-            container.appendChild(particle);
-        }
-    }
-    
-    startNeuralPulse() {
-        setInterval(() => {
-            if (this.gameState.isActive) {
-                this.gameState.neuralEnergy = Math.min(100, this.gameState.neuralEnergy + 1);
-                this.gameState.aiSync = Math.min(100, this.gameState.aiSync + 0.5);
-                this.updateUI();
-            }
-        }, 1000);
-    }
-    
-    startRealitySimulation() {
-        setInterval(() => {
-            if (this.gameState.isActive && this.gameState.physicsEnabled) {
-                this.updatePhysics();
-            }
-        }, 16); // 60 FPS
-    }
-    
-    updatePhysics() {
-        this.gameState.realityObjects.forEach(obj => {
-            if (this.realityPhysics.gravity > 0) {
-                obj.velocity.y += this.realityPhysics.gravity * this.realityPhysics.timeScale;
-            }
-            
-            obj.x += obj.velocity.x * this.realityPhysics.timeScale;
-            obj.y += obj.velocity.y * this.realityPhysics.timeScale;
-            
-            // Bounce off walls
-            if (obj.x < 0 || obj.x > 800 - obj.size) {
-                obj.velocity.x *= -this.realityPhysics.bounce;
-                obj.x = Math.max(0, Math.min(800 - obj.size, obj.x));
-            }
-            if (obj.y < 0 || obj.y > 400 - obj.size) {
-                obj.velocity.y *= -this.realityPhysics.bounce;
-                obj.y = Math.max(0, Math.min(400 - obj.size, obj.y));
-            }
-            
-            // Apply friction
-            obj.velocity.x *= this.realityPhysics.friction;
-            obj.velocity.y *= this.realityPhysics.friction;
-            
-            // Update visual position
-            const element = document.querySelector(`[data-matter-id="${obj.id}"]`);
-            if (element) {
-                element.style.left = obj.x + 'px';
-                element.style.top = obj.y + 'px';
-            }
-        });
-    }
-    
-    showNeuralMessage(message) {
-        const dataStream = document.getElementById('data-stream');
-        const messageElement = document.createElement('div');
-        messageElement.className = 'stream-line';
-        messageElement.textContent = message;
-        dataStream.appendChild(messageElement);
+    showWrongAnimation() {
+        const animation = document.getElementById('wrong-animation');
+        animation.classList.remove('hidden');
         
-        // Keep only last 10 messages
-        while (dataStream.children.length > 10) {
-            dataStream.removeChild(dataStream.firstChild);
-        }
+        setTimeout(() => {
+            animation.classList.add('hidden');
+        }, 1500);
+    }
+    
+    showExplanation(explanation) {
+        const modal = document.getElementById('modal-overlay');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
         
-        // Scroll to bottom
-        dataStream.scrollTop = dataStream.scrollHeight;
+        modalTitle.textContent = 'Explanation';
+        modalBody.innerHTML = `<p>${explanation}</p>`;
+        
+        modal.classList.remove('hidden');
+    }
+    
+    hideModal() {
+        document.getElementById('modal-overlay').classList.add('hidden');
     }
     
     updateUI() {
-        document.getElementById('neural-energy').style.width = this.gameState.neuralEnergy + '%';
-        document.getElementById('neural-energy-value').textContent = Math.round(this.gameState.neuralEnergy) + '%';
-        document.getElementById('reality-level').style.width = (this.gameState.realityLevel / 10) * 100 + '%';
-        document.getElementById('reality-level-value').textContent = this.gameState.realityLevel;
-        document.getElementById('ai-sync').style.width = this.gameState.aiSync + '%';
-        document.getElementById('ai-sync-value').textContent = Math.round(this.gameState.aiSync) + '%';
+        // Update header stats
+        document.getElementById('hearts').textContent = this.userState.hearts;
+        document.getElementById('gems').textContent = this.userState.gems;
+        document.getElementById('streak').textContent = this.userState.streak;
         
-        // Update status
-        const statusIndicator = document.getElementById('status-indicator');
-        const statusText = document.getElementById('status-text');
+        // Update daily progress
+        const progressFill = document.getElementById('daily-progress');
+        const progressText = document.querySelector('.progress-text');
+        const progressPercentage = Math.min((this.userState.dailyXP / this.userState.dailyGoal) * 100, 100);
         
-        if (this.gameState.isActive) {
-            statusIndicator.className = 'status-indicator active';
-            statusText.textContent = 'Neural Link Active';
-        } else {
-            statusIndicator.className = 'status-indicator';
-            statusText.textContent = 'Standby';
-        }
+        progressFill.style.width = `${progressPercentage}%`;
+        progressText.textContent = `${this.userState.dailyXP} / ${this.userState.dailyGoal} XP`;
+        
+        // Update lesson stats
+        document.getElementById('lesson-hearts').textContent = this.userState.hearts;
+        document.getElementById('lesson-gems').textContent = this.userState.gems;
     }
 }
 
-// Initialize the Neural Nexus
+// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new NeuralNexus();
+    new DuolingoApp();
 });
